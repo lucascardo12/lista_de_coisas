@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "337919947963",
+    "firebase_url": "https://listadecoisas-f6c9f.firebaseio.com",
+    "project_id": "listadecoisas-f6c9f",
+    "storage_bucket": "listadecoisas-f6c9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337919947963:android:678f0ba153d88ae3e5e59e",
+        "android_client_info": {
+          "package_name": "com.example.listadecoisa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337919947963-k03cjvefjm59mkc9tjjjsi08idouc066.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqg2r_EMPG_QUlJVetRuU-ZRgU2AobUzk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337919947963-k03cjvefjm59mkc9tjjjsi08idouc066.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
