@@ -95,7 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 coisas: global.lisCoisa[index],
                                               ))).then((value) {
                                     setState(() {
-                                      global.lisCoisa[index] = value;
+                                      global.lisCoisa[index] =
+                                          value ?? global.lisCoisa[index];
                                     });
                                   });
                                 },
