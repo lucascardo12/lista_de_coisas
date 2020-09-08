@@ -21,7 +21,9 @@ Future<void> main() async {
         global.usuario = new UserP.fromJson(json.decode(auxi));
         List<dynamic> listCat =
             await global.banco.getCoisas(user: global.usuario);
-        global.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
+        if (listCat != null) {
+          global.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
+        }
       }
     } catch (e) {
       print(e);

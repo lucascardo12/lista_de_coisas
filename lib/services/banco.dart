@@ -27,10 +27,23 @@ class BancoFire {
   }
 
   getCoisas({UserP user}) async {
-    var result =
-        await db.collection('user').doc(user.id).collection('coisas').get();
-
-    return result.docs;
+    print(user);
+    try {
+      var result =
+          await db.collection('user').doc(user.id).collection('coisas').get();
+      return result.docs;
+    } catch (e) {
+      var auxi = await translator.translate(e.message, from: 'en', to: 'pt');
+      Fluttertoast.showToast(
+          msg: auxi.text,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 18.0);
+      return null;
+    }
   }
 
   removeCoisas({Coisas cat, UserP user}) async {

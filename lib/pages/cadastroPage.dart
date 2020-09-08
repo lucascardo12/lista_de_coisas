@@ -4,21 +4,37 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/classes/coisas.dart';
 import 'package:listadecoisa/classes/user.dart';
-import 'package:listadecoisa/pages/cadastroPage.dart';
 import 'package:listadecoisa/pages/homePage.dart';
 import 'package:listadecoisa/services/global.dart' as global;
 
-class Login extends StatefulWidget {
-  Login();
+class Cadastro extends StatefulWidget {
+  Cadastro();
   @override
-  State<StatefulWidget> createState() => new _Login();
+  State<StatefulWidget> createState() => new _Cadastro();
 }
 
-class _Login extends State<Login> {
+class _Cadastro extends State<Cadastro> {
   TextEditingController loginControler = TextEditingController();
   TextEditingController senhaControler = TextEditingController();
+  TextEditingController nomeControler = TextEditingController();
   bool isVali = false;
   bool lObescure = true;
+  void valida() {
+    UserP us = new UserP(
+        id: null, login: loginControler.text, senha: senhaControler.text);
+    global.banco.criaUser(us).then((value) {
+      if (value.isNotEmpty) {
+        setState(() {
+          global.isLoading = false;
+        });
+        _submit();
+      } else {
+        setState(() {
+          global.isLoading = false;
+        });
+      }
+    });
+  }
 
   void _submit() {
     global.banco
@@ -67,7 +83,7 @@ class _Login extends State<Login> {
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Text(
-                  'Lista de coisas',
+                  'Cadastro',
                   style: TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,
@@ -154,6 +170,39 @@ class _Login extends State<Login> {
                   )),
               Padding(
                   padding: EdgeInsets.all(15),
+                  child: TextFormField(
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          color: Colors.transparent,
+                          icon: Icon(Icons.visibility_off),
+                          onPressed: () {},
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                              width: 2,
+                            )),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                              width: 2,
+                            )),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                              width: 2,
+                            )),
+                        hintStyle: TextStyle(color: Colors.white),
+                        hintText: 'Nome'),
+                    controller: nomeControler,
+                  )),
+              Padding(
+                  padding: EdgeInsets.all(15),
                   child: FlatButton(
                     minWidth: MediaQuery.of(context).size.width - 100,
                     shape: RoundedRectangleBorder(
@@ -163,25 +212,20 @@ class _Login extends State<Login> {
                     child: Padding(
                         padding: EdgeInsets.all(15),
                         child: Text(
-                          'Login',
+                          'Cadastro',
                           style:
                               TextStyle(color: Color.fromRGBO(255, 64, 111, 1)),
                         )),
                     onPressed: () {
-                      _submit();
+                      valida();
                     },
                   )),
               FlatButton(
                 child: Text(
-                  'Cadastrar-se',
+                  'Voltar',
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (BuildContext context) => Cadastro()));
-                },
+                onPressed: () => Navigator.pop(context),
               )
             ],
           )

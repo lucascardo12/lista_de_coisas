@@ -6,7 +6,6 @@ import 'package:listadecoisa/services/banco.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 bool isLoading = false;
-String nome;
 SharedPreferences prefs;
 String app = "Anote";
 bool isSwitched;
