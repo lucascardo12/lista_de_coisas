@@ -1,4 +1,4 @@
-# listadecoisa
+# listadecoisas
 
 
 <img src="https://github.com/lucascardo12/listadecoisa/blob/master/assets/Screenshot_1609358645.png" width="460">
