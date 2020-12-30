@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/classes/coisas.dart';
@@ -19,14 +22,22 @@ class _ListasPageState extends State<ListasPage> {
   Coisas coisa;
   TextEditingController tituloControler = TextEditingController();
   TextEditingController contentControler = TextEditingController();
+  AdmobInterstitial interstitialAd;
   _ListasPageState(this.coisas);
   @override
   void initState() {
+    interstitialAd = AdmobInterstitial(
+      adUnitId: 'ca-app-pub-1205611887737485/8086429884',
+      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+        if (event == AdmobAdEvent.closed) interstitialAd.load();
+      },
+    );
+
     if (this.coisas != null) {
       contentControler.text = this.coisas.descricao ?? '';
       tituloControler.text = this.coisas.nome ?? '';
     }
-
+    interstitialAd.load();
     super.initState();
   }
 
@@ -110,6 +121,9 @@ class _ListasPageState extends State<ListasPage> {
                             hintText: 'Titulo da lista'),
                         controller: tituloControler,
                       ),
+                      SizedBox(
+                        height: 5,
+                      ),
                       TextFormField(
                         maxLines: 200,
                         minLines: 20,
@@ -167,9 +181,26 @@ class _ListasPageState extends State<ListasPage> {
                     this.coisas != null ? 'Alterar' : 'Salvar',
                     style: TextStyle(color: Color.fromRGBO(255, 64, 111, 1)),
                   ),
-                  onPressed: () {
-                    criaCoisa();
-                    Navigator.pop(context, coisa);
+                  onPressed: () async {
+                    var day = global.prefs.getInt('day');
+                    if (await interstitialAd.isLoaded &&
+                        (day != DateTime.now().day || day == null)) {
+                      global.prefs.setInt('day', DateTime.now().day);
+                      interstitialAd.show();
+                    }
+                    if (tituloControler.text.isNotEmpty) {
+                      criaCoisa();
+                      Navigator.pop(context, coisa);
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: "Atenção o titulo não pode ta vazio!!",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 5,
+                          backgroundColor: Color.fromRGBO(255, 64, 111, 1),
+                          textColor: Colors.white,
+                          fontSize: 18.0);
+                    }
                   },
                 ),
               )

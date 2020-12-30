@@ -21,7 +21,9 @@ class _Cadastro extends State<Cadastro> {
   bool lObescure = true;
   void valida() {
     UserP us = new UserP(
-        id: null, login: loginControler.text, senha: senhaControler.text);
+      id: null,
+      login: loginControler.text,
+    );
     global.banco.criaUser(us).then((value) {
       if (value.isNotEmpty) {
         setState(() {
@@ -81,7 +83,7 @@ class _Cadastro extends State<Cadastro> {
           Padding(
               padding: EdgeInsets.only(top: 100, bottom: 100),
               child: Align(
-                alignment: Alignment.topCenter,
+                alignment: Alignment.center,
                 child: Text(
                   'Cadastro',
                   style: TextStyle(
@@ -99,7 +101,7 @@ class _Cadastro extends State<Cadastro> {
                   padding: EdgeInsets.all(15),
                   child: TextFormField(
                     style: TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                     decoration: InputDecoration(
                         suffixIcon: IconButton(
                           color: Colors.transparent,
@@ -133,7 +135,7 @@ class _Cadastro extends State<Cadastro> {
                   child: TextFormField(
                     obscureText: lObescure,
                     style: TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                     decoration: InputDecoration(
                         suffixIcon: IconButton(
                           color: Colors.white,
@@ -172,7 +174,7 @@ class _Cadastro extends State<Cadastro> {
                   padding: EdgeInsets.all(15),
                   child: TextFormField(
                     style: TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                     decoration: InputDecoration(
                         suffixIcon: IconButton(
                           color: Colors.transparent,

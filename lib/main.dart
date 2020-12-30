@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/classes/coisas.dart';
@@ -12,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  Admob.initialize();
   global.banco.db.enablePersistence();
   await SharedPreferences.getInstance().then((value) async {
     global.prefs = value;

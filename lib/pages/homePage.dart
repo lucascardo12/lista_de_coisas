@@ -1,4 +1,6 @@
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:listadecoisa/classes/coisas.dart';
 import 'package:listadecoisa/pages/listasPage.dart';
 import 'package:listadecoisa/pages/loginPage.dart';
@@ -13,6 +15,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   GlobalKey<ScaffoldState> _scaffoldKe = new GlobalKey();
+  AdmobBannerSize bannerSize;
+
   void logoff() {
     global.prefs.setString('user', '');
     global.prefs.setBool("fezLogin", false);
@@ -36,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Text("Continar"),
       onPressed: () {
         deleteList(coisa: coisas);
+        Navigator.pop(context);
       },
     );
     //configura o AlertDialog
@@ -56,89 +61,149 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  showExit({
+    BuildContext context,
+  }) {
+    Widget cancelaButton = FlatButton(
+      child: Text("Sim"),
+      onPressed: () {
+        SystemNavigator.pop();
+      },
+    );
+    Widget continuaButton = FlatButton(
+      child: Text("Não"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    //configura o AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Atenção !!!"),
+      content: Text("Deseja sair do app ?"),
+      actions: [
+        cancelaButton,
+        continuaButton,
+      ],
+    );
+    //exibe o diálogo
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  String getBannerAdUnitId() {
+    return 'ca-app-pub-1205611887737485/2150742777';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    bannerSize = AdmobBannerSize.ADAPTIVE_BANNER(
+        width: MediaQuery.of(context).size.width.round());
     return Scaffold(
-      key: _scaffoldKe,
-      body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                Color.fromRGBO(255, 64, 111, 1),
-                Color.fromRGBO(255, 128, 111, 1)
-              ])),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 50,
+      appBar: AppBar(
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(
+                left: 10,
+                right: 10,
+                top: 10,
               ),
-              Align(
-                  alignment: Alignment.topCenter,
-                  child: Text('Listas',
-                      style: TextStyle(color: Colors.white, fontSize: 28))),
-              Padding(
-                  padding: EdgeInsets.all(10),
-                  child: global.lisCoisa != null
-                      ? ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: global.lisCoisa.length,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              ListasPage(
-                                                coisas: global.lisCoisa[index],
-                                              ))).then((value) {
-                                    setState(() {
-                                      global.lisCoisa[index] =
-                                          value ?? global.lisCoisa[index];
-                                    });
+              child: IconButton(
+                color: Colors.white,
+                icon: Icon(
+                  Icons.add_circle,
+                  size: 32,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) => ListasPage()))
+                      .then((value) {
+                    if (value != null) {
+                      setState(() {
+                        global.lisCoisa.add(value);
+                      });
+                    }
+                  });
+                },
+              ))
+        ],
+        centerTitle: true,
+        backgroundColor: Color.fromRGBO(255, 64, 111, 1),
+        title:
+            Text('Listas', style: TextStyle(color: Colors.white, fontSize: 25)),
+      ),
+      key: _scaffoldKe,
+      body: WillPopScope(
+          onWillPop: () => showExit(context: context),
+          child: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                  Color.fromRGBO(255, 64, 111, 1),
+                  Color.fromRGBO(255, 128, 111, 1)
+                ])),
+            child: Padding(
+                padding: EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                  top: 10,
+                ),
+                child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: global.lisCoisa.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ListasPage(
+                                              coisas: global.lisCoisa[index],
+                                            ))).then((value) {
+                                  setState(() {
+                                    global.lisCoisa[index] =
+                                        value ?? global.lisCoisa[index];
                                   });
-                                },
-                                child: Card(
-                                  child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 10, right: 10),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(global.lisCoisa[index].nome),
-                                            IconButton(
-                                                icon:
-                                                    Icon(Icons.delete_forever),
-                                                onPressed: () {
-                                                  showAlertDialog2(
-                                                      coisas: global
-                                                          .lisCoisa[index],
-                                                      context: context);
-                                                })
-                                          ])),
-                                ));
-                          })
-                      : SizedBox())
-            ],
-          )),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: Padding(
-          padding: EdgeInsets.only(top: 5),
-          child: IconButton(
-            icon: Icon(
-              Icons.list,
-              size: 36,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              _scaffoldKe.currentState.openEndDrawer();
-            },
+                                });
+                              },
+                              child: Card(
+                                child: Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 10, right: 10),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(global.lisCoisa[index].nome),
+                                          IconButton(
+                                              icon: Icon(Icons.delete_forever),
+                                              onPressed: () {
+                                                showAlertDialog2(
+                                                    coisas:
+                                                        global.lisCoisa[index],
+                                                    context: context);
+                                              })
+                                        ])),
+                              ));
+                        }))),
           )),
       endDrawerEnableOpenDragGesture: true,
-      endDrawer: Drawer(
+      drawer: Drawer(
         elevation: 8,
         child: ListView(
           children: [
@@ -160,8 +225,29 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextStyle(color: Colors.white, fontSize: 22),
                   )),
             ),
+            !global.prefs.getBool('isAnonimo') ?? false
+                ? Padding(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: FlatButton(
+                        splashColor: Color.fromRGBO(255, 128, 111, 1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        color: Color.fromRGBO(255, 64, 111, 1),
+                        onPressed: () {
+                          logoff();
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (BuildContext context) => Login()));
+                        },
+                        child: Text(
+                          "Logout",
+                          style: TextStyle(color: Colors.white),
+                        )))
+                : Container(),
             Padding(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.only(left: 20, right: 20),
                 child: FlatButton(
                     splashColor: Color.fromRGBO(255, 128, 111, 1),
                     shape: RoundedRectangleBorder(
@@ -169,50 +255,48 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     color: Color.fromRGBO(255, 64, 111, 1),
                     onPressed: () {
-                      logoff();
                       Navigator.push(
                           context,
                           new MaterialPageRoute(
                               builder: (BuildContext context) => Login()));
                     },
                     child: Text(
-                      "Logout",
+                      "Voltar",
                       style: TextStyle(color: Colors.white),
                     ))),
+            !global.prefs.getBool('isAnonimo') ?? false
+                ? Padding(
+                    padding: EdgeInsets.only(left: 20, right: 20),
+                    child: FlatButton(
+                        splashColor: Color.fromRGBO(255, 128, 111, 1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        color: Color.fromRGBO(255, 64, 111, 1),
+                        onPressed: () {
+                          global.banco.resetarSenha(user: global.usuario);
+                        },
+                        child: Text(
+                          "Redefina Senha",
+                          style: TextStyle(color: Colors.white),
+                        )))
+                : Container(),
           ],
         ),
       ),
       persistentFooterButtons: [
         Container(
-          color: Colors.white,
-          width: MediaQuery.of(context).copyWith().size.width,
-          child: Row(
-            children: [
-              Expanded(
-                child: FlatButton(
-                  child: Text(
-                    'Criar Nova Lista',
-                    style: TextStyle(color: Color.fromRGBO(255, 64, 111, 1)),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                ListasPage())).then((value) {
-                      if (value != null) {
-                        setState(() {
-                          global.lisCoisa.add(value);
-                        });
-                      }
-                    });
-                  },
-                ),
-              )
-            ],
+          width: MediaQuery.of(context).size.width,
+          child: AdmobBanner(
+            adUnitId: getBannerAdUnitId(),
+            adSize: bannerSize,
+            listener: (AdmobAdEvent event, Map<String, dynamic> args) {},
+            onBannerCreated: (AdmobBannerController controller) {
+              // controller.dispose();
+            },
           ),
         )
-      ], // This trailing comma makes auto-formatting nicer for build methods.
+      ],
     );
   }
 }

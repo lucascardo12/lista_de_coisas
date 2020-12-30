@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/classes/coisas.dart';
 import 'package:listadecoisa/classes/user.dart';
+import 'package:listadecoisa/services/global.dart';
 import 'package:translator/translator.dart';
 
 class BancoFire {
@@ -27,7 +28,6 @@ class BancoFire {
   }
 
   getCoisas({UserP user}) async {
-    print(user);
     try {
       var result =
           await db.collection('user').doc(user.id).collection('coisas').get();
@@ -112,5 +112,42 @@ class BancoFire {
           fontSize: 18.0);
       return null;
     }
+  }
+
+  Future<UserP> criaUserAnonimo() async {
+    try {
+      UserP user = new UserP();
+      var axui = prefs.getString('userAnonimo') ?? '';
+      if (axui.isNotEmpty) {
+        DocumentSnapshot result = await db
+            .collection('user')
+            .doc(prefs.getString('userAnonimo'))
+            .get();
+
+        user.id = result.data()['id'];
+      } else {
+        var _value = await _firebaseAuth.signInAnonymously();
+        user.id = _value.user.uid;
+        db.collection('user').doc(user.id).set(user.toJson());
+        prefs.setString('userAnonimo', user.id);
+      }
+
+      return user;
+    } catch (e) {
+      var auxi = await translator.translate(e.message, from: 'en', to: 'pt');
+      Fluttertoast.showToast(
+          msg: auxi.text,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 18.0);
+      return null;
+    }
+  }
+
+  Future<void> resetarSenha({UserP user}) {
+    _firebaseAuth.sendPasswordResetEmail(email: user.login);
   }
 }
