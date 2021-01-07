@@ -4,10 +4,11 @@ class UserP {
   String senha;
   String login;
 
-  UserP({String id, String nome, String login}) {
+  UserP({String id, String nome, String login, String senha}) {
     this.id = id;
     this.nome = nome;
     this.login = login;
+    this.senha = senha;
   }
   UserP.fromJson(Map<String, dynamic> xjson) {
     nome = xjson['nome'];

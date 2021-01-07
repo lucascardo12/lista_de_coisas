@@ -21,9 +21,7 @@ class _Cadastro extends State<Cadastro> {
   bool lObescure = true;
   void valida() {
     UserP us = new UserP(
-      id: null,
-      login: loginControler.text,
-    );
+        id: null, login: loginControler.text, senha: senhaControler.text);
     global.banco.criaUser(us).then((value) {
       if (value.isNotEmpty) {
         setState(() {

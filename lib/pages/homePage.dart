@@ -16,6 +16,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   GlobalKey<ScaffoldState> _scaffoldKe = new GlobalKey();
   AdmobBannerSize bannerSize;
+  bool isAnonimo = false;
 
   void logoff() {
     global.prefs.setString('user', '');
@@ -100,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    isAnonimo = global.prefs.getBool('isAnonimo') ?? false;
     super.initState();
   }
 
@@ -114,7 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.only(
                 left: 10,
                 right: 10,
-                top: 10,
               ),
               child: IconButton(
                 color: Colors.white,
@@ -225,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextStyle(color: Colors.white, fontSize: 22),
                   )),
             ),
-            !global.prefs.getBool('isAnonimo') ?? false
+            !isAnonimo
                 ? Padding(
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: FlatButton(
@@ -264,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       "Voltar",
                       style: TextStyle(color: Colors.white),
                     ))),
-            !global.prefs.getBool('isAnonimo') ?? false
+            !isAnonimo
                 ? Padding(
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: FlatButton(

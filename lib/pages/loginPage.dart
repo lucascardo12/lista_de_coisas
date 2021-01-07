@@ -9,16 +9,28 @@ import 'package:listadecoisa/pages/homePage.dart';
 import 'package:listadecoisa/services/global.dart' as global;
 
 class Login extends StatefulWidget {
-  Login();
+  Login({
+    Key key,
+    this.coisas,
+  }) : super(key: key);
+  final Coisas coisas;
   @override
-  State<StatefulWidget> createState() => new _Login();
+  _LoginState createState() => _LoginState();
 }
 
-class _Login extends State<Login> {
+class _LoginState extends State<Login> {
   TextEditingController loginControler = TextEditingController();
   TextEditingController senhaControler = TextEditingController();
+  // GoogleSignInAccount _currentUser;
   bool isVali = false;
   bool lObescure = true;
+
+  // GoogleSignIn _googleSignIn = GoogleSignIn(
+  //   scopes: <String>[
+  //     'email',
+  //     'https://www.googleapis.com/auth/contacts.readonly',
+  //   ],
+  // );
 
   showAlertDialog2({BuildContext context}) {
     Widget cancelaButton = FlatButton(
@@ -81,6 +93,14 @@ class _Login extends State<Login> {
     });
   }
 
+  // Future<void> _handleSignIn() async {
+  //   try {
+  //     await _googleSignIn.signIn();
+  //   } catch (error) {
+  //     print(error);
+  //   }
+  // }
+
   void _submitAnonimo() {
     global.banco.criaUserAnonimo().then((value) async {
       setState(() {
@@ -105,6 +125,20 @@ class _Login extends State<Login> {
                     MyHomePage(title: 'Lista de Coisas')));
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+    //   setState(() {
+    //     _currentUser = account;
+    //   });
+    //   if (_currentUser != null) {
+    //     // _handleGetContact();
+    //   }
+    // });
+    // _googleSignIn.signInSilently();
   }
 
   @override
@@ -273,7 +307,20 @@ class _Login extends State<Login> {
                     onPressed: () {
                       _submitAnonimo();
                     },
-                  )
+                  ),
+                  // FlatButton(
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(25),
+                  //   ),
+                  //   color: Colors.white,
+                  //   child: Text(
+                  //     'Google',
+                  //     style: TextStyle(color: Color.fromRGBO(255, 64, 111, 1)),
+                  //   ),
+                  //   onPressed: () {
+                  //     global.banco.signInWithGoogle();
+                  //   },
+                  // )
                 ],
               )
             ],
