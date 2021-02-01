@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/classes/coisas.dart';
 import 'package:listadecoisa/classes/user.dart';
+import 'package:listadecoisa/services/temas.dart';
 import 'package:listadecoisa/services/global.dart' as global;
 
 class ListasPage extends StatefulWidget {
@@ -50,12 +51,12 @@ class _ListasPageState extends State<ListasPage> {
     global.banco.criaAlteraCoisas(coisas: coisa, user: global.usuario);
     Fluttertoast.showToast(
         msg: this.coisas != null
-            ? "Alerado com Sucesso!!"
+            ? "Alterado com Sucesso!!"
             : "Criado com Sucesso!!",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 5,
-        backgroundColor: Color.fromRGBO(255, 64, 111, 1),
+        backgroundColor: getPrimary(),
         textColor: Colors.white,
         fontSize: 18.0);
   }
@@ -68,10 +69,7 @@ class _ListasPageState extends State<ListasPage> {
               gradient: LinearGradient(
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
-                  colors: [
-                Color.fromRGBO(255, 64, 111, 1),
-                Color.fromRGBO(255, 128, 111, 1)
-              ])),
+                  colors: [getPrimary(), getSecondary()])),
           child: Center(
               child: Padding(
                   padding: EdgeInsets.all(10),
@@ -167,7 +165,7 @@ class _ListasPageState extends State<ListasPage> {
                 child: FlatButton(
                   child: Text(
                     'Cancelar',
-                    style: TextStyle(color: Color.fromRGBO(255, 64, 111, 1)),
+                    style: TextStyle(color: getPrimary()),
                   ),
                   onPressed: () {
                     Navigator.pop(
@@ -179,7 +177,7 @@ class _ListasPageState extends State<ListasPage> {
                 child: FlatButton(
                   child: Text(
                     this.coisas != null ? 'Alterar' : 'Salvar',
-                    style: TextStyle(color: Color.fromRGBO(255, 64, 111, 1)),
+                    style: TextStyle(color: getPrimary()),
                   ),
                   onPressed: () async {
                     var day = global.prefs.getInt('day');
@@ -197,7 +195,7 @@ class _ListasPageState extends State<ListasPage> {
                           toastLength: Toast.LENGTH_LONG,
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 5,
-                          backgroundColor: Color.fromRGBO(255, 64, 111, 1),
+                          backgroundColor: getPrimary(),
                           textColor: Colors.white,
                           fontSize: 18.0);
                     }

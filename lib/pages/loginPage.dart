@@ -6,6 +6,8 @@ import 'package:listadecoisa/classes/coisas.dart';
 import 'package:listadecoisa/classes/user.dart';
 import 'package:listadecoisa/pages/cadastroPage.dart';
 import 'package:listadecoisa/pages/homePage.dart';
+import 'package:listadecoisa/services/temas.dart';
+
 import 'package:listadecoisa/services/global.dart' as global;
 
 class Login extends StatefulWidget {
@@ -159,10 +161,7 @@ class _LoginState extends State<Login> {
               gradient: LinearGradient(
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
-                  colors: [
-                Color.fromRGBO(255, 64, 111, 1),
-                Color.fromRGBO(255, 128, 111, 1)
-              ])),
+                  colors: [getPrimary(), getSecondary()])),
           child: ListView(
             padding: EdgeInsets.all(0),
             children: [
@@ -276,8 +275,7 @@ class _LoginState extends State<Login> {
                             padding: EdgeInsets.all(15),
                             child: Text(
                               'Login',
-                              style: TextStyle(
-                                  color: Color.fromRGBO(255, 64, 111, 1)),
+                              style: TextStyle(color: getPrimary()),
                             )),
                         onPressed: () {
                           _submit();
@@ -302,25 +300,25 @@ class _LoginState extends State<Login> {
                     color: Colors.white,
                     child: Text(
                       'Modo anônimo',
-                      style: TextStyle(color: Color.fromRGBO(255, 64, 111, 1)),
+                      style: TextStyle(color: getPrimary()),
                     ),
                     onPressed: () {
                       _submitAnonimo();
                     },
                   ),
-                  // FlatButton(
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(25),
-                  //   ),
-                  //   color: Colors.white,
-                  //   child: Text(
-                  //     'Google',
-                  //     style: TextStyle(color: Color.fromRGBO(255, 64, 111, 1)),
-                  //   ),
-                  //   onPressed: () {
-                  //     global.banco.signInWithGoogle();
-                  //   },
-                  // )
+                  FlatButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    color: Colors.white,
+                    child: Text(
+                      'Google',
+                      style: TextStyle(color: getPrimary()),
+                    ),
+                    onPressed: () {
+                      global.banco.signInWithGoogle();
+                    },
+                  )
                 ],
               )
             ],

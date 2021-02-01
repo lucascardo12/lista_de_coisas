@@ -1,10 +1,13 @@
 import 'package:admob_flutter/admob_flutter.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:listadecoisa/classes/coisas.dart';
 import 'package:listadecoisa/pages/listasPage.dart';
 import 'package:listadecoisa/pages/loginPage.dart';
+import 'package:listadecoisa/services/temas.dart';
 import 'package:listadecoisa/services/global.dart' as global;
+import 'package:smart_select/smart_select.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -139,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ))
         ],
         centerTitle: true,
-        backgroundColor: Color.fromRGBO(255, 64, 111, 1),
+        backgroundColor: getPrimary(),
         title:
             Text('Listas', style: TextStyle(color: Colors.white, fontSize: 25)),
       ),
@@ -151,10 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 gradient: LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
-                    colors: [
-                  Color.fromRGBO(255, 64, 111, 1),
-                  Color.fromRGBO(255, 128, 111, 1)
-                ])),
+                    colors: [getPrimary(), getSecondary()])),
             child: Padding(
                 padding: EdgeInsets.only(
                   left: 10,
@@ -215,10 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   gradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
-                      colors: [
-                    Color.fromRGBO(255, 64, 111, 1),
-                    Color.fromRGBO(255, 128, 111, 1)
-                  ])),
+                      colors: [getPrimary(), getSecondary()])),
               child: Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
@@ -230,11 +227,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ? Padding(
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: FlatButton(
-                        splashColor: Color.fromRGBO(255, 128, 111, 1),
+                        splashColor: getSecondary(),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
-                        color: Color.fromRGBO(255, 64, 111, 1),
+                        color: getPrimary(),
                         onPressed: () {
                           logoff();
                           Navigator.push(
@@ -250,11 +247,11 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: FlatButton(
-                    splashColor: Color.fromRGBO(255, 128, 111, 1),
+                    splashColor: getSecondary(),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    color: Color.fromRGBO(255, 64, 111, 1),
+                    color: getPrimary(),
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -269,11 +266,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ? Padding(
                     padding: EdgeInsets.only(left: 20, right: 20),
                     child: FlatButton(
-                        splashColor: Color.fromRGBO(255, 128, 111, 1),
+                        splashColor: getSecondary(),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
-                        color: Color.fromRGBO(255, 64, 111, 1),
+                        color: getPrimary(),
                         onPressed: () {
                           global.banco.resetarSenha(user: global.usuario);
                         },
@@ -282,6 +279,45 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: TextStyle(color: Colors.white),
                         )))
                 : Container(),
+            Padding(
+                padding: EdgeInsets.only(left: 5, right: 5),
+                child: SmartSelect<String>.single(
+                  title: 'Temas',
+                  onChange: (selected) {
+                    setState(() => global.tema = selected.value);
+                  },
+                  choiceType: S2ChoiceType.radios,
+                  choiceItems: [
+                    S2Choice(title: 'Original', value: 'Original'),
+                    S2Choice(title: 'Dark', value: 'Dark'),
+                    S2Choice(title: 'Azul', value: 'Azul'),
+                    S2Choice(title: 'Roxo', value: 'Roxo')
+                  ],
+                  modalType: S2ModalType.popupDialog,
+                  modalHeader: false,
+                  modalConfig: const S2ModalConfig(
+                    style: S2ModalStyle(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                    ),
+                  ),
+                  tileBuilder: (context, state) {
+                    return S2Tile.fromState(
+                      state,
+                      isTwoLine: false,
+                      leading: CircleAvatar(
+                        backgroundColor: getPrimary(),
+                        child: Text(
+                          '',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
+                  },
+                  value: global.tema,
+                ))
           ],
         ),
       ),

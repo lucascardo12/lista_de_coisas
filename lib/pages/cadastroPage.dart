@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/classes/coisas.dart';
 import 'package:listadecoisa/classes/user.dart';
 import 'package:listadecoisa/pages/homePage.dart';
+import 'package:listadecoisa/services/temas.dart';
 import 'package:listadecoisa/services/global.dart' as global;
 
 class Cadastro extends StatefulWidget {
@@ -71,10 +72,7 @@ class _Cadastro extends State<Cadastro> {
           gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [
-            Color.fromRGBO(255, 64, 111, 1),
-            Color.fromRGBO(255, 128, 111, 1)
-          ])),
+              colors: [getPrimary(), getSecondary()])),
       child: ListView(
         padding: EdgeInsets.all(15),
         children: [
@@ -213,8 +211,7 @@ class _Cadastro extends State<Cadastro> {
                         padding: EdgeInsets.all(15),
                         child: Text(
                           'Cadastro',
-                          style:
-                              TextStyle(color: Color.fromRGBO(255, 64, 111, 1)),
+                          style: TextStyle(color: getPrimary()),
                         )),
                     onPressed: () {
                       valida();

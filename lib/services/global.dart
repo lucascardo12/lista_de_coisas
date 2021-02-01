@@ -16,3 +16,4 @@ UserP usuario;
 BancoFire banco = new BancoFire();
 int hora;
 int dia;
+String tema;

@@ -17,6 +17,7 @@ Future<void> main() async {
   global.banco.db.enablePersistence();
   await SharedPreferences.getInstance().then((value) async {
     global.prefs = value;
+    global.tema = value.getString("tema") ?? "Original";
     var auxi = value.getString("user") ?? '';
     try {
       if (value.getBool('fezLogin')) {
