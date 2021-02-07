@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:listadecoisa/services/global.dart' as global;
-import 'package:listadecoisa/services/temas.dart';
+import 'package:listadecoisa/controller/global.dart' as global;
+import 'package:listadecoisa/controller/temas.dart';
 
 Color primary = new Color(0xFF212121);
 Color primaryLight = new Color(0xFF484848);
@@ -16,12 +16,16 @@ Color getPrimary() {
       break;
     case "Dark":
       return primary;
+      break;
     case "Azul":
       return Color.fromRGBO(89, 165, 216, 1);
+      break;
     case "Roxo":
       return Color.fromRGBO(90, 24, 154, 1);
+      break;
     default:
       return null;
+      break;
   }
 }
 
@@ -32,12 +36,16 @@ Color getSecondary() {
       break;
     case "Dark":
       return primaryLight;
+      break;
     case "Azul":
       return Color.fromRGBO(145, 229, 246, 1);
+      break;
     case "Roxo":
       return Color.fromRGBO(157, 78, 221, 1);
+      break;
     default:
       return null;
+      break;
   }
 }
 
@@ -48,11 +56,15 @@ Color getWhiteOrBlack() {
       break;
     case "Dark":
       return Colors.black;
+      break;
     case "Azul":
       return Colors.white;
+      break;
     case "Roxo":
       return Color.fromRGBO(89, 165, 216, 1);
+      break;
     default:
       return null;
+      break;
   }
 }

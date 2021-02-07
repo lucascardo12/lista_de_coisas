@@ -2,23 +2,22 @@ import 'package:admob_flutter/admob_flutter.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:listadecoisa/classes/coisas.dart';
-import 'package:listadecoisa/pages/listasPage.dart';
-import 'package:listadecoisa/pages/loginPage.dart';
-import 'package:listadecoisa/services/temas.dart';
-import 'package:listadecoisa/services/global.dart' as global;
+import 'package:listadecoisa/model/coisas.dart';
+import 'package:listadecoisa/view/listasPage.dart';
+import 'package:listadecoisa/view/loginPage.dart';
+import 'package:listadecoisa/controller/temas.dart';
+import 'package:listadecoisa/controller/global.dart' as global;
 import 'package:smart_select/smart_select.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomeviewtate createState() => _MyHomeviewtate();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomeviewtate extends State<MyHomePage> {
   GlobalKey<ScaffoldState> _scaffoldKe = new GlobalKey();
-  AdmobBannerSize bannerSize;
   bool isAnonimo = false;
 
   void logoff() {
@@ -98,10 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  String getBannerAdUnitId() {
-    return 'ca-app-pub-1205611887737485/2150742777';
-  }
-
   @override
   void initState() {
     isAnonimo = global.prefs.getBool('isAnonimo') ?? false;
@@ -110,8 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bannerSize = AdmobBannerSize.ADAPTIVE_BANNER(
-        width: MediaQuery.of(context).size.width.round());
+    print('att');
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -284,7 +278,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: SmartSelect<String>.single(
                   title: 'Temas',
                   onChange: (selected) {
-                    setState(() => global.tema = selected.value);
+                    setState(() {
+                      global.tema = selected.value;
+                      global.prefs.setString("tema", selected.value);
+                    });
                   },
                   choiceType: S2ChoiceType.radios,
                   choiceItems: [
@@ -323,13 +320,15 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       persistentFooterButtons: [
         Container(
+          margin: EdgeInsets.all(0),
           width: MediaQuery.of(context).size.width,
           child: AdmobBanner(
-            adUnitId: getBannerAdUnitId(),
-            adSize: bannerSize,
+            adUnitId: 'ca-app-pub-1205611887737485/2150742777',
+            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
+                width: MediaQuery.of(context).size.width.round()),
             listener: (AdmobAdEvent event, Map<String, dynamic> args) {},
             onBannerCreated: (AdmobBannerController controller) {
-              // controller.dispose();
+              //controller.dispose();
             },
           ),
         )

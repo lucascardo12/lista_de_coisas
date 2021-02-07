@@ -1,8 +1,8 @@
 library my_prj.globals;
 
-import 'package:listadecoisa/classes/coisas.dart';
-import 'package:listadecoisa/classes/user.dart';
-import 'package:listadecoisa/services/banco.dart';
+import 'package:listadecoisa/model/coisas.dart';
+import 'package:listadecoisa/model/user.dart';
+import 'package:listadecoisa/controller/banco.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 bool isLoading = false;

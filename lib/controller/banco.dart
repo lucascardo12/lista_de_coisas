@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:listadecoisa/classes/coisas.dart';
-import 'package:listadecoisa/classes/user.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/model/coisas.dart';
+import 'package:listadecoisa/model/user.dart';
+import 'package:listadecoisa/controller/global.dart';
 import 'package:translator/translator.dart';
 
 class BancoFire {

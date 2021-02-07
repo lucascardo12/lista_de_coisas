@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:listadecoisa/controller/temas.dart';
+import 'package:listadecoisa/model/coisas.dart';
 
 Widget loading() {
   return Container(
@@ -12,11 +14,13 @@ Widget loading() {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
           Image.asset(
-            'assets/icon.png',
-            height: 100,
-            width: 100,
+            'assets/tenor.gif',
+            color: getPrimary(),
           ),
-          Text('Procurando coisas..')
+          Text(
+            'Procurando coisas...',
+            style: TextStyle(color: getPrimary(), fontSize: 28),
+          )
         ]))),
   );
 }

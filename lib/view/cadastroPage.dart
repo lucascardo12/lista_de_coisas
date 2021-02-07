@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:listadecoisa/classes/coisas.dart';
-import 'package:listadecoisa/classes/user.dart';
-import 'package:listadecoisa/pages/homePage.dart';
-import 'package:listadecoisa/services/temas.dart';
-import 'package:listadecoisa/services/global.dart' as global;
+import 'package:listadecoisa/model/coisas.dart';
+import 'package:listadecoisa/model/user.dart';
+import 'package:listadecoisa/view/homePage.dart';
+import 'package:listadecoisa/controller/temas.dart';
+import 'package:listadecoisa/controller/global.dart' as global;
 
 class Cadastro extends StatefulWidget {
   Cadastro();
@@ -53,7 +53,6 @@ class _Cadastro extends State<Cadastro> {
           var userCo = jsonEncode(value);
           global.prefs.setString('user', userCo);
           global.prefs.setBool("fezLogin", true);
-          global.usuario = value;
         });
         Navigator.push(
             context,

@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:listadecoisa/classes/coisas.dart';
-import 'package:listadecoisa/classes/user.dart';
-import 'package:listadecoisa/pages/homePage.dart';
-import 'package:listadecoisa/pages/loginPage.dart';
-import 'package:listadecoisa/services/global.dart' as global;
+import 'package:listadecoisa/model/coisas.dart';
+import 'package:listadecoisa/model/user.dart';
+import 'package:listadecoisa/view/homePage.dart';
+import 'package:listadecoisa/view/loginPage.dart';
+import 'package:listadecoisa/controller/global.dart' as global;
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -42,6 +42,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.white),
+      ),
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       title: 'Lista de Coisas',
       home: global.usuario != null
