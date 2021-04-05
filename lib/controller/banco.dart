@@ -17,21 +17,14 @@ class BancoFire {
 
   criaAlteraCoisas({Coisas coisas, UserP user}) {
     if (coisas.idFire == null) {
-      coisas.idFire =
-          db.collection('user').doc(user.id).collection('coisas').doc().id;
+      coisas.idFire = db.collection('user').doc(user.id).collection('coisas').doc().id;
     }
-    db
-        .collection('user')
-        .doc(user.id)
-        .collection('coisas')
-        .doc(coisas.idFire)
-        .set(coisas.toJson());
+    db.collection('user').doc(user.id).collection('coisas').doc(coisas.idFire).set(coisas.toJson());
   }
 
   getCoisas({UserP user}) async {
     try {
-      var result =
-          await db.collection('user').doc(user.id).collection('coisas').get();
+      var result = await db.collection('user').doc(user.id).collection('coisas').get();
       return result.docs;
     } catch (e) {
       var auxi = await translator.translate(e.message, from: 'en', to: 'pt');
@@ -48,25 +41,19 @@ class BancoFire {
   }
 
   removeCoisas({Coisas cat, UserP user}) async {
-    db
-        .collection('user')
-        .doc(user.id)
-        .collection('coisas')
-        .doc(cat.idFire)
-        .delete();
+    db.collection('user').doc(user.id).collection('coisas').doc(cat.idFire).delete();
   }
 
   getMoviment({UserP user}) async {
-    var result =
-        await db.collection('user').doc(user.id).collection('moviment').get();
+    var result = await db.collection('user').doc(user.id).collection('moviment').get();
 
     return result.docs;
   }
 
   Future<String> criaUser(UserP user) async {
     try {
-      var userFire = await _firebaseAuth.createUserWithEmailAndPassword(
-          email: user.login, password: user.senha);
+      var userFire =
+          await _firebaseAuth.createUserWithEmailAndPassword(email: user.login, password: user.senha);
 
       user.id = userFire.user.uid;
       db.collection('user').doc(userFire.user.uid).set(user.toJson());
@@ -87,11 +74,9 @@ class BancoFire {
 
   Future<UserP> login({String email, String password}) async {
     try {
-      var _value = await _firebaseAuth.signInWithEmailAndPassword(
-          email: email.trim(), password: password);
+      var _value = await _firebaseAuth.signInWithEmailAndPassword(email: email.trim(), password: password);
 
-      DocumentSnapshot result =
-          await db.collection('user').doc(_value.user.uid).get();
+      DocumentSnapshot result = await db.collection('user').doc(_value.user.uid).get();
 
       UserP auxi = new UserP(
         login: result.data()['login'],
@@ -120,10 +105,7 @@ class BancoFire {
       UserP user = new UserP();
       var axui = prefs.getString('userAnonimo') ?? '';
       if (axui.isNotEmpty) {
-        DocumentSnapshot result = await db
-            .collection('user')
-            .doc(prefs.getString('userAnonimo'))
-            .get();
+        DocumentSnapshot result = await db.collection('user').doc(prefs.getString('userAnonimo')).get();
 
         user.id = result.data()['id'];
       } else {
@@ -148,7 +130,7 @@ class BancoFire {
     }
   }
 
-  Future<void> resetarSenha({UserP user}) {
+  void resetarSenha({UserP user}) {
     _firebaseAuth.sendPasswordResetEmail(email: user.login);
   }
 
@@ -157,8 +139,7 @@ class BancoFire {
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
     // Create a new credential
     final GoogleAuthCredential credential = GoogleAuthProvider.credential(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
-import 'package:listadecoisa/controller/temas.dart';
 
 Color primary = new Color(0xFF212121);
 Color primaryLight = new Color(0xFF484848);

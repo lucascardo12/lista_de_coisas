@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/controller/temas.dart';
-import 'package:listadecoisa/model/coisas.dart';
 
 Widget loading() {
   return Container(

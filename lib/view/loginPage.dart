@@ -94,22 +94,19 @@ class _LoginState extends State<Login> {
                                     onPressed: () {},
                                   ),
                                   border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(25)),
+                                      borderRadius: BorderRadius.all(Radius.circular(25)),
                                       borderSide: BorderSide(
                                         color: Colors.white,
                                         width: 2,
                                       )),
                                   enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(25)),
+                                      borderRadius: BorderRadius.all(Radius.circular(25)),
                                       borderSide: BorderSide(
                                         color: Colors.white,
                                         width: 2,
                                       )),
                                   focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(25)),
+                                      borderRadius: BorderRadius.all(Radius.circular(25)),
                                       borderSide: BorderSide(
                                         color: Colors.white,
                                         width: 2,
@@ -128,9 +125,7 @@ class _LoginState extends State<Login> {
                               decoration: InputDecoration(
                                   suffixIcon: IconButton(
                                     color: Colors.white,
-                                    icon: Icon(lObescure
-                                        ? Icons.visibility
-                                        : Icons.visibility_off),
+                                    icon: Icon(lObescure ? Icons.visibility : Icons.visibility_off),
                                     onPressed: () {
                                       setState(() {
                                         lObescure = !lObescure;
@@ -138,22 +133,19 @@ class _LoginState extends State<Login> {
                                     },
                                   ),
                                   border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(25)),
+                                      borderRadius: BorderRadius.all(Radius.circular(25)),
                                       borderSide: BorderSide(
                                         color: Colors.white,
                                         width: 2,
                                       )),
                                   enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(25)),
+                                      borderRadius: BorderRadius.all(Radius.circular(25)),
                                       borderSide: BorderSide(
                                         color: Colors.white,
                                         width: 2,
                                       )),
                                   focusedBorder: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(25)),
+                                      borderRadius: BorderRadius.all(Radius.circular(25)),
                                       borderSide: BorderSide(
                                         color: Colors.white,
                                         width: 2,
@@ -192,11 +184,8 @@ class _LoginState extends State<Login> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        Cadastro()));
+                            Navigator.push(context,
+                                new MaterialPageRoute(builder: (BuildContext context) => Cadastro()));
                           },
                         ),
                         FlatButton(
