@@ -9,6 +9,13 @@ import 'package:listadecoisa/controller/temas.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
 import 'package:smart_select/smart_select.dart';
 
+import '../controller/temas.dart';
+import '../controller/temas.dart';
+import '../controller/temas.dart';
+import '../controller/temas.dart';
+import '../controller/temas.dart';
+import '../model/coisas.dart';
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
@@ -19,6 +26,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomeviewtate extends State<MyHomePage> {
   GlobalKey<ScaffoldState> _scaffoldKe = new GlobalKey();
   bool isAnonimo = false;
+  int tipo = 1;
+  List<String> listaTipo = ["Texto Simples", "Check-List", "Lista de Compras"];
 
   void logoff() {
     global.prefs.setString('user', '');
@@ -97,6 +106,91 @@ class _MyHomeviewtate extends State<MyHomePage> {
     );
   }
 
+  showCria({
+    BuildContext context,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        final theme = Theme.of(context);
+        return Wrap(
+          children: [
+            ListTile(
+              title: Text(
+                'Escolha o tipo de Lista',
+                style: theme.textTheme.subtitle1.copyWith(color: getWhiteOrBlack()),
+              ),
+              tileColor: getPrimary(),
+            ),
+            for (int i = 0; i < listaTipo.length; i++)
+              ListTile(
+                title: Text(
+                  '${listaTipo[i]}',
+                  style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.black),
+                ),
+                leading: Radio(
+                  value: i,
+                  activeColor: getPrimary(),
+                  onChanged: (int value) {
+                    setState(() {
+                      tipo = value;
+                    });
+                    Navigator.pop(context);
+                    showCria(context: context);
+                  },
+                  groupValue: tipo,
+                ),
+              ),
+            Padding(
+                padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                        child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(
+                        "Cancelar",
+                        style: theme.textTheme.subtitle1.copyWith(color: Colors.black),
+                      ),
+                      style: TextButton.styleFrom(backgroundColor: Colors.white),
+                    )),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                        child: TextButton(
+                            onPressed: () => Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (BuildContext context) => ListasPage(
+                                              coisas: Coisas(
+                                                  tipo: tipo,
+                                                  checkCompras: [],
+                                                  checklist: [],
+                                                  descricao: '',
+                                                  nome: ''),
+                                            ))).then((value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      global.lisCoisa.add(value);
+                                    });
+                                  }
+                                  Navigator.pop(context);
+                                }),
+                            child: Text(
+                              "Continuar",
+                              style: theme.textTheme.subtitle1.copyWith(color: getWhiteOrBlack()),
+                            ),
+                            style: TextButton.styleFrom(backgroundColor: Colors.green)))
+                  ],
+                )),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     isAnonimo = global.prefs.getBool('isAnonimo') ?? false;
@@ -105,7 +199,6 @@ class _MyHomeviewtate extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('att');
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -121,24 +214,22 @@ class _MyHomeviewtate extends State<MyHomePage> {
                   size: 32,
                 ),
                 onPressed: () {
-                  Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (BuildContext context) => ListasPage()))
-                      .then((value) {
-                    if (value != null) {
-                      setState(() {
-                        global.lisCoisa.add(value);
-                      });
-                    }
-                  });
+                  // Navigator.push(
+                  //         context, new MaterialPageRoute(builder: (BuildContext context) => ListasPage()))
+                  //     .then((value) {
+                  //   if (value != null) {
+                  //     setState(() {
+                  //       global.lisCoisa.add(value);
+                  //     });
+                  //   }
+                  // });
+                  showCria(context: context);
                 },
               ))
         ],
         centerTitle: true,
         backgroundColor: getPrimary(),
-        title:
-            Text('Listas', style: TextStyle(color: Colors.white, fontSize: 25)),
+        title: Text('Listas', style: TextStyle(color: Colors.white, fontSize: 25)),
       ),
       key: _scaffoldKe,
       body: WillPopScope(
@@ -166,34 +257,26 @@ class _MyHomeviewtate extends State<MyHomePage> {
                                 Navigator.push(
                                     context,
                                     new MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ListasPage(
+                                        builder: (BuildContext context) => ListasPage(
                                               coisas: global.lisCoisa[index],
                                             ))).then((value) {
                                   setState(() {
-                                    global.lisCoisa[index] =
-                                        value ?? global.lisCoisa[index];
+                                    global.lisCoisa[index] = value ?? global.lisCoisa[index];
                                   });
                                 });
                               },
                               child: Card(
                                 child: Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 10, right: 10),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(global.lisCoisa[index].nome),
-                                          IconButton(
-                                              icon: Icon(Icons.delete_forever),
-                                              onPressed: () {
-                                                showAlertDialog2(
-                                                    coisas:
-                                                        global.lisCoisa[index],
-                                                    context: context);
-                                              })
-                                        ])),
+                                    padding: EdgeInsets.only(left: 10, right: 10),
+                                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                      Text(global.lisCoisa[index].nome),
+                                      IconButton(
+                                          icon: Icon(Icons.delete_forever),
+                                          onPressed: () {
+                                            showAlertDialog2(
+                                                coisas: global.lisCoisa[index], context: context);
+                                          })
+                                    ])),
                               ));
                         }))),
           )),
@@ -229,9 +312,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                         onPressed: () {
                           logoff();
                           Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (BuildContext context) => Login()));
+                              context, new MaterialPageRoute(builder: (BuildContext context) => Login()));
                         },
                         child: Text(
                           "Logout",
@@ -248,9 +329,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                     color: getPrimary(),
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (BuildContext context) => Login()));
+                          context, new MaterialPageRoute(builder: (BuildContext context) => Login()));
                     },
                     child: Text(
                       "Voltar",
@@ -324,8 +403,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
           width: MediaQuery.of(context).size.width,
           child: AdmobBanner(
             adUnitId: 'ca-app-pub-1205611887737485/2150742777',
-            adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-                width: MediaQuery.of(context).size.width.round()),
+            adSize: AdmobBannerSize.ADAPTIVE_BANNER(width: MediaQuery.of(context).size.width.round()),
             listener: (AdmobAdEvent event, Map<String, dynamic> args) {},
             onBannerCreated: (AdmobBannerController controller) {
               //controller.dispose();

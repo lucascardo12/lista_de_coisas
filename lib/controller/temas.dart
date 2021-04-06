@@ -54,13 +54,13 @@ Color getWhiteOrBlack() {
       return Colors.white;
       break;
     case "Dark":
-      return Colors.black;
+      return Colors.white;
       break;
     case "Azul":
       return Colors.white;
       break;
     case "Roxo":
-      return Color.fromRGBO(89, 165, 216, 1);
+      return Colors.white;
       break;
     default:
       return null;
