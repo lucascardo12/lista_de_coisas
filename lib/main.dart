@@ -23,22 +23,21 @@ Future<void> main() async {
   global.banco.db.settings = Settings(persistenceEnabled: true);
   await SharedPreferences.getInstance().then((value) async {
     global.prefs = value;
-    global.tema = value.getString("tema") ?? "Original";
-    var auxi = value.getString("user") ?? '';
-    try {
-      if (value.getBool('fezLogin')) {
-        global.usuario = new UserP.fromJson(json.decode(auxi));
-        List<dynamic> listCat = await global.banco.getCoisas(user: global.usuario);
-        if (listCat != null) {
-          global.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
-        }
-      }
-    } catch (e) {
-      print(e);
-    }
-
-    runApp(MyApp());
   });
+  global.tema = global.prefs.getString("tema") ?? "Original";
+  var auxi = global.prefs.getString("user") ?? '';
+  try {
+    if (global.prefs.getBool('fezLogin')) {
+      global.usuario = new UserP.fromJson(json.decode(auxi));
+      List<dynamic> listCat = await global.banco.getCoisas(user: global.usuario);
+      if (listCat != null) {
+        global.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
+      }
+    }
+  } catch (e) {
+    print(e);
+  }
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
