@@ -164,7 +164,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (BuildContext context) => ListasPage(
-                                              coisas: Coisas(
+                                              coisa: Coisas(
                                                   tipo: tipo,
                                                   checkCompras: [],
                                                   checklist: [],
@@ -199,6 +199,10 @@ class _MyHomeviewtate extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.light,
+      statusBarColor: getPrimary(), // status bar color
+    ));
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -213,18 +217,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                   Icons.add_circle,
                   size: 32,
                 ),
-                onPressed: () {
-                  // Navigator.push(
-                  //         context, new MaterialPageRoute(builder: (BuildContext context) => ListasPage()))
-                  //     .then((value) {
-                  //   if (value != null) {
-                  //     setState(() {
-                  //       global.lisCoisa.add(value);
-                  //     });
-                  //   }
-                  // });
-                  showCria(context: context);
-                },
+                onPressed: () => showCria(context: context),
               ))
         ],
         centerTitle: true,
@@ -234,53 +227,53 @@ class _MyHomeviewtate extends State<MyHomePage> {
       key: _scaffoldKe,
       body: WillPopScope(
           onWillPop: () => showExit(context: context),
-          child: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [getPrimary(), getSecondary()])),
-            child: Padding(
-                padding: EdgeInsets.only(
-                  left: 10,
-                  right: 10,
-                  top: 10,
-                ),
-                child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: global.lisCoisa.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (BuildContext context) => ListasPage(
-                                              coisas: global.lisCoisa[index],
-                                            ))).then((value) {
-                                  setState(() {
-                                    global.lisCoisa[index] = value ?? global.lisCoisa[index];
-                                  });
-                                });
-                              },
-                              child: Card(
-                                child: Padding(
-                                    padding: EdgeInsets.only(left: 10, right: 10),
-                                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                      Text(global.lisCoisa[index].nome),
-                                      IconButton(
-                                          icon: Icon(Icons.delete_forever),
-                                          onPressed: () {
-                                            showAlertDialog2(
-                                                coisas: global.lisCoisa[index], context: context);
-                                          })
-                                    ])),
-                              ));
-                        }))),
+          child: Stack(
+            children: [
+              Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: [getPrimary(), getSecondary()]))),
+              ListView.builder(
+                  padding: EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                  ),
+                  shrinkWrap: true,
+                  itemCount: global.lisCoisa.length,
+                  itemBuilder: (context, index) {
+                    var coisa = global.lisCoisa[index];
+                    return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (BuildContext context) => ListasPage(
+                                        coisa: coisa,
+                                      ))).then((value) {
+                            if (value != null)
+                              setState(() {
+                                global.lisCoisa[index] = value;
+                              });
+                          });
+                        },
+                        child: Card(
+                          child: Padding(
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                Text(global.lisCoisa[index].nome),
+                                IconButton(
+                                    icon: Icon(Icons.delete_forever),
+                                    onPressed: () {
+                                      showAlertDialog2(coisas: global.lisCoisa[index], context: context);
+                                    })
+                              ])),
+                        ));
+                  }),
+            ],
           )),
-      endDrawerEnableOpenDragGesture: true,
       drawer: Drawer(
         elevation: 8,
         child: ListView(
@@ -397,20 +390,16 @@ class _MyHomeviewtate extends State<MyHomePage> {
           ],
         ),
       ),
-      persistentFooterButtons: [
-        Container(
-          margin: EdgeInsets.all(0),
-          width: MediaQuery.of(context).size.width,
-          child: AdmobBanner(
-            adUnitId: 'ca-app-pub-1205611887737485/2150742777',
-            adSize: AdmobBannerSize.ADAPTIVE_BANNER(width: MediaQuery.of(context).size.width.round()),
-            listener: (AdmobAdEvent event, Map<String, dynamic> args) {},
-            onBannerCreated: (AdmobBannerController controller) {
-              //controller.dispose();
-            },
-          ),
-        )
-      ],
+      bottomNavigationBar: Container(
+        child: AdmobBanner(
+          adUnitId: 'ca-app-pub-1205611887737485/2150742777',
+          adSize: AdmobBannerSize.ADAPTIVE_BANNER(width: MediaQuery.of(context).size.width.round()),
+          listener: (AdmobAdEvent event, Map<String, dynamic> args) {},
+          onBannerCreated: (AdmobBannerController controller) {
+            //controller.dispose();
+          },
+        ),
+      ),
     );
   }
 }

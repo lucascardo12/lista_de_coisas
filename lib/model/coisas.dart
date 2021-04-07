@@ -32,7 +32,7 @@ class Coisas {
         'nome': nome,
         'descricao': descricao,
         'idFire': idFire,
-        if (checklist != null) 'checklist': checklist.map((i) => i..toJson()).toList(),
+        if (checklist != null) 'checklist': checklist.map((i) => i.toJson()).toList(),
         if (checkCompras != null) 'checkCompras': checkCompras.map((e) => e.toJson()).toList(),
         'tipo': tipo,
       };

@@ -45,26 +45,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.light,
+      statusBarColor: getPrimary(), // status bar color
+    ));
     return MaterialApp(
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       title: 'Lista de Coisas',
       theme: ThemeData(
-          accentColor: getSecondary(),
-          primaryColor: getSecondary(),
-          colorScheme: Theme.of(context).colorScheme.copyWith(
-                primary: getSecondary(),
-                secondary: getSecondary(),
-              ),
-          appBarTheme: Theme.of(context).appBarTheme.copyWith(
-                brightness: Brightness.light,
-                backgroundColor: getSecondary(),
-                backwardsCompatibility: false,
-                systemOverlayStyle: SystemUiOverlayStyle(
-                  statusBarColor: getSecondary(),
-                  statusBarIconBrightness: Brightness.light,
-                ),
-              )),
+        accentColor: getSecondary(),
+        primaryColor: getSecondary(),
+        colorScheme: Theme.of(context).colorScheme.copyWith(
+              primary: getSecondary(),
+              secondary: getSecondary(),
+            ),
+      ),
       home: global.usuario != null ? MyHomePage(title: 'Lista de Coisas') : Login(),
     );
   }
