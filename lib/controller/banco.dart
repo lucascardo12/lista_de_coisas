@@ -44,10 +44,10 @@ class BancoFire {
     db.collection('user').doc(user.id).collection('coisas').doc(cat.idFire).delete();
   }
 
-  getMoviment({UserP user}) async {
-    var result = await db.collection('user').doc(user.id).collection('moviment').get();
+  Future<DocumentSnapshot> getCoisa({String idUser, String idLista}) async {
+    DocumentSnapshot result = await db.collection('user').doc(idUser).collection('coisas').doc(idLista).get();
 
-    return result.docs;
+    return result;
   }
 
   Future<String> criaUser(UserP user) async {

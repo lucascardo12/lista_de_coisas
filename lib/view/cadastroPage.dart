@@ -7,6 +7,7 @@ import 'package:listadecoisa/model/user.dart';
 import 'package:listadecoisa/view/homePage.dart';
 import 'package:listadecoisa/controller/temas.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
+import 'package:listadecoisa/widgets/borda-padrao.dart';
 
 class Cadastro extends StatefulWidget {
   Cadastro();
@@ -21,8 +22,7 @@ class _Cadastro extends State<Cadastro> {
   bool isVali = false;
   bool lObescure = true;
   void valida() {
-    UserP us = new UserP(
-        id: null, login: loginControler.text, senha: senhaControler.text);
+    UserP us = new UserP(id: null, login: loginControler.text, senha: senhaControler.text);
     global.banco.criaUser(us).then((value) {
       if (value.isNotEmpty) {
         setState(() {
@@ -38,27 +38,21 @@ class _Cadastro extends State<Cadastro> {
   }
 
   void _submit() {
-    global.banco
-        .login(email: loginControler.text, password: senhaControler.text)
-        .then((value) async {
+    global.banco.login(email: loginControler.text, password: senhaControler.text).then((value) async {
       setState(() {
         global.usuario = value;
         global.isLoading = false;
       });
       if (value != null) {
-        List<dynamic> listCat =
-            await global.banco.getCoisas(user: global.usuario);
+        List<dynamic> listCat = await global.banco.getCoisas(user: global.usuario);
         global.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
         setState(() {
           var userCo = jsonEncode(value);
           global.prefs.setString('user', userCo);
           global.prefs.setBool("fezLogin", true);
         });
-        Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    MyHomePage(title: 'Lista de Coisas')));
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (BuildContext context) => MyHomePage(title: 'Lista de Coisas')));
       }
     });
   }
@@ -69,9 +63,7 @@ class _Cadastro extends State<Cadastro> {
         body: Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [getPrimary(), getSecondary()])),
+              begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [getPrimary(), getSecondary()])),
       child: ListView(
         padding: EdgeInsets.all(15),
         children: [
@@ -103,24 +95,9 @@ class _Cadastro extends State<Cadastro> {
                           icon: Icon(Icons.visibility_off),
                           onPressed: () {},
                         ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            )),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            )),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            )),
+                        border: BordaPadrao.build(),
+                        enabledBorder: BordaPadrao.build(),
+                        focusedBorder: BordaPadrao.build(),
                         hintStyle: TextStyle(color: Colors.white),
                         hintText: 'E-mail'),
                     controller: loginControler,
@@ -134,33 +111,16 @@ class _Cadastro extends State<Cadastro> {
                     decoration: InputDecoration(
                         suffixIcon: IconButton(
                           color: Colors.white,
-                          icon: Icon(lObescure
-                              ? Icons.visibility
-                              : Icons.visibility_off),
+                          icon: Icon(lObescure ? Icons.visibility : Icons.visibility_off),
                           onPressed: () {
                             setState(() {
                               lObescure = !lObescure;
                             });
                           },
                         ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            )),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            )),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            )),
+                        border: BordaPadrao.build(),
+                        enabledBorder: BordaPadrao.build(),
+                        focusedBorder: BordaPadrao.build(),
                         hintStyle: TextStyle(color: Colors.white),
                         hintText: 'Senha'),
                     controller: senhaControler,
@@ -176,36 +136,23 @@ class _Cadastro extends State<Cadastro> {
                           icon: Icon(Icons.visibility_off),
                           onPressed: () {},
                         ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            )),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            )),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 2,
-                            )),
+                        border: BordaPadrao.build(),
+                        enabledBorder: BordaPadrao.build(),
+                        focusedBorder: BordaPadrao.build(),
                         hintStyle: TextStyle(color: Colors.white),
                         hintText: 'Nome'),
                     controller: nomeControler,
                   )),
               Padding(
                   padding: EdgeInsets.all(15),
-                  child: FlatButton(
-                    minWidth: MediaQuery.of(context).size.width - 100,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      minimumSize: Size(MediaQuery.of(context).size.width - 100, 2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      backgroundColor: Colors.white,
                     ),
-                    color: Colors.white,
                     child: Padding(
                         padding: EdgeInsets.all(15),
                         child: Text(
@@ -216,7 +163,7 @@ class _Cadastro extends State<Cadastro> {
                       valida();
                     },
                   )),
-              FlatButton(
+              TextButton(
                 child: Text(
                   'Voltar',
                   style: TextStyle(color: Colors.white),

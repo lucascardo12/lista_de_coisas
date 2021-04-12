@@ -1,9 +1,10 @@
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:listadecoisa/controller/listas-controller.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/controller/temas.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
+import 'package:listadecoisa/widgets/borda-padrao.dart';
 
 class ListasPage extends StatefulWidget {
   ListasPage({
@@ -33,18 +34,6 @@ class _ListasPageState extends State<ListasPage> {
     );
     interstitialAd.load();
     super.initState();
-  }
-
-  void criaCoisa() {
-    global.banco.criaAlteraCoisas(coisas: _coisas, user: global.usuario);
-    Fluttertoast.showToast(
-        msg: _coisas != null ? "Alterado com Sucesso!!" : "Criado com Sucesso!!",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 5,
-        backgroundColor: getPrimary(),
-        textColor: Colors.white,
-        fontSize: 18.0);
   }
 
   @override
@@ -92,7 +81,7 @@ class _ListasPageState extends State<ListasPage> {
                         global.prefs.setInt('day', DateTime.now().day);
                         interstitialAd.show();
                       }
-                      criaCoisa();
+                      await ListasController.criaCoisa(coisa: _coisas);
                       Navigator.pop(context, _coisas);
                     }
                   },
@@ -148,6 +137,7 @@ class _ListasPageState extends State<ListasPage> {
                       if (value.isEmpty) return "Titulo não pode ser vazio";
                       return null;
                     },
+                    onChanged: (value) => _coisas.nome = value,
                     style: TextStyle(color: Colors.white, fontSize: 20),
                     initialValue: _coisas.nome ?? '',
                     textAlign: TextAlign.center,
@@ -171,29 +161,15 @@ class _ListasPageState extends State<ListasPage> {
                   autofocus: _coisas.descricao.isEmpty ? true : false,
                   maxLines: 300,
                   initialValue: _coisas.descricao ?? '',
+                  onChanged: (value) => _coisas.descricao = value,
                   minLines: 20,
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 2,
-                        )),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 2,
-                        )),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 2,
-                        )),
+                    border: BordaPadrao.build(),
+                    enabledBorder: BordaPadrao.build(),
+                    focusedBorder: BordaPadrao.build(),
                     hintStyle: TextStyle(color: Colors.white),
                     alignLabelWithHint: true,
                     labelText: 'Conteudo da lista',
@@ -276,9 +252,9 @@ class _ListasPageState extends State<ListasPage> {
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.zero,
-                            border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                            border: BordaPadrao.check(),
+                            enabledBorder: BordaPadrao.check(),
+                            focusedBorder: BordaPadrao.check(),
                             hintStyle: TextStyle(color: Colors.white),
                             alignLabelWithHint: true,
                             hintText: "item",
@@ -375,11 +351,9 @@ class _ListasPageState extends State<ListasPage> {
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.zero,
-                                border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                enabledBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                focusedBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                                border: BordaPadrao.check(),
+                                enabledBorder: BordaPadrao.check(),
+                                focusedBorder: BordaPadrao.check(),
                                 hintStyle: TextStyle(color: Colors.white),
                                 alignLabelWithHint: true,
                                 hintText: "item",
@@ -403,11 +377,9 @@ class _ListasPageState extends State<ListasPage> {
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.zero,
                                 hintText: "Qts",
-                                border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                enabledBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                focusedBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                                border: BordaPadrao.check(),
+                                enabledBorder: BordaPadrao.check(),
+                                focusedBorder: BordaPadrao.check(),
                                 hintStyle: TextStyle(color: Colors.white),
                                 alignLabelWithHint: true,
                                 labelStyle: TextStyle(color: Colors.white, fontSize: 18),
@@ -433,11 +405,9 @@ class _ListasPageState extends State<ListasPage> {
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.zero,
                                 hintText: "R\u0024",
-                                border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                enabledBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                focusedBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                                border: BordaPadrao.check(),
+                                enabledBorder: BordaPadrao.check(),
+                                focusedBorder: BordaPadrao.check(),
                                 hintStyle: TextStyle(color: Colors.white),
                                 alignLabelWithHint: true,
                                 labelStyle: TextStyle(color: Colors.white, fontSize: 18),

@@ -1,11 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:listadecoisa/controller/custom-widget.dart';
 import 'package:listadecoisa/controller/login-controller.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/view/cadastroPage.dart';
 import 'package:listadecoisa/controller/temas.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
+import 'package:listadecoisa/widgets/borda-padrao.dart';
+import 'package:listadecoisa/widgets/loading-padrao.dart';
 
 class Login extends StatefulWidget {
   Login({
@@ -18,40 +19,28 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController loginControler = TextEditingController();
-  TextEditingController senhaControler = TextEditingController();
-  // GoogleSignInAccount _currentUser;
+  TextEditingController loginControler = TextEditingController(text: global.prefs.getString('login') ?? "");
+  TextEditingController senhaControler = TextEditingController(text: global.prefs.getString('senha') ?? "");
   bool isVali = false;
   bool lObescure = true;
 
   @override
   void initState() {
     super.initState();
-    loginControler.text = global.prefs.getString('login') ?? "";
-    senhaControler.text = global.prefs.getString('senha') ?? "";
-    // _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-    //   setState(() {
-    //     _currentUser = account;
-    //   });
-    //   if (_currentUser != null) {
-    //     // _handleGetContact();
-    //   }
-    // });
-    // _googleSignIn.signInSilently();
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        floatingActionButton: FlatButton(
-          padding: EdgeInsets.all(0),
+        floatingActionButton: TextButton(
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.all(0),
+          ),
           child: Text(
             'Esqueceu sua senha?',
             style: TextStyle(color: Colors.white),
           ),
-          onPressed: () {
-            showAlertDialog2(context: context, loginControler: loginControler);
-          },
+          onPressed: () => showAlertDialog2(context: context, loginControler: loginControler),
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -60,7 +49,7 @@ class _LoginState extends State<Login> {
                   end: Alignment.bottomLeft,
                   colors: [getPrimary(), getSecondary()])),
           child: global.isLoading
-              ? loading()
+              ? LoadPadrao()
               : ListView(
                   padding: EdgeInsets.all(0),
                   children: [
@@ -93,24 +82,9 @@ class _LoginState extends State<Login> {
                                     icon: Icon(Icons.visibility_off),
                                     onPressed: () {},
                                   ),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: 2,
-                                      )),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: 2,
-                                      )),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: 2,
-                                      )),
+                                  border: BordaPadrao.build(),
+                                  enabledBorder: BordaPadrao.build(),
+                                  focusedBorder: BordaPadrao.build(),
                                   hintStyle: TextStyle(color: Colors.white),
                                   hintText: 'E-mail'),
                               controller: loginControler,
@@ -132,42 +106,28 @@ class _LoginState extends State<Login> {
                                       });
                                     },
                                   ),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: 2,
-                                      )),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: 2,
-                                      )),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                                      borderSide: BorderSide(
-                                        color: Colors.white,
-                                        width: 2,
-                                      )),
+                                  border: BordaPadrao.build(),
+                                  enabledBorder: BordaPadrao.build(),
+                                  focusedBorder: BordaPadrao.build(),
                                   hintStyle: TextStyle(color: Colors.white),
                                   hintText: 'Senha'),
                               controller: senhaControler,
                             )),
                         Padding(
                             padding: EdgeInsets.all(15),
-                            child: FlatButton(
-                              minWidth: MediaQuery.of(context).size.width - 100,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.only(top: 10, bottom: 10),
+                                minimumSize: Size(MediaQuery.of(context).size.width - 100, 2),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                backgroundColor: Colors.white,
                               ),
-                              color: Colors.white,
-                              child: Padding(
-                                  padding: EdgeInsets.all(15),
-                                  child: Text(
-                                    'Login',
-                                    style: TextStyle(color: getPrimary()),
-                                  )),
+                              child: Text(
+                                'Login',
+                                style: TextStyle(color: getPrimary()),
+                              ),
                               onPressed: () {
                                 setState(() {
                                   global.isLoading = true;
@@ -178,7 +138,7 @@ class _LoginState extends State<Login> {
                                     senhaControler: senhaControler);
                               },
                             )),
-                        FlatButton(
+                        TextButton(
                           child: Text(
                             'Cadastrar-se',
                             style: TextStyle(color: Colors.white),
@@ -188,11 +148,13 @@ class _LoginState extends State<Login> {
                                 new MaterialPageRoute(builder: (BuildContext context) => Cadastro()));
                           },
                         ),
-                        FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            backgroundColor: Colors.white,
                           ),
-                          color: Colors.white,
                           child: Text(
                             'Modo anônimo',
                             style: TextStyle(color: getPrimary()),
@@ -201,19 +163,6 @@ class _LoginState extends State<Login> {
                             loginAnonimo(context: context);
                           },
                         ),
-                        // FlatButton(
-                        //   shape: RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.circular(25),
-                        //   ),
-                        //   color: Colors.white,
-                        //   child: Text(
-                        //     'Google',
-                        //     style: TextStyle(color: getPrimary()),
-                        //   ),
-                        //   onPressed: () {
-                        //     global.banco.signInWithGoogle();
-                        //   },
-                        // )
                       ],
                     )
                   ],
