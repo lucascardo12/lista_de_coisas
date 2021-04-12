@@ -2,7 +2,6 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/controller/listas-controller.dart';
 import 'package:listadecoisa/model/coisas.dart';
-import 'package:listadecoisa/controller/temas.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
 import 'package:listadecoisa/widgets/borda-padrao.dart';
 
@@ -96,7 +95,7 @@ class _ListasPageState extends State<ListasPage> {
                   gradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
-                      colors: [getPrimary(), getSecondary()])),
+                      colors: [global.getPrimary(), global.getSecondary()])),
             ),
             retornaBody(tipo: _coisas.tipo),
           ],
@@ -213,7 +212,7 @@ class _ListasPageState extends State<ListasPage> {
                       child: IconButton(
                           icon: Icon(
                             Icons.add,
-                            color: getPrimary(),
+                            color: global.getPrimary(),
                           ),
                           onPressed: () =>
                               setState(() => _coisas.checklist.add(Checklist(feito: false, item: '')))))
@@ -229,7 +228,7 @@ class _ListasPageState extends State<ListasPage> {
                       children: [
                         Checkbox(
                           fillColor: MaterialStateProperty.all(Colors.white),
-                          checkColor: getPrimary(),
+                          checkColor: global.getPrimary(),
                           onChanged: (bool value) {
                             setState(() {
                               _coisas.checklist[i].feito = value;
@@ -308,7 +307,7 @@ class _ListasPageState extends State<ListasPage> {
                       child: IconButton(
                           icon: Icon(
                             Icons.add,
-                            color: getPrimary(),
+                            color: global.getPrimary(),
                           ),
                           onPressed: () => setState(() => _coisas.checkCompras.add(CheckCompras(
                                 feito: false,
@@ -327,7 +326,7 @@ class _ListasPageState extends State<ListasPage> {
                       children: [
                         Checkbox(
                           fillColor: MaterialStateProperty.all(Colors.white),
-                          checkColor: getPrimary(),
+                          checkColor: global.getPrimary(),
                           onChanged: (bool value) {
                             setState(() {
                               _coisas.checkCompras[i].feito = value;

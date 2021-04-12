@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/user.dart';
 import 'package:listadecoisa/view/homePage.dart';
-import 'package:listadecoisa/controller/temas.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
 import 'package:listadecoisa/widgets/borda-padrao.dart';
 
@@ -63,7 +62,9 @@ class _Cadastro extends State<Cadastro> {
         body: Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-              begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [getPrimary(), getSecondary()])),
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [global.getPrimary(), global.getSecondary()])),
       child: ListView(
         padding: EdgeInsets.all(15),
         children: [
@@ -157,7 +158,7 @@ class _Cadastro extends State<Cadastro> {
                         padding: EdgeInsets.all(15),
                         child: Text(
                           'Cadastro',
-                          style: TextStyle(color: getPrimary()),
+                          style: TextStyle(color: global.getPrimary()),
                         )),
                     onPressed: () {
                       valida();

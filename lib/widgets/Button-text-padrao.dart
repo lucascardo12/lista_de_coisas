@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:listadecoisa/controller/temas.dart';
+import 'package:listadecoisa/controller/global.dart' as global;
 
 class ButtonTextPadrao extends StatelessWidget {
   final Function onPressed;
@@ -11,11 +11,12 @@ class ButtonTextPadrao extends StatelessWidget {
         padding: EdgeInsets.only(left: 20, right: 20),
         child: TextButton(
             style: TextButton.styleFrom(
-              onSurface: getSecondary(),
+              elevation: 8,
+              onSurface: global.getSecondary(),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
               ),
-              backgroundColor: getPrimary(),
+              backgroundColor: global.getPrimary(),
             ),
             onPressed: onPressed,
             child: Text(

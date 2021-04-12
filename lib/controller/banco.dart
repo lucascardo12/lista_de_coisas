@@ -50,6 +50,12 @@ class BancoFire {
     return result;
   }
 
+  Future<DocumentSnapshot> getUser({String idUser}) async {
+    DocumentSnapshot result = await db.collection('user').doc(idUser).get();
+
+    return result;
+  }
+
   Future<String> criaUser(UserP user) async {
     try {
       var userFire =

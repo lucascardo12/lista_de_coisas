@@ -40,6 +40,8 @@ dependencies:
   smart_select: ^4.3.2
   uni_links: ^0.4.0
   scan: ^1.1.0
+  qr_flutter: ^4.0.0
+  share: ^2.0.1
  
 
 dev_dependencies:

@@ -9,7 +9,6 @@ import 'package:listadecoisa/view/homePage.dart';
 import 'package:listadecoisa/view/loginPage.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'controller/temas.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,11 +41,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Lista de Coisas',
       theme: ThemeData(
-        accentColor: getSecondary(),
-        primaryColor: getSecondary(),
+        accentColor: global.getSecondary(),
+        primaryColor: global.getSecondary(),
         colorScheme: Theme.of(context).colorScheme.copyWith(
-              primary: getSecondary(),
-              secondary: getSecondary(),
+              primary: global.getSecondary(),
+              secondary: global.getSecondary(),
             ),
       ),
       routes: {

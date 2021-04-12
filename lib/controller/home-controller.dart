@@ -50,15 +50,18 @@ class HomeController {
     );
   }
 
-  static initPlatformStateForStringUniLinks({BuildContext context}) async {
+  static Future initPlatformStateForStringUniLinks({BuildContext context}) async {
     String initialLink;
 
     try {
       initialLink = await getInitialLink();
       print('initial link: $initialLink');
-      gb.codigo = initialLink.substring(33, initialLink.length);
-      var rota = initialLink.substring(28, 33);
-      Navigator.pushNamed(context, rota);
+      if (initialLink != null) {
+        gb.codigoList = initialLink.substring(33, initialLink.indexOf('@'));
+        gb.codigoUser = initialLink.substring(initialLink.indexOf('@') + 1, initialLink.length);
+        var rota = initialLink.substring(28, 33);
+        return Navigator.pushNamed(context, rota);
+      }
     } on PlatformException {
       initialLink = 'Failed to get initial link.';
     } on FormatException {

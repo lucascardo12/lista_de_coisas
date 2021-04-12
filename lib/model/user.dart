@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserP {
   String id;
   String nome;
@@ -25,5 +27,11 @@ class UserP {
     map["nome"] = nome;
     map["id"] = id;
     map['login'] = login;
+  }
+
+  UserP.fromSnapshot(DocumentSnapshot snapshot) {
+    nome = snapshot.data()['nome'];
+    login = snapshot.data()["login"];
+    id = snapshot.id;
   }
 }

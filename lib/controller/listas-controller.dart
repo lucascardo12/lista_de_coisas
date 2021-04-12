@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:listadecoisa/controller/temas.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/controller/global.dart' as gb;
 
@@ -12,7 +11,7 @@ class ListasController {
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 5,
-        backgroundColor: getPrimary(),
+        backgroundColor: gb.getPrimary(),
         textColor: Colors.white,
         fontSize: 18.0);
   }

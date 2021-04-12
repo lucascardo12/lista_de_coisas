@@ -6,18 +6,14 @@ import 'package:listadecoisa/controller/home-controller.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/view/listasPage.dart';
 import 'package:listadecoisa/view/loginPage.dart';
-import 'package:listadecoisa/controller/temas.dart';
 import 'package:listadecoisa/controller/global.dart' as gb;
 import 'package:listadecoisa/widgets/Button-text-padrao.dart';
 import 'package:listadecoisa/widgets/loading-padrao.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:scan/scan.dart';
 import 'package:smart_select/smart_select.dart';
-import 'package:uni_links/uni_links.dart';
-import '../controller/temas.dart';
 import '../model/coisas.dart';
-import 'package:flutter/services.dart';
-
-enum UniLinksType { string, uri }
+import 'package:share/share.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -29,6 +25,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomeviewtate extends State<MyHomePage> {
   GlobalKey<ScaffoldState> _scaffoldKe = new GlobalKey();
   bool isAnonimo = false;
+  bool isLoading = false;
   int tipo = 1;
   ScanController controller = ScanController();
   StreamSubscription sup;
@@ -46,9 +43,9 @@ class _MyHomeviewtate extends State<MyHomePage> {
             ListTile(
               title: Text(
                 'Escolha o tipo de Lista',
-                style: theme.textTheme.subtitle1.copyWith(color: getWhiteOrBlack()),
+                style: theme.textTheme.subtitle1.copyWith(color: gb.getWhiteOrBlack()),
               ),
-              tileColor: getPrimary(),
+              tileColor: gb.getPrimary(),
             ),
             for (int i = 0; i < listaTipo.length; i++)
               ListTile(
@@ -58,7 +55,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                 ),
                 leading: Radio(
                   value: i,
-                  activeColor: getPrimary(),
+                  activeColor: gb.getPrimary(),
                   onChanged: (int value) {
                     setState(() {
                       tipo = value;
@@ -108,7 +105,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                                 }),
                             child: Text(
                               "Continuar",
-                              style: theme.textTheme.subtitle1.copyWith(color: getWhiteOrBlack()),
+                              style: theme.textTheme.subtitle1.copyWith(color: gb.getWhiteOrBlack()),
                             ),
                             style: TextButton.styleFrom(backgroundColor: Colors.green)))
                   ],
@@ -121,10 +118,12 @@ class _MyHomeviewtate extends State<MyHomePage> {
 
   @override
   void initState() {
-    HomeController.initPlatformStateForStringUniLinks(context: context);
-    gb.isLoading = true;
-    HomeController.atualizaLista().then((value) => setState(() => gb.isLoading = false));
+    isLoading = true;
     isAnonimo = gb.prefs.getBool('isAnonimo') ?? false;
+    HomeController.atualizaLista().then((value) => setState(() => isLoading = false));
+    HomeController.initPlatformStateForStringUniLinks(context: context).then((value) {
+      setState(() => isLoading = false);
+    });
     super.initState();
   }
 
@@ -155,7 +154,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
               ))
         ],
         centerTitle: true,
-        backgroundColor: getPrimary(),
+        backgroundColor: gb.getPrimary(),
         title: Text('Listas', style: TextStyle(color: Colors.white, fontSize: 25)),
       ),
       key: _scaffoldKe,
@@ -168,8 +167,8 @@ class _MyHomeviewtate extends State<MyHomePage> {
                       gradient: LinearGradient(
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
-                          colors: [getPrimary(), getSecondary()]))),
-              gb.isLoading
+                          colors: [gb.getPrimary(), gb.getSecondary()]))),
+              isLoading
                   ? LoadPadrao()
                   : ListView.builder(
                       padding: EdgeInsets.only(
@@ -199,16 +198,68 @@ class _MyHomeviewtate extends State<MyHomePage> {
                                   padding: EdgeInsets.only(left: 10, right: 10),
                                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                                     Text(gb.lisCoisa[index].nome),
-                                    IconButton(
-                                        icon: Icon(Icons.delete_forever),
-                                        onPressed: () async {
-                                          await HomeController.showAlertDialog2(
-                                              coisas: gb.lisCoisa[index], context: context);
-                                          setState(() {});
-                                        }),
-                                    IconButton(
-                                        icon: Icon(Icons.delete_forever),
-                                        onPressed: () => Navigator.pushNamed(context, '/comp')),
+                                    PopupMenuButton(
+                                      icon: Icon(Icons.more_vert),
+                                      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                                        PopupMenuItem(
+                                          value: 0,
+                                          child: ListTile(
+                                            leading: Icon(Icons.qr_code_scanner_rounded),
+                                            title: Text('Compartilhar'),
+                                          ),
+                                        ),
+                                        PopupMenuItem(
+                                          value: 1,
+                                          child: ListTile(
+                                            leading: Icon(Icons.delete),
+                                            title: Text('Excluir'),
+                                          ),
+                                        ),
+                                      ],
+                                      onSelected: (value) async {
+                                        switch (value) {
+                                          case 0:
+                                            showModalBottomSheet(
+                                              context: context,
+                                              builder: (context) {
+                                                return ListView(
+                                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                                  children: [
+                                                    Text(
+                                                      'Mostre o QR code ou compartilhe o link',
+                                                      style: Theme.of(context).textTheme.headline5,
+                                                    ),
+                                                    Text(
+                                                      'Quem for receber a lista precisa abri com o app o link ou escanear o QRcode',
+                                                      style: Theme.of(context).textTheme.bodyText1,
+                                                    ),
+                                                    Center(
+                                                        child: QrImage(
+                                                      data:
+                                                          'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario.id}',
+                                                      version: QrVersions.auto,
+                                                      size: 200.0,
+                                                    )),
+                                                    ButtonTextPadrao(
+                                                      label: "Compartilhar link",
+                                                      onPressed: () => Share.share(
+                                                          'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario.id}'),
+                                                    )
+                                                  ],
+                                                );
+                                              },
+                                            );
+
+                                            break;
+                                          case 1:
+                                            await HomeController.showAlertDialog2(
+                                                coisas: gb.lisCoisa[index], context: context);
+                                            setState(() {});
+                                            break;
+                                          default:
+                                        }
+                                      },
+                                    ),
                                   ])),
                             ));
                       }),
@@ -225,7 +276,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                   gradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
-                      colors: [getPrimary(), getSecondary()])),
+                      colors: [gb.getPrimary(), gb.getSecondary()])),
               child: Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
@@ -289,7 +340,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                       state,
                       isTwoLine: false,
                       leading: CircleAvatar(
-                        backgroundColor: getPrimary(),
+                        backgroundColor: gb.getPrimary(),
                         child: Text(
                           '',
                           style: TextStyle(color: Colors.white),

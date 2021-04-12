@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/controller/login-controller.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/view/cadastroPage.dart';
-import 'package:listadecoisa/controller/temas.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
 import 'package:listadecoisa/widgets/borda-padrao.dart';
 import 'package:listadecoisa/widgets/loading-padrao.dart';
@@ -47,7 +46,7 @@ class _LoginState extends State<Login> {
               gradient: LinearGradient(
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
-                  colors: [getPrimary(), getSecondary()])),
+                  colors: [global.getPrimary(), global.getSecondary()])),
           child: global.isLoading
               ? LoadPadrao()
               : ListView(
@@ -126,7 +125,7 @@ class _LoginState extends State<Login> {
                               ),
                               child: Text(
                                 'Login',
-                                style: TextStyle(color: getPrimary()),
+                                style: TextStyle(color: global.getPrimary()),
                               ),
                               onPressed: () {
                                 setState(() {
@@ -157,7 +156,7 @@ class _LoginState extends State<Login> {
                           ),
                           child: Text(
                             'Modo anônimo',
-                            style: TextStyle(color: getPrimary()),
+                            style: TextStyle(color: global.getPrimary()),
                           ),
                           onPressed: () {
                             loginAnonimo(context: context);
