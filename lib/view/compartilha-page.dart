@@ -46,11 +46,11 @@ class _CompartilhaPage extends State<CompartilhaPage> {
           children: [
             ButtonTextPadrao(
               label: '  Cancelar  ',
-              onPressed: () => null,
+              onPressed: () => Navigator.pop(context),
             ),
             ButtonTextPadrao(
               label: '  Salvar  ',
-              onPressed: () => null,
+              onPressed: () => {},
             )
           ],
         ),
@@ -75,7 +75,7 @@ class _CompartilhaPage extends State<CompartilhaPage> {
                   children: [
                     Text(
                       'Desejar anexar a seguinte lista?',
-                      style: Theme.of(context).textTheme.headline4.copyWith(color: Colors.white),
+                      style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.white),
                     ),
                     SizedBox(
                       height: 10,
@@ -87,6 +87,7 @@ class _CompartilhaPage extends State<CompartilhaPage> {
                           new MaterialPageRoute(
                               builder: (BuildContext context) => ListasPage(
                                     coisa: lista,
+                                    isComp: true,
                                   ))),
                     )
                   ],

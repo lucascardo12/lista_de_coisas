@@ -204,14 +204,20 @@ class _MyHomeviewtate extends State<MyHomePage> {
                                         PopupMenuItem(
                                           value: 0,
                                           child: ListTile(
-                                            leading: Icon(Icons.qr_code_scanner_rounded),
+                                            leading: Icon(
+                                              Icons.qr_code_scanner_rounded,
+                                              color: gb.getPrimary(),
+                                            ),
                                             title: Text('Compartilhar'),
                                           ),
                                         ),
                                         PopupMenuItem(
                                           value: 1,
                                           child: ListTile(
-                                            leading: Icon(Icons.delete),
+                                            leading: Icon(
+                                              Icons.delete,
+                                              color: gb.getPrimary(),
+                                            ),
                                             title: Text('Excluir'),
                                           ),
                                         ),
@@ -233,6 +239,9 @@ class _MyHomeviewtate extends State<MyHomePage> {
                                                       'Quem for receber a lista precisa abri com o app o link ou escanear o QRcode',
                                                       style: Theme.of(context).textTheme.bodyText1,
                                                     ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
                                                     Center(
                                                         child: QrImage(
                                                       data:
@@ -244,7 +253,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                                                       label: "Compartilhar link",
                                                       onPressed: () => Share.share(
                                                           'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario.id}'),
-                                                    )
+                                                    ),
                                                   ],
                                                 );
                                               },
