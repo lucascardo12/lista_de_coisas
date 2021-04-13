@@ -26,10 +26,78 @@ class _MyHomeviewtate extends State<MyHomePage> {
   GlobalKey<ScaffoldState> _scaffoldKe = new GlobalKey();
   bool isAnonimo = false;
   bool isLoading = false;
+  bool isread = false;
   int tipo = 1;
   ScanController controller = ScanController();
   StreamSubscription sup;
   List<String> listaTipo = ["Texto Simples", "Check-List", "Lista de Compras"];
+  showCompartilha({BuildContext context, int index}) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ListView(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          children: [
+            Text(
+              'Mostre o QR code ou compartilhe o link',
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            Text(
+              'Quem for receber a lista precisa abri com o app o link ou escanear o QRcode',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Somente visualização?',
+                  style: Theme.of(context).textTheme.subtitle1.copyWith(color: gb.primary),
+                ),
+                Switch(
+                  value: isread,
+                  activeColor: gb.getPrimary(),
+                  onChanged: (bool value) {
+                    isread = value;
+                    Navigator.pop(context);
+                    showCompartilha(context: context, index: index);
+                  },
+                ),
+              ],
+            ),
+            Center(
+                child: QrImage(
+              data: 'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario.id}*$isread',
+              version: QrVersions.auto,
+              size: 200.0,
+            )),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 60, right: 60),
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.only(top: 15, bottom: 15),
+                      onSurface: gb.getSecondary(),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      backgroundColor: gb.getPrimary(),
+                    ),
+                    onPressed: () => Share.share(
+                        'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario.id}*$isread'),
+                    child: Text(
+                      "Compartilhar link",
+                      style: TextStyle(color: Colors.white),
+                    )))
+          ],
+        );
+      },
+    );
+  }
 
   showCria({
     BuildContext context,
@@ -225,40 +293,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                                       onSelected: (value) async {
                                         switch (value) {
                                           case 0:
-                                            showModalBottomSheet(
-                                              context: context,
-                                              builder: (context) {
-                                                return ListView(
-                                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                                                  children: [
-                                                    Text(
-                                                      'Mostre o QR code ou compartilhe o link',
-                                                      style: Theme.of(context).textTheme.headline5,
-                                                    ),
-                                                    Text(
-                                                      'Quem for receber a lista precisa abri com o app o link ou escanear o QRcode',
-                                                      style: Theme.of(context).textTheme.bodyText1,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    Center(
-                                                        child: QrImage(
-                                                      data:
-                                                          'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario.id}',
-                                                      version: QrVersions.auto,
-                                                      size: 200.0,
-                                                    )),
-                                                    ButtonTextPadrao(
-                                                      label: "Compartilhar link",
-                                                      onPressed: () => Share.share(
-                                                          'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario.id}'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-
+                                            showCompartilha(context: context, index: index);
                                             break;
                                           case 1:
                                             await HomeController.showAlertDialog2(

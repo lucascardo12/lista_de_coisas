@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/controller/global.dart' as gb;
@@ -37,6 +36,8 @@ class _CompartilhaPage extends State<CompartilhaPage> {
     });
   }
 
+  criaListaCompartilhada() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,8 +50,18 @@ class _CompartilhaPage extends State<CompartilhaPage> {
               onPressed: () => Navigator.pop(context),
             ),
             ButtonTextPadrao(
-              label: '  Salvar  ',
-              onPressed: () => {},
+              label: '  Confirmar  ',
+              onPressed: () async {
+                if (gb.usuario.listaComp == null) {
+                  gb.usuario.listaComp = [];
+                  gb.usuario.listaComp.add(Compartilha(
+                      idLista: gb.codigoList,
+                      idUser: gb.codigoUser,
+                      isRead: gb.codigRead == 'true' ? true : false));
+                  await gb.banco.criaAlteraComp();
+                  Navigator.pop(context);
+                }
+              },
             )
           ],
         ),

@@ -22,6 +22,10 @@ class BancoFire {
     db.collection('user').doc(user.id).collection('coisas').doc(coisas.idFire).set(coisas.toJson());
   }
 
+  void criaAlteraComp({UserP user}) async {
+    await db.collection('user').doc(user.id).set(user.toJson());
+  }
+
   getCoisas({UserP user}) async {
     try {
       var result = await db.collection('user').doc(user.id).collection('coisas').get();

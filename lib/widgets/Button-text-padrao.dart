@@ -11,7 +11,6 @@ class ButtonTextPadrao extends StatelessWidget {
         padding: EdgeInsets.only(left: 20, right: 20),
         child: TextButton(
             style: TextButton.styleFrom(
-              elevation: 8,
               onSurface: global.getSecondary(),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),

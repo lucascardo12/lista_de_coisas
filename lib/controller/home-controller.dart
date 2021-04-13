@@ -58,7 +58,8 @@ class HomeController {
       print('initial link: $initialLink');
       if (initialLink != null) {
         gb.codigoList = initialLink.substring(33, initialLink.indexOf('@'));
-        gb.codigoUser = initialLink.substring(initialLink.indexOf('@') + 1, initialLink.length);
+        gb.codigoUser = initialLink.substring(initialLink.indexOf('@') + 1, initialLink.indexOf('*'));
+        gb.codigRead = initialLink.substring(initialLink.indexOf('*') + 1, initialLink.length);
         var rota = initialLink.substring(28, 33);
         return Navigator.pushNamed(context, rota);
       }

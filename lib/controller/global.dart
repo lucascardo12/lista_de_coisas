@@ -18,6 +18,7 @@ int dia;
 String tema;
 String codigoList;
 String codigoUser;
+String codigRead;
 Color primary = new Color(0xFF212121);
 Color primaryLight = new Color(0xFF484848);
 Color primaryDark = new Color(0xFF000000);
