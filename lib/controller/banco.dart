@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:listadecoisa/model/coisas.dart';
+import 'package:listadecoisa/model/compartilha.dart';
 import 'package:listadecoisa/model/user.dart';
 import 'package:listadecoisa/controller/global.dart';
 import 'package:translator/translator.dart';
@@ -22,8 +23,11 @@ class BancoFire {
     db.collection('user').doc(user.id).collection('coisas').doc(coisas.idFire).set(coisas.toJson());
   }
 
-  void criaAlteraComp({UserP user}) async {
-    await db.collection('user').doc(user.id).set(user.toJson());
+  Future<void> criaAlteraComp({UserP user, Compartilha coisas}) async {
+    if (coisas.idFire == null) {
+      coisas.idFire = db.collection('user').doc(user.id).collection('compartilha').doc().id;
+    }
+    db.collection('user').doc(user.id).collection('compartilha').doc(coisas.idFire).set(coisas.toJson());
   }
 
   getCoisas({UserP user}) async {
@@ -44,8 +48,33 @@ class BancoFire {
     }
   }
 
+  getComps({UserP user}) async {
+    try {
+      var result = await db.collection('user').doc(user.id).collection('compartilha').get();
+      return result.docs;
+    } catch (e) {
+      var auxi = await translator.translate(e.message, from: 'en', to: 'pt');
+      Fluttertoast.showToast(
+          msg: auxi.text,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 18.0);
+      return null;
+    }
+  }
+
   removeCoisas({Coisas cat, UserP user}) async {
     db.collection('user').doc(user.id).collection('coisas').doc(cat.idFire).delete();
+  }
+
+  Future<DocumentSnapshot> getComp({String idUser, String idLista}) async {
+    DocumentSnapshot result =
+        await db.collection('user').doc(idUser).collection('compartilha').doc(idLista).get();
+
+    return result;
   }
 
   Future<DocumentSnapshot> getCoisa({String idUser, String idLista}) async {

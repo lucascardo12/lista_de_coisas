@@ -2,13 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/controller/global.dart' as gb;
+import 'package:listadecoisa/model/compartilha.dart';
 import 'package:uni_links/uni_links.dart';
 
 class HomeController {
-  static Future atualizaLista() async {
+  static Future<void> atualizaLista() async {
     List<dynamic> listCat = await gb.banco.getCoisas(user: gb.usuario);
     if (listCat != null) {
       gb.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
+    }
+
+    List<dynamic> listcomp = await gb.banco.getComps(user: gb.usuario);
+    if (listcomp != null && listcomp.isNotEmpty) {
+      gb.lisComp = listcomp.map((i) => Compartilha.fromSnapshot(i)).toList();
+    }
+    if (gb.lisComp != null && gb.lisComp.isNotEmpty) {
+      for (var i = 0; i < gb.lisComp.length; i++) {
+        var auxi = await gb.banco.getCoisa(idUser: gb.lisComp[i].idUser, idLista: gb.lisComp[i].idLista);
+        if (auxi != null) {
+          gb.lisCoisaComp.add(Coisas.fromSnapshot(auxi));
+        }
+      }
     }
   }
 

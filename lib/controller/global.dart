@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/model/coisas.dart';
+import 'package:listadecoisa/model/compartilha.dart';
 import 'package:listadecoisa/model/user.dart';
 import 'package:listadecoisa/controller/banco.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +11,9 @@ String app = "Anote";
 bool isSwitched;
 bool isSwitched2;
 bool isSwitched3;
-List<Coisas> lisCoisa;
+List<Coisas> lisCoisa = [];
+List<Coisas> lisCoisaComp = [];
+List<Compartilha> lisComp = [];
 UserP usuario;
 BancoFire banco = new BancoFire();
 int hora;

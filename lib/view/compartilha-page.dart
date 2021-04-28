@@ -1,7 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:listadecoisa/controller/home-controller.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/controller/global.dart' as gb;
+import 'package:listadecoisa/model/compartilha.dart';
 import 'package:listadecoisa/model/user.dart';
 import 'package:listadecoisa/view/listasPage.dart';
 import 'package:listadecoisa/widgets/Button-text-padrao.dart';
@@ -52,15 +55,28 @@ class _CompartilhaPage extends State<CompartilhaPage> {
             ButtonTextPadrao(
               label: '  Confirmar  ',
               onPressed: () async {
-                if (gb.usuario.listaComp == null) {
-                  gb.usuario.listaComp = [];
-                  gb.usuario.listaComp.add(Compartilha(
-                      idLista: gb.codigoList,
-                      idUser: gb.codigoUser,
-                      isRead: gb.codigRead == 'true' ? true : false));
-                  await gb.banco.criaAlteraComp();
-                  Navigator.pop(context);
+                var comp = Compartilha(
+                    idLista: gb.codigoList,
+                    idUser: gb.codigoUser,
+                    isRead: gb.codigRead == 'true' ? true : false);
+
+                if (gb.lisComp
+                    .where((element) => element.idLista == comp.idLista && element.idUser == comp.idUser)
+                    .isEmpty) {
+                  gb.lisComp.add(comp);
+                  await gb.banco.criaAlteraComp(user: gb.usuario, coisas: comp);
+                  await HomeController.atualizaLista();
+                } else {
+                  await Fluttertoast.showToast(
+                      msg: "A lista já foi salva!!",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 5,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 18.0);
                 }
+                Navigator.pop(context);
               },
             )
           ],
