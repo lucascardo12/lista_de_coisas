@@ -1,16 +1,18 @@
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:listadecoisa/controller/listas-controller.dart';
 import 'package:listadecoisa/model/coisas.dart';
-import 'package:listadecoisa/controller/temas.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
+import 'package:listadecoisa/widgets/borda-padrao.dart';
 
 class ListasPage extends StatefulWidget {
   ListasPage({
     Key key,
     this.coisa,
+    this.isComp = false,
   }) : super(key: key);
   final Coisas coisa;
+  final bool isComp;
   @override
   _ListasPageState createState() => _ListasPageState();
 }
@@ -35,18 +37,6 @@ class _ListasPageState extends State<ListasPage> {
     super.initState();
   }
 
-  void criaCoisa() {
-    global.banco.criaAlteraCoisas(coisas: _coisas, user: global.usuario);
-    Fluttertoast.showToast(
-        msg: _coisas != null ? "Alterado com Sucesso!!" : "Criado com Sucesso!!",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 5,
-        backgroundColor: getPrimary(),
-        textColor: Colors.white,
-        fontSize: 18.0);
-  }
-
   @override
   Widget build(BuildContext context) {
     node = FocusScope.of(context);
@@ -67,37 +57,41 @@ class _ListasPageState extends State<ListasPage> {
               BackButton(
                 color: Colors.white,
               ),
-              Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.clear,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.done,
-                    color: Colors.white,
-                  ),
-                  onPressed: () async {
-                    if (formKey.currentState.validate()) {
-                      var day = global.prefs.getInt('day');
-                      if (await interstitialAd.isLoaded && (day != DateTime.now().day || day == null)) {
-                        global.prefs.setInt('day', DateTime.now().day);
-                        interstitialAd.show();
-                      }
-                      criaCoisa();
-                      Navigator.pop(context, _coisas);
-                    }
-                  },
-                ),
-              ])
+              !widget.isComp
+                  ? Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.clear,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.done,
+                          color: Colors.white,
+                        ),
+                        onPressed: () async {
+                          if (formKey.currentState.validate()) {
+                            var day = global.prefs.getInt('day');
+                            if (await interstitialAd.isLoaded && (day != DateTime.now().day || day == null)) {
+                              global.prefs.setInt('day', DateTime.now().day);
+                              interstitialAd.show();
+                            }
+                            await ListasController.criaCoisa(coisa: _coisas);
+                            Navigator.pop(context, _coisas);
+                          }
+                        },
+                      ),
+                    ])
+                  : SizedBox(
+                      width: 15,
+                    )
             ])),
         floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
         body: Stack(
@@ -107,7 +101,7 @@ class _ListasPageState extends State<ListasPage> {
                   gradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
-                      colors: [getPrimary(), getSecondary()])),
+                      colors: [global.getPrimary(), global.getSecondary()])),
             ),
             retornaBody(tipo: _coisas.tipo),
           ],
@@ -144,10 +138,12 @@ class _ListasPageState extends State<ListasPage> {
                   height: 30,
                 ),
                 TextFormField(
+                    readOnly: widget.isComp,
                     validator: (value) {
                       if (value.isEmpty) return "Titulo não pode ser vazio";
                       return null;
                     },
+                    onChanged: (value) => _coisas.nome = value,
                     style: TextStyle(color: Colors.white, fontSize: 20),
                     initialValue: _coisas.nome ?? '',
                     textAlign: TextAlign.center,
@@ -163,6 +159,7 @@ class _ListasPageState extends State<ListasPage> {
                   height: 5,
                 ),
                 TextFormField(
+                  readOnly: widget.isComp,
                   validator: (value) {
                     if (value.isEmpty) return "Conteudo não pode ser vazio";
                     return null;
@@ -171,29 +168,15 @@ class _ListasPageState extends State<ListasPage> {
                   autofocus: _coisas.descricao.isEmpty ? true : false,
                   maxLines: 300,
                   initialValue: _coisas.descricao ?? '',
+                  onChanged: (value) => _coisas.descricao = value,
                   minLines: 20,
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 2,
-                        )),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 2,
-                        )),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                        borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 2,
-                        )),
+                    border: BordaPadrao.build(),
+                    enabledBorder: BordaPadrao.build(),
+                    focusedBorder: BordaPadrao.build(),
                     hintStyle: TextStyle(color: Colors.white),
                     alignLabelWithHint: true,
                     labelText: 'Conteudo da lista',
@@ -216,6 +199,7 @@ class _ListasPageState extends State<ListasPage> {
                     height: 10,
                   ),
                   TextFormField(
+                      readOnly: widget.isComp,
                       validator: (value) {
                         _coisas.nome = value;
                         if (value.isEmpty) return "Titulo não pode ser vazio";
@@ -232,15 +216,17 @@ class _ListasPageState extends State<ListasPage> {
                           color: Colors.white,
                         ),
                       )),
-                  CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: IconButton(
-                          icon: Icon(
-                            Icons.add,
-                            color: getPrimary(),
-                          ),
-                          onPressed: () =>
-                              setState(() => _coisas.checklist.add(Checklist(feito: false, item: '')))))
+                  !widget.isComp
+                      ? CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: IconButton(
+                              icon: Icon(
+                                Icons.add,
+                                color: global.getPrimary(),
+                              ),
+                              onPressed: () =>
+                                  setState(() => _coisas.checklist.add(Checklist(feito: false, item: '')))))
+                      : SizedBox()
                 ])),
             Container(
                 height: MediaQuery.of(context).size.height * 0.8,
@@ -251,18 +237,23 @@ class _ListasPageState extends State<ListasPage> {
                   itemBuilder: (BuildContext context, int i) {
                     return Row(
                       children: [
-                        Checkbox(
-                          fillColor: MaterialStateProperty.all(Colors.white),
-                          checkColor: getPrimary(),
-                          onChanged: (bool value) {
-                            setState(() {
-                              _coisas.checklist[i].feito = value;
-                            });
-                          },
-                          value: _coisas.checklist[i].feito ?? false,
-                        ),
+                        !widget.isComp
+                            ? Checkbox(
+                                fillColor: MaterialStateProperty.all(Colors.white),
+                                checkColor: global.getPrimary(),
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    _coisas.checklist[i].feito = value;
+                                  });
+                                },
+                                value: _coisas.checklist[i].feito ?? false,
+                              )
+                            : SizedBox(
+                                width: 20,
+                              ),
                         Expanded(
                             child: TextFormField(
+                          readOnly: widget.isComp,
                           onEditingComplete: () => node.nextFocus(),
                           validator: (value) {
                             _coisas.checklist[i].item = value;
@@ -276,21 +267,26 @@ class _ListasPageState extends State<ListasPage> {
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.zero,
-                            border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                            border: BordaPadrao.check(),
+                            enabledBorder: BordaPadrao.check(),
+                            focusedBorder: BordaPadrao.check(),
                             hintStyle: TextStyle(color: Colors.white),
                             alignLabelWithHint: true,
                             hintText: "item",
                             labelStyle: TextStyle(color: Colors.white, fontSize: 18),
                           ),
                         )),
-                        IconButton(
-                            icon: Icon(
-                              Icons.clear,
-                              color: Colors.white,
-                            ),
-                            onPressed: () => setState(() => _coisas.checklist.remove(_coisas.checklist[i])))
+                        !widget.isComp
+                            ? IconButton(
+                                icon: Icon(
+                                  Icons.clear,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () =>
+                                    setState(() => _coisas.checklist.remove(_coisas.checklist[i])))
+                            : SizedBox(
+                                width: 20,
+                              )
                       ],
                     );
                   },
@@ -311,6 +307,7 @@ class _ListasPageState extends State<ListasPage> {
                     height: 10,
                   ),
                   TextFormField(
+                      readOnly: widget.isComp,
                       validator: (value) {
                         _coisas.nome = value;
                         if (value.isEmpty) return "Titulo não pode ser vazio";
@@ -332,7 +329,7 @@ class _ListasPageState extends State<ListasPage> {
                       child: IconButton(
                           icon: Icon(
                             Icons.add,
-                            color: getPrimary(),
+                            color: global.getPrimary(),
                           ),
                           onPressed: () => setState(() => _coisas.checkCompras.add(CheckCompras(
                                 feito: false,
@@ -351,7 +348,7 @@ class _ListasPageState extends State<ListasPage> {
                       children: [
                         Checkbox(
                           fillColor: MaterialStateProperty.all(Colors.white),
-                          checkColor: getPrimary(),
+                          checkColor: global.getPrimary(),
                           onChanged: (bool value) {
                             setState(() {
                               _coisas.checkCompras[i].feito = value;
@@ -362,6 +359,7 @@ class _ListasPageState extends State<ListasPage> {
                         Expanded(
                             flex: 7,
                             child: TextFormField(
+                              readOnly: widget.isComp,
                               onEditingComplete: () => node.nextFocus(),
                               validator: (value) {
                                 _coisas.checkCompras[i].item = value;
@@ -375,11 +373,9 @@ class _ListasPageState extends State<ListasPage> {
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.zero,
-                                border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                enabledBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                focusedBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                                border: BordaPadrao.check(),
+                                enabledBorder: BordaPadrao.check(),
+                                focusedBorder: BordaPadrao.check(),
                                 hintStyle: TextStyle(color: Colors.white),
                                 alignLabelWithHint: true,
                                 hintText: "item",
@@ -389,6 +385,7 @@ class _ListasPageState extends State<ListasPage> {
                         Expanded(
                             flex: 2,
                             child: TextFormField(
+                              readOnly: widget.isComp,
                               onEditingComplete: () => node.nextFocus(),
                               validator: (value) {
                                 if (value.isEmpty) return "Conteudo não pode ser vazio";
@@ -403,11 +400,9 @@ class _ListasPageState extends State<ListasPage> {
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.zero,
                                 hintText: "Qts",
-                                border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                enabledBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                focusedBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                                border: BordaPadrao.check(),
+                                enabledBorder: BordaPadrao.check(),
+                                focusedBorder: BordaPadrao.check(),
                                 hintStyle: TextStyle(color: Colors.white),
                                 alignLabelWithHint: true,
                                 labelStyle: TextStyle(color: Colors.white, fontSize: 18),
@@ -416,6 +411,7 @@ class _ListasPageState extends State<ListasPage> {
                         Expanded(
                             flex: 2,
                             child: TextFormField(
+                              readOnly: widget.isComp,
                               onEditingComplete: () => setState(() => node.nextFocus()),
                               validator: (value) {
                                 if (value.isEmpty) return "Conteudo não pode ser vazio";
@@ -433,11 +429,9 @@ class _ListasPageState extends State<ListasPage> {
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.zero,
                                 hintText: "R\u0024",
-                                border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                enabledBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                                focusedBorder:
-                                    OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                                border: BordaPadrao.check(),
+                                enabledBorder: BordaPadrao.check(),
+                                focusedBorder: BordaPadrao.check(),
                                 hintStyle: TextStyle(color: Colors.white),
                                 alignLabelWithHint: true,
                                 labelStyle: TextStyle(color: Colors.white, fontSize: 18),
