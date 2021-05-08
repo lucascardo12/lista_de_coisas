@@ -181,6 +181,33 @@ class _MyHomeviewtate extends State<MyHomePage> {
     );
   }
 
+  showAlertRedefinir({BuildContext context}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirma redefinição de senha!!"),
+          content: Text('Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam.'),
+          actions: [
+            TextButton(
+              child: Text("Cancelar"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text("Confirmar"),
+              onPressed: () {
+                gb.banco.resetarSenha(user: gb.usuario);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     isLoading = true;
@@ -294,9 +321,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                   !isAnonimo
                       ? ButtonTextPadrao(
                           label: "Redefina Senha",
-                          onPressed: () {
-                            gb.banco.resetarSenha(user: gb.usuario);
-                          },
+                          onPressed: () => showAlertRedefinir(context: context),
                         )
                       : Container(),
                   Padding(

@@ -21,7 +21,7 @@ class _Cadastro extends State<Cadastro> {
   bool isVali = false;
   bool lObescure = true;
   void valida() {
-    UserP us = new UserP(id: null, login: loginControler.text, senha: senhaControler.text);
+    UserP us = new UserP(id: null, login: loginControler.text.trim(), senha: senhaControler.text.trim());
     global.banco.criaUser(us).then((value) {
       if (value.isNotEmpty) {
         setState(() {
@@ -37,7 +37,9 @@ class _Cadastro extends State<Cadastro> {
   }
 
   void _submit() {
-    global.banco.login(email: loginControler.text, password: senhaControler.text).then((value) async {
+    global.banco
+        .login(email: loginControler.text.trim(), password: senhaControler.text.trim())
+        .then((value) async {
       setState(() {
         global.usuario = value;
         global.isLoading = false;
