@@ -2,19 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/compartilha.dart';
 import 'package:listadecoisa/model/user.dart';
-import 'package:listadecoisa/controller/global.dart';
+import 'package:listadecoisa/services/global.dart';
 import 'package:translator/translator.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-class BancoFire {
+class BancoFire extends GetxService {
   final translator = GoogleTranslator();
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   late UserP usuario;
-  BancoFire();
+  Future<BancoFire> inicia() async {
+    await Firebase.initializeApp();
+    db.settings = Settings(persistenceEnabled: true);
+    return this;
+  }
 
   criaAlteraCoisas({required Coisas coisas, required UserP user}) {
     if (coisas.idFire == null) {
@@ -117,7 +123,7 @@ class BancoFire {
 
       DocumentSnapshot result = await db.collection('user').doc(_value.user!.uid).get();
 
-      UserP auxi = new UserP(
+      UserP auxi = UserP(
         login: result.get('login'),
         id: result.get('id'),
         nome: result.get('nome'),
@@ -140,18 +146,22 @@ class BancoFire {
   }
 
   Future<UserP?> criaUserAnonimo() async {
+    final gb = Get.find<Global>();
     try {
-      UserP user = new UserP();
-      var axui = prefs.getString('userAnonimo') ?? '';
+      UserP user = UserP();
+      var axui = gb.box.get(
+        'userAnonimo',
+        defaultValue: '',
+      );
       if (axui.isNotEmpty) {
-        DocumentSnapshot result = await db.collection('user').doc(prefs.getString('userAnonimo')).get();
+        DocumentSnapshot result = await db.collection('user').doc(gb.box.get('userAnonimo')).get();
 
         user.id = result.get('id');
       } else {
         var _value = await _firebaseAuth.signInAnonymously();
         user.id = _value.user!.uid;
         db.collection('user').doc(user.id).set(user.toJson());
-        prefs.setString('userAnonimo', user.id ?? '');
+        gb.box.put('userAnonimo', user.id ?? '');
       }
 
       return user;
@@ -180,7 +190,7 @@ class BancoFire {
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
 
-    // Create a new credential
+    // Create a  credential
     final OAuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
