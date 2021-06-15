@@ -13,29 +13,29 @@ class BancoFire {
   final translator = GoogleTranslator();
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  UserP usuario;
+  late UserP usuario;
   BancoFire();
 
-  criaAlteraCoisas({Coisas coisas, UserP user}) {
+  criaAlteraCoisas({required Coisas coisas, required UserP user}) {
     if (coisas.idFire == null) {
       coisas.idFire = db.collection('user').doc(user.id).collection('coisas').doc().id;
     }
     db.collection('user').doc(user.id).collection('coisas').doc(coisas.idFire).set(coisas.toJson());
   }
 
-  Future<void> criaAlteraComp({UserP user, Compartilha coisas}) async {
+  Future<void> criaAlteraComp({required UserP user, required Compartilha coisas}) async {
     if (coisas.idFire == null) {
       coisas.idFire = db.collection('user').doc(user.id).collection('compartilha').doc().id;
     }
     db.collection('user').doc(user.id).collection('compartilha').doc(coisas.idFire).set(coisas.toJson());
   }
 
-  getCoisas({UserP user}) async {
+  getCoisas({required UserP user}) async {
     try {
       var result = await db.collection('user').doc(user.id).collection('coisas').get();
       return result.docs;
     } catch (e) {
-      var auxi = await translator.translate(e.message, from: 'en', to: 'pt');
+      var auxi = await translator.translate(e.toString(), from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -48,12 +48,12 @@ class BancoFire {
     }
   }
 
-  getComps({UserP user}) async {
+  getComps({required UserP user}) async {
     try {
       var result = await db.collection('user').doc(user.id).collection('compartilha').get();
       return result.docs;
     } catch (e) {
-      var auxi = await translator.translate(e.message, from: 'en', to: 'pt');
+      var auxi = await translator.translate(e.toString(), from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -66,24 +66,24 @@ class BancoFire {
     }
   }
 
-  removeCoisas({Coisas cat, UserP user}) async {
+  removeCoisas({required Coisas cat, required UserP user}) async {
     db.collection('user').doc(user.id).collection('coisas').doc(cat.idFire).delete();
   }
 
-  Future<DocumentSnapshot> getComp({String idUser, String idLista}) async {
+  Future<DocumentSnapshot> getComp({required String idUser, required String idLista}) async {
     DocumentSnapshot result =
         await db.collection('user').doc(idUser).collection('compartilha').doc(idLista).get();
 
     return result;
   }
 
-  Future<DocumentSnapshot> getCoisa({String idUser, String idLista}) async {
+  Future<DocumentSnapshot> getCoisa({required String idUser, required String idLista}) async {
     DocumentSnapshot result = await db.collection('user').doc(idUser).collection('coisas').doc(idLista).get();
 
     return result;
   }
 
-  Future<DocumentSnapshot> getUser({String idUser}) async {
+  Future<DocumentSnapshot> getUser({required String idUser}) async {
     DocumentSnapshot result = await db.collection('user').doc(idUser).get();
 
     return result;
@@ -91,14 +91,14 @@ class BancoFire {
 
   Future<String> criaUser(UserP user) async {
     try {
-      var userFire =
-          await _firebaseAuth.createUserWithEmailAndPassword(email: user.login, password: user.senha);
+      var userFire = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: user.login ?? '', password: user.senha ?? '');
 
-      user.id = userFire.user.uid;
-      db.collection('user').doc(userFire.user.uid).set(user.toJson());
-      return userFire.user.uid;
+      user.id = userFire.user!.uid;
+      db.collection('user').doc(userFire.user!.uid).set(user.toJson());
+      return userFire.user!.uid;
     } catch (erro) {
-      var auxi = await translator.translate(erro.message, from: 'en', to: 'pt');
+      var auxi = await translator.translate(erro.toString(), from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -111,11 +111,11 @@ class BancoFire {
     }
   }
 
-  Future<UserP> login({String email, String password}) async {
+  Future<UserP?> login({required String email, required String password}) async {
     try {
       var _value = await _firebaseAuth.signInWithEmailAndPassword(email: email.trim(), password: password);
 
-      DocumentSnapshot result = await db.collection('user').doc(_value.user.uid).get();
+      DocumentSnapshot result = await db.collection('user').doc(_value.user!.uid).get();
 
       UserP auxi = new UserP(
         login: result.get('login'),
@@ -126,7 +126,7 @@ class BancoFire {
 
       return auxi;
     } catch (e) {
-      var auxi = await translator.translate(e.message, from: 'en', to: 'pt');
+      var auxi = await translator.translate(e.toString(), from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -139,7 +139,7 @@ class BancoFire {
     }
   }
 
-  Future<UserP> criaUserAnonimo() async {
+  Future<UserP?> criaUserAnonimo() async {
     try {
       UserP user = new UserP();
       var axui = prefs.getString('userAnonimo') ?? '';
@@ -149,14 +149,14 @@ class BancoFire {
         user.id = result.get('id');
       } else {
         var _value = await _firebaseAuth.signInAnonymously();
-        user.id = _value.user.uid;
+        user.id = _value.user!.uid;
         db.collection('user').doc(user.id).set(user.toJson());
-        prefs.setString('userAnonimo', user.id);
+        prefs.setString('userAnonimo', user.id ?? '');
       }
 
       return user;
     } catch (e) {
-      var auxi = await translator.translate(e.message, from: 'en', to: 'pt');
+      var auxi = await translator.translate(e.toString(), from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -169,19 +169,19 @@ class BancoFire {
     }
   }
 
-  void resetarSenha({UserP user}) {
-    _firebaseAuth.sendPasswordResetEmail(email: user.login);
+  void resetarSenha({required UserP user}) {
+    _firebaseAuth.sendPasswordResetEmail(email: user.login ?? '');
   }
 
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
-    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
 
     // Create a new credential
-    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+    final OAuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );

@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
 
 class ButtonTextPadrao extends StatelessWidget {
-  final Function onPressed;
+  final Function()? onPressed;
   final String label;
-  const ButtonTextPadrao({Key key, this.onPressed, this.label}) : super(key: key);
+  const ButtonTextPadrao({
+    this.onPressed,
+    required this.label,
+  });
   @override
   Widget build(BuildContext context) {
     return Padding(

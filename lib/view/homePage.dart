@@ -1,7 +1,6 @@
-import 'dart:async';
-
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:listadecoisa/controller/home-controller.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/view/listasPage.dart';
@@ -9,29 +8,28 @@ import 'package:listadecoisa/view/loginPage.dart';
 import 'package:listadecoisa/controller/global.dart' as gb;
 import 'package:listadecoisa/widgets/Button-text-padrao.dart';
 import 'package:listadecoisa/widgets/loading-padrao.dart';
+import 'package:listadecoisa/widgets/selectTheme.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:scan/scan.dart';
-import 'package:smart_select/smart_select.dart';
 import '../model/coisas.dart';
 import 'package:share/share.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+class HomePage extends StatefulWidget {
+  HomePage();
+
   @override
   _MyHomeviewtate createState() => _MyHomeviewtate();
 }
 
-class _MyHomeviewtate extends State<MyHomePage> {
+class _MyHomeviewtate extends State<HomePage> {
   GlobalKey<ScaffoldState> scaffoldKe = new GlobalKey();
   bool isAnonimo = false;
   bool isLoading = false;
   bool isread = false;
   int tipo = 1;
   ScanController controller = ScanController();
-  StreamSubscription sup;
   List<String> listaTipo = ["Texto Simples", "Check-List", "Lista de Compras"];
-  showCompartilha({BuildContext context, int index}) {
+  showCompartilha({required BuildContext context, required int index}) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -51,7 +49,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
               children: [
                 Text(
                   'Somente visualização?',
-                  style: Theme.of(context).textTheme.subtitle1.copyWith(color: gb.primary),
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: gb.primary),
                 ),
                 Switch(
                   value: isread,
@@ -66,7 +64,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
             ),
             Center(
                 child: QrImage(
-              data: 'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario.id}*$isread',
+              data: 'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario!.id}*$isread',
               version: QrVersions.auto,
               size: 200.0,
             )),
@@ -85,7 +83,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                       backgroundColor: gb.getPrimary(),
                     ),
                     onPressed: () => Share.share(
-                        'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario.id}*$isread'),
+                        'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario!.id}*$isread'),
                     child: Text(
                       "Compartilhar link",
                       style: TextStyle(color: Colors.white),
@@ -97,7 +95,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
   }
 
   showCria({
-    BuildContext context,
+    required BuildContext context,
   }) {
     showModalBottomSheet(
       context: context,
@@ -108,7 +106,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
             ListTile(
               title: Text(
                 'Escolha o tipo de Lista',
-                style: theme.textTheme.subtitle1.copyWith(color: gb.getWhiteOrBlack()),
+                style: theme.textTheme.subtitle1!.copyWith(color: gb.getWhiteOrBlack()),
               ),
               tileColor: gb.getPrimary(),
             ),
@@ -116,14 +114,14 @@ class _MyHomeviewtate extends State<MyHomePage> {
               ListTile(
                 title: Text(
                   '${listaTipo[i]}',
-                  style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.black),
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),
                 ),
                 leading: Radio(
                   value: i,
                   activeColor: gb.getPrimary(),
-                  onChanged: (int value) {
+                  onChanged: (int? value) {
                     setState(() {
-                      tipo = value;
+                      tipo = value ?? 1;
                     });
                     Navigator.pop(context);
                     showCria(context: context);
@@ -141,7 +139,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                       onPressed: () => Navigator.pop(context),
                       child: Text(
                         "Cancelar",
-                        style: theme.textTheme.subtitle1.copyWith(color: Colors.black),
+                        style: theme.textTheme.subtitle1!.copyWith(color: Colors.black),
                       ),
                       style: TextButton.styleFrom(backgroundColor: Colors.white),
                     )),
@@ -170,7 +168,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                                 }),
                             child: Text(
                               "Continuar",
-                              style: theme.textTheme.subtitle1.copyWith(color: gb.getWhiteOrBlack()),
+                              style: theme.textTheme.subtitle1!.copyWith(color: gb.getWhiteOrBlack()),
                             ),
                             style: TextButton.styleFrom(backgroundColor: Colors.green)))
                   ],
@@ -181,7 +179,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
     );
   }
 
-  showAlertRedefinir({BuildContext context}) {
+  showAlertRedefinir({required BuildContext context}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -198,7 +196,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
             TextButton(
               child: Text("Confirmar"),
               onPressed: () {
-                gb.banco.resetarSenha(user: gb.usuario);
+                gb.banco.resetarSenha(user: gb.usuario!);
                 Navigator.pop(context);
               },
             ),
@@ -223,7 +221,6 @@ class _MyHomeviewtate extends State<MyHomePage> {
 
   @override
   void dispose() {
-    if (sup != null) sup.cancel();
     super.dispose();
   }
 
@@ -297,7 +294,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                     child: Padding(
                         padding: EdgeInsets.all(20),
                         child: Text(
-                          gb.usuario.nome ?? '',
+                          gb.usuario!.nome ?? '',
                           style: TextStyle(color: Colors.white, fontSize: 22),
                         )),
                   ),
@@ -324,48 +321,61 @@ class _MyHomeviewtate extends State<MyHomePage> {
                           onPressed: () => showAlertRedefinir(context: context),
                         )
                       : Container(),
-                  Padding(
-                      padding: EdgeInsets.only(left: 5, right: 5),
-                      child: SmartSelect<String>.single(
-                        title: 'Temas',
-                        onChange: (selected) {
-                          setState(() {
-                            gb.tema = selected.value;
-                            gb.prefs.setString("tema", selected.value);
-                          });
-                        },
-                        choiceType: S2ChoiceType.radios,
-                        choiceItems: [
-                          S2Choice(title: 'Original', value: 'Original'),
-                          S2Choice(title: 'Dark', value: 'Dark'),
-                          S2Choice(title: 'Azul', value: 'Azul'),
-                          S2Choice(title: 'Roxo', value: 'Roxo')
-                        ],
-                        modalType: S2ModalType.popupDialog,
-                        modalHeader: false,
-                        modalConfig: const S2ModalConfig(
-                          style: S2ModalStyle(
-                            elevation: 3,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                            ),
-                          ),
+                  // Padding(
+                  //     padding: EdgeInsets.only(left: 5, right: 5),
+                  //     child: SmartSelect<String>.single(
+                  //       title: 'Temas',
+                  //       onChange: (selected) {
+                  //         setState(() {
+                  //           gb.tema = selected.value;
+                  //           gb.prefs.setString("tema", selected.value);
+                  //         });
+                  //       },
+                  //       choiceType: S2ChoiceType.radios,
+                  //       choiceItems: [
+                  //         S2Choice(title: 'Original', value: 'Original'),
+                  //         S2Choice(title: 'Dark', value: 'Dark'),
+                  //         S2Choice(title: 'Azul', value: 'Azul'),
+                  //         S2Choice(title: 'Roxo', value: 'Roxo')
+                  //       ],
+                  //       modalType: S2ModalType.popupDialog,
+                  //       modalHeader: false,
+                  //       modalConfig: const S2ModalConfig(
+                  //         style: S2ModalStyle(
+                  //           elevation: 3,
+                  //           shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       tileBuilder: (context, state) {
+                  //         return S2Tile.fromState(
+                  //           state,
+                  //           isTwoLine: false,
+                  //           leading: CircleAvatar(
+                  //             backgroundColor: gb.getPrimary(),
+                  //             child: Text(
+                  //               '',
+                  //               style: TextStyle(color: Colors.white),
+                  //             ),
+                  //           ),
+                  //         );
+                  //       },
+                  //       value: gb.tema,
+                  //     ))
+                  TextButton(
+                    onPressed: () => Get.dialog(
+                        SelectTheme(
+                          items: [
+                            {'nome': 'Original', 'value': 'Original'},
+                            {'nome': 'Dark', 'value': 'Dark'},
+                            {'nome': 'Azul', 'value': 'Azul'},
+                            {'nome': 'Roxo', 'value': 'Roxo'}
+                          ],
                         ),
-                        tileBuilder: (context, state) {
-                          return S2Tile.fromState(
-                            state,
-                            isTwoLine: false,
-                            leading: CircleAvatar(
-                              backgroundColor: gb.getPrimary(),
-                              child: Text(
-                                '',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          );
-                        },
-                        value: gb.tema,
-                      ))
+                        barrierColor: Colors.transparent),
+                    child: Text('testes'),
+                  )
                 ],
               ),
             ),
@@ -373,7 +383,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
               child: AdmobBanner(
                 adUnitId: 'ca-app-pub-1205611887737485/2150742777',
                 adSize: AdmobBannerSize.ADAPTIVE_BANNER(width: MediaQuery.of(context).size.width.round()),
-                listener: (AdmobAdEvent event, Map<String, dynamic> args) {},
+                listener: (AdmobAdEvent event, Map<String, dynamic>? args) {},
                 onBannerCreated: (AdmobBannerController controller) {
                   //controller.dispose();
                 },
@@ -413,7 +423,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                     child: Padding(
                         padding: EdgeInsets.only(left: 10, right: 10),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text(gb.lisCoisa[index].nome),
+                          Text(gb.lisCoisa[index].nome ?? ''),
                           PopupMenuButton(
                             icon: Icon(Icons.more_vert),
                             itemBuilder: (BuildContext context) => <PopupMenuEntry>[
@@ -487,7 +497,7 @@ class _MyHomeviewtate extends State<MyHomePage> {
                     child: Padding(
                         padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text(gb.lisCoisaComp[index].nome),
+                          Text(gb.lisCoisaComp[index].nome ?? ''),
                         ])),
                   ));
             });

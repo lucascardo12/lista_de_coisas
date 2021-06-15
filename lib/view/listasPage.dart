@@ -7,10 +7,9 @@ import 'package:listadecoisa/widgets/borda-padrao.dart';
 
 class ListasPage extends StatefulWidget {
   ListasPage({
-    Key key,
-    this.coisa,
+    required this.coisa,
     this.isComp = false,
-  }) : super(key: key);
+  });
   final Coisas coisa;
   final bool isComp;
   @override
@@ -18,18 +17,18 @@ class ListasPage extends StatefulWidget {
 }
 
 class _ListasPageState extends State<ListasPage> {
-  AdmobBannerSize bannerSize;
+  late AdmobBannerSize bannerSize;
   final formKey = GlobalKey<FormState>();
-  Coisas _coisas;
-  FocusScopeNode node;
+  late Coisas coisas;
+  late FocusScopeNode node;
   final FocusNode _nodeText1 = FocusNode();
-  AdmobInterstitial interstitialAd;
+  late AdmobInterstitial interstitialAd;
   @override
   void initState() {
-    _coisas = widget.coisa;
+    coisas = widget.coisa;
     interstitialAd = AdmobInterstitial(
       adUnitId: 'ca-app-pub-1205611887737485/8086429884',
-      listener: (AdmobAdEvent event, Map<String, dynamic> args) {
+      listener: (AdmobAdEvent event, Map<String, dynamic>? args) {
         if (event == AdmobAdEvent.closed) interstitialAd.load();
       },
     );
@@ -45,7 +44,6 @@ class _ListasPageState extends State<ListasPage> {
           child: AdmobBanner(
             adUnitId: 'ca-app-pub-1205611887737485/8760342564',
             adSize: AdmobBannerSize.ADAPTIVE_BANNER(width: MediaQuery.of(context).size.width.round()),
-            listener: (AdmobAdEvent event, Map<String, dynamic> args) {},
             onBannerCreated: (AdmobBannerController controller) {
               //controller.dispose();
             },
@@ -77,14 +75,15 @@ class _ListasPageState extends State<ListasPage> {
                           color: Colors.white,
                         ),
                         onPressed: () async {
-                          if (formKey.currentState.validate()) {
+                          if (formKey.currentState!.validate()) {
                             var day = global.prefs.getInt('day');
-                            if (await interstitialAd.isLoaded && (day != DateTime.now().day || day == null)) {
+                            if ((await interstitialAd.isLoaded ?? false) &&
+                                (day != DateTime.now().day || day == null)) {
                               global.prefs.setInt('day', DateTime.now().day);
                               interstitialAd.show();
                             }
-                            await ListasController.criaCoisa(coisa: _coisas);
-                            Navigator.pop(context, _coisas);
+                            await ListasController.criaCoisa(coisa: coisas);
+                            Navigator.pop(context, coisas);
                           }
                         },
                       ),
@@ -103,23 +102,23 @@ class _ListasPageState extends State<ListasPage> {
                       end: Alignment.bottomLeft,
                       colors: [global.getPrimary(), global.getSecondary()])),
             ),
-            retornaBody(tipo: _coisas.tipo),
+            retornaBody(tipo: coisas.tipo),
           ],
         ));
   }
 
-  Widget retornaBody({int tipo}) {
+  Widget retornaBody({int? tipo}) {
     tipo = tipo != null ? tipo : 0;
     switch (tipo) {
       case 0:
         return contentText();
-        break;
+
       case 1:
         return contentCheckList();
-        break;
+
       case 2:
         return contentCheckCompra();
-        break;
+
       default:
         return Container();
     }
@@ -140,17 +139,17 @@ class _ListasPageState extends State<ListasPage> {
                 TextFormField(
                     readOnly: widget.isComp,
                     validator: (value) {
-                      if (value.isEmpty) return "Titulo não pode ser vazio";
+                      if (value!.isEmpty) return "Titulo não pode ser vazio";
                       return null;
                     },
-                    onChanged: (value) => _coisas.nome = value,
+                    onChanged: (value) => coisas.nome = value,
                     style: TextStyle(color: Colors.white, fontSize: 20),
-                    initialValue: _coisas.nome ?? '',
+                    initialValue: coisas.nome ?? '',
                     textAlign: TextAlign.center,
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      labelText: _coisas.nome.isEmpty ? "Digite um Titulo" : null,
+                      labelText: coisas.nome!.isEmpty ? "Digite um Titulo" : null,
                       labelStyle: TextStyle(
                         color: Colors.white,
                       ),
@@ -161,14 +160,14 @@ class _ListasPageState extends State<ListasPage> {
                 TextFormField(
                   readOnly: widget.isComp,
                   validator: (value) {
-                    if (value.isEmpty) return "Conteudo não pode ser vazio";
+                    if (value!.isEmpty) return "Conteudo não pode ser vazio";
                     return null;
                   },
                   focusNode: _nodeText1,
-                  autofocus: _coisas.descricao.isEmpty ? true : false,
+                  autofocus: coisas.descricao!.isEmpty ? true : false,
                   maxLines: 300,
-                  initialValue: _coisas.descricao ?? '',
-                  onChanged: (value) => _coisas.descricao = value,
+                  initialValue: coisas.descricao ?? '',
+                  onChanged: (value) => coisas.descricao = value,
                   minLines: 20,
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
@@ -201,17 +200,17 @@ class _ListasPageState extends State<ListasPage> {
                   TextFormField(
                       readOnly: widget.isComp,
                       validator: (value) {
-                        _coisas.nome = value;
-                        if (value.isEmpty) return "Titulo não pode ser vazio";
+                        coisas.nome = value;
+                        if (value!.isEmpty) return "Titulo não pode ser vazio";
                         return null;
                       },
                       style: TextStyle(color: Colors.white, fontSize: 20),
-                      initialValue: _coisas.nome ?? '',
+                      initialValue: coisas.nome ?? '',
                       textAlign: TextAlign.center,
                       cursorColor: Colors.white,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        labelText: _coisas.nome.isEmpty ? "Digite um Titulo" : null,
+                        labelText: coisas.nome!.isEmpty ? "Digite um Titulo" : null,
                         labelStyle: TextStyle(
                           color: Colors.white,
                         ),
@@ -225,7 +224,7 @@ class _ListasPageState extends State<ListasPage> {
                                 color: global.getPrimary(),
                               ),
                               onPressed: () =>
-                                  setState(() => _coisas.checklist.add(Checklist(feito: false, item: '')))))
+                                  setState(() => coisas.checklist!.add(Checklist(feito: false, item: '')))))
                       : SizedBox()
                 ])),
             Container(
@@ -233,7 +232,7 @@ class _ListasPageState extends State<ListasPage> {
                 child: ListView.builder(
                   padding: EdgeInsets.all(10),
                   shrinkWrap: true,
-                  itemCount: _coisas.checklist.length,
+                  itemCount: coisas.checklist!.length,
                   itemBuilder: (BuildContext context, int i) {
                     return Row(
                       children: [
@@ -241,12 +240,12 @@ class _ListasPageState extends State<ListasPage> {
                             ? Checkbox(
                                 fillColor: MaterialStateProperty.all(Colors.white),
                                 checkColor: global.getPrimary(),
-                                onChanged: (bool value) {
+                                onChanged: (bool? value) {
                                   setState(() {
-                                    _coisas.checklist[i].feito = value;
+                                    coisas.checklist![i].feito = value;
                                   });
                                 },
-                                value: _coisas.checklist[i].feito ?? false,
+                                value: coisas.checklist![i].feito ?? false,
                               )
                             : SizedBox(
                                 width: 20,
@@ -256,12 +255,12 @@ class _ListasPageState extends State<ListasPage> {
                           readOnly: widget.isComp,
                           onEditingComplete: () => node.nextFocus(),
                           validator: (value) {
-                            _coisas.checklist[i].item = value;
-                            if (value.isEmpty) return "Conteudo não pode ser vazio";
+                            coisas.checklist![i].item = value;
+                            if (value!.isEmpty) return "Conteudo não pode ser vazio";
                             return null;
                           },
-                          autofocus: _coisas.checklist[i].item.isEmpty ? true : false,
-                          initialValue: _coisas.checklist[i].item,
+                          autofocus: coisas.checklist![i].item.isEmpty ? true : false,
+                          initialValue: coisas.checklist![i].item,
                           cursorColor: Colors.white,
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
@@ -283,7 +282,7 @@ class _ListasPageState extends State<ListasPage> {
                                   color: Colors.white,
                                 ),
                                 onPressed: () =>
-                                    setState(() => _coisas.checklist.remove(_coisas.checklist[i])))
+                                    setState(() => coisas.checklist!.remove(coisas.checklist![i])))
                             : SizedBox(
                                 width: 20,
                               )
@@ -309,17 +308,17 @@ class _ListasPageState extends State<ListasPage> {
                   TextFormField(
                       readOnly: widget.isComp,
                       validator: (value) {
-                        _coisas.nome = value;
-                        if (value.isEmpty) return "Titulo não pode ser vazio";
+                        coisas.nome = value;
+                        if (value!.isEmpty) return "Titulo não pode ser vazio";
                         return null;
                       },
                       style: TextStyle(color: Colors.white, fontSize: 20),
-                      initialValue: _coisas.nome ?? '',
+                      initialValue: coisas.nome ?? '',
                       textAlign: TextAlign.center,
                       cursorColor: Colors.white,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        labelText: _coisas.nome.isEmpty ? "Digite um Titulo" : null,
+                        labelText: coisas.nome!.isEmpty ? "Digite um Titulo" : null,
                         labelStyle: TextStyle(
                           color: Colors.white,
                         ),
@@ -331,7 +330,7 @@ class _ListasPageState extends State<ListasPage> {
                             Icons.add,
                             color: global.getPrimary(),
                           ),
-                          onPressed: () => setState(() => _coisas.checkCompras.add(CheckCompras(
+                          onPressed: () => setState(() => coisas.checkCompras!.add(CheckCompras(
                                 feito: false,
                                 item: '',
                                 quant: 1,
@@ -342,19 +341,19 @@ class _ListasPageState extends State<ListasPage> {
                 child: ListView.builder(
                   padding: EdgeInsets.all(10),
                   shrinkWrap: true,
-                  itemCount: _coisas.checkCompras.length,
+                  itemCount: coisas.checkCompras!.length,
                   itemBuilder: (BuildContext context, int i) {
                     return Row(
                       children: [
                         Checkbox(
                           fillColor: MaterialStateProperty.all(Colors.white),
                           checkColor: global.getPrimary(),
-                          onChanged: (bool value) {
+                          onChanged: (bool? value) {
                             setState(() {
-                              _coisas.checkCompras[i].feito = value;
+                              coisas.checkCompras![i].feito = value;
                             });
                           },
-                          value: _coisas.checkCompras[i].feito ?? false,
+                          value: coisas.checkCompras![i].feito ?? false,
                         ),
                         Expanded(
                             flex: 7,
@@ -362,12 +361,12 @@ class _ListasPageState extends State<ListasPage> {
                               readOnly: widget.isComp,
                               onEditingComplete: () => node.nextFocus(),
                               validator: (value) {
-                                _coisas.checkCompras[i].item = value;
-                                if (value.isEmpty) return "Conteudo não pode ser vazio";
+                                coisas.checkCompras![i].item = value;
+                                if (value!.isEmpty) return "Conteudo não pode ser vazio";
                                 return null;
                               },
-                              autofocus: _coisas.checkCompras[i].item.isEmpty ? true : false,
-                              initialValue: _coisas.checkCompras[i].item,
+                              autofocus: coisas.checkCompras![i].item.isEmpty ? true : false,
+                              initialValue: coisas.checkCompras![i].item,
                               cursorColor: Colors.white,
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
@@ -388,12 +387,12 @@ class _ListasPageState extends State<ListasPage> {
                               readOnly: widget.isComp,
                               onEditingComplete: () => node.nextFocus(),
                               validator: (value) {
-                                if (value.isEmpty) return "Conteudo não pode ser vazio";
+                                if (value!.isEmpty) return "Conteudo não pode ser vazio";
                                 return null;
                               },
-                              onChanged: (v) => _coisas.checkCompras[i].quant = int.tryParse(v) ?? 0,
-                              autofocus: _coisas.checkCompras[i].quant == null ? true : false,
-                              initialValue: _coisas.checkCompras[i].quant.toString() ?? '',
+                              onChanged: (v) => coisas.checkCompras![i].quant = int.tryParse(v) ?? 0,
+                              autofocus: coisas.checkCompras![i].quant == null ? true : false,
+                              initialValue: coisas.checkCompras![i].quant.toString(),
                               cursorColor: Colors.white,
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
@@ -414,15 +413,15 @@ class _ListasPageState extends State<ListasPage> {
                               readOnly: widget.isComp,
                               onEditingComplete: () => setState(() => node.nextFocus()),
                               validator: (value) {
-                                if (value.isEmpty) return "Conteudo não pode ser vazio";
+                                if (value!.isEmpty) return "Conteudo não pode ser vazio";
                                 return null;
                               },
                               onChanged: (value) =>
-                                  _coisas.checkCompras[i].valor = double.tryParse(value) ?? 0.0,
-                              autofocus: _coisas.checkCompras[i].valor == null ? true : false,
-                              initialValue: _coisas.checkCompras[i].valor == null
+                                  coisas.checkCompras![i].valor = double.tryParse(value) ?? 0.0,
+                              autofocus: coisas.checkCompras![i].valor == null ? true : false,
+                              initialValue: coisas.checkCompras![i].valor == null
                                   ? ''
-                                  : _coisas.checkCompras[i].valor.toString(),
+                                  : coisas.checkCompras![i].valor.toString(),
                               cursorColor: Colors.white,
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.center,
@@ -444,7 +443,7 @@ class _ListasPageState extends State<ListasPage> {
                               color: Colors.white,
                             ),
                             onPressed: () =>
-                                setState(() => _coisas.checkCompras.remove(_coisas.checkCompras[i])))
+                                setState(() => coisas.checkCompras!.remove(coisas.checkCompras![i])))
                       ],
                     );
                   },
@@ -454,8 +453,8 @@ class _ListasPageState extends State<ListasPage> {
             ),
             Center(
               child: Text(
-                "Valor total da compra R\u0024: ${retornaTotal(_coisas.checkCompras)}",
-                style: Theme.of(context).textTheme.subtitle1.copyWith(color: Colors.white),
+                "Valor total da compra R\u0024: ${retornaTotal(coisas.checkCompras!)}",
+                style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.white),
               ),
             )
           ],

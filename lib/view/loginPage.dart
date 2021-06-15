@@ -1,18 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/controller/login-controller.dart';
-import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/view/cadastroPage.dart';
 import 'package:listadecoisa/controller/global.dart' as global;
 import 'package:listadecoisa/widgets/borda-padrao.dart';
 import 'package:listadecoisa/widgets/loading-padrao.dart';
 
 class Login extends StatefulWidget {
-  Login({
-    Key key,
-    this.coisas,
-  }) : super(key: key);
-  final Coisas coisas;
+  Login();
+
   @override
   _LoginState createState() => _LoginState();
 }

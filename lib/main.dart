@@ -3,6 +3,7 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:listadecoisa/model/user.dart';
 import 'package:listadecoisa/view/compartilha-page.dart';
 import 'package:listadecoisa/view/homePage.dart';
@@ -22,7 +23,7 @@ Future<void> main() async {
   global.tema = global.prefs.getString("tema") ?? "Original";
   var auxi = global.prefs.getString("user") ?? '';
   try {
-    if (global.prefs.getBool('fezLogin')) {
+    if (global.prefs.getBool('fezLogin') ?? false) {
       global.usuario = new UserP.fromJson(json.decode(auxi));
     }
   } catch (e) {
@@ -32,11 +33,9 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       title: 'Lista de Coisas',
@@ -52,7 +51,13 @@ class MyApp extends StatelessWidget {
         //'/': (context) => LoginPage(),
         '/comp': (context) => CompartilhaPage(),
       },
-      home: global.usuario != null ? MyHomePage(title: 'Lista de Coisas') : Login(),
+      getPages: [
+        GetPage(
+            name: '/',
+            page: () {
+              return global.usuario != null ? HomePage() : Login();
+            })
+      ],
     );
   }
 }

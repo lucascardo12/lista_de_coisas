@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Coisas {
-  String nome;
-  String descricao;
-  String idFire;
-  int tipo;
-  List<dynamic> checklist;
-  List<dynamic> checkCompras;
+  String? nome;
+  String? descricao;
+  String? idFire;
+  int? tipo;
+  List<dynamic>? checklist;
+  List<dynamic>? checkCompras;
 
   Coisas({this.nome, this.descricao, this.idFire, this.checkCompras, this.checklist, this.tipo});
 
@@ -32,27 +32,31 @@ class Coisas {
         'nome': nome,
         'descricao': descricao,
         'idFire': idFire,
-        if (checklist != null) 'checklist': checklist.map((i) => i.toJson()).toList(),
-        if (checkCompras != null) 'checkCompras': checkCompras.map((e) => e.toJson()).toList(),
+        if (checklist != null) 'checklist': checklist!.map((i) => i.toJson()).toList(),
+        if (checkCompras != null) 'checkCompras': checkCompras!.map((e) => e.toJson()).toList(),
         'tipo': tipo,
       };
 
   Coisas.fromSnapshot(DocumentSnapshot snapshot) {
-    nome = snapshot.get('nome');
-    descricao = snapshot.get("descricao");
+    Map data = snapshot.exists ? snapshot.data() as Map : Map();
     idFire = snapshot.id;
-    if (snapshot.get('checklist') != null)
-      checklist = snapshot.get('checklist').map((i) => new Checklist.fromJson(i)).toList();
-    if (snapshot.get('checkCompras') != null)
-      checkCompras = snapshot.get('checkCompras').map((i) => new CheckCompras.fromJson(i)).toList();
-    tipo = snapshot.get('tipo');
+    nome = data['nome'];
+    descricao = data["descricao"];
+    if (data.containsKey('checklist'))
+      checklist = data['checklist'].map((i) => Checklist.fromJson(i)).toList();
+    if (data.containsKey('checkCompras'))
+      checkCompras = data['checkCompras'].map((i) => CheckCompras.fromJson(i)).toList();
+    tipo = data['tipo'];
   }
 }
 
 class Checklist {
-  String item;
-  bool feito;
-  Checklist({this.item, this.feito});
+  String? item;
+  bool? feito;
+  Checklist({
+    this.item,
+    this.feito,
+  });
 
   Checklist.fromJson(Map<String, dynamic> xjson) {
     item = xjson['descri'];
@@ -68,11 +72,16 @@ class Checklist {
 }
 
 class CheckCompras {
-  String item;
-  bool feito;
-  int quant;
-  double valor;
-  CheckCompras({this.item, this.feito, this.quant, this.valor});
+  String? item;
+  bool? feito;
+  int? quant;
+  double? valor;
+  CheckCompras({
+    this.item,
+    this.feito,
+    this.quant,
+    this.valor,
+  });
 
   CheckCompras.fromJson(Map<String, dynamic> xjson) {
     item = xjson['descri'];

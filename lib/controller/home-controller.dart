@@ -7,18 +7,19 @@ import 'package:uni_links/uni_links.dart';
 
 class HomeController {
   static Future<void> atualizaLista() async {
-    List<dynamic> listCat = await gb.banco.getCoisas(user: gb.usuario);
+    List<dynamic> listCat = await gb.banco.getCoisas(user: gb.usuario!);
     if (listCat != null) {
       gb.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
     }
 
-    List<dynamic> listcomp = await gb.banco.getComps(user: gb.usuario);
+    List<dynamic> listcomp = await gb.banco.getComps(user: gb.usuario!);
     if (listcomp != null && listcomp.isNotEmpty) {
       gb.lisComp = listcomp.map((i) => Compartilha.fromSnapshot(i)).toList();
     }
     if (gb.lisComp != null && gb.lisComp.isNotEmpty) {
       for (var i = 0; i < gb.lisComp.length; i++) {
-        var auxi = await gb.banco.getCoisa(idUser: gb.lisComp[i].idUser, idLista: gb.lisComp[i].idLista);
+        var auxi =
+            await gb.banco.getCoisa(idUser: gb.lisComp[i].idUser ?? '', idLista: gb.lisComp[i].idLista ?? '');
         if (auxi != null) {
           gb.lisCoisaComp.add(Coisas.fromSnapshot(auxi));
         }
@@ -32,12 +33,12 @@ class HomeController {
     gb.usuario = null;
   }
 
-  static Future<void> deleteList({Coisas coisa}) async {
-    await gb.banco.removeCoisas(user: gb.usuario, cat: coisa);
+  static Future<void> deleteList({required Coisas coisa}) async {
+    await gb.banco.removeCoisas(user: gb.usuario!, cat: coisa);
     gb.lisCoisa.remove(coisa);
   }
 
-  static Future showAlertDialog2({BuildContext context, Coisas coisas}) {
+  static Future showAlertDialog2({required BuildContext context, required Coisas coisas}) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -64,11 +65,11 @@ class HomeController {
     );
   }
 
-  static Future initPlatformStateForStringUniLinks({BuildContext context}) async {
-    String initialLink;
+  static Future initPlatformStateForStringUniLinks({required BuildContext context}) async {
+    String? initialLink;
 
     try {
-      initialLink = await getInitialLink();
+      initialLink = (await getInitialLink());
       print('initial link: $initialLink');
       if (initialLink != null) {
         gb.codigoList = initialLink.substring(33, initialLink.indexOf('@'));
@@ -85,7 +86,7 @@ class HomeController {
   }
 
   static showExit({
-    BuildContext context,
+    required BuildContext context,
   }) {
     showDialog(
       context: context,

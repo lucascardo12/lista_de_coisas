@@ -45,15 +45,19 @@ class _Cadastro extends State<Cadastro> {
         global.isLoading = false;
       });
       if (value != null) {
-        List<dynamic> listCat = await global.banco.getCoisas(user: global.usuario);
+        List<dynamic> listCat = await global.banco.getCoisas(user: global.usuario!);
         global.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
         setState(() {
           var userCo = jsonEncode(value);
           global.prefs.setString('user', userCo);
           global.prefs.setBool("fezLogin", true);
         });
-        Navigator.push(context,
-            new MaterialPageRoute(builder: (BuildContext context) => MyHomePage(title: 'Lista de Coisas')));
+        Navigator.push(
+          context,
+          new MaterialPageRoute(
+            builder: (BuildContext context) => HomePage(),
+          ),
+        );
       }
     });
   }

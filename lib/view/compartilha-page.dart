@@ -17,8 +17,8 @@ class CompartilhaPage extends StatefulWidget {
 }
 
 class _CompartilhaPage extends State<CompartilhaPage> {
-  Coisas lista;
-  UserP user;
+  late Coisas lista;
+  late UserP user;
   @override
   void initState() {
     gb.isLoading = true;
@@ -27,11 +27,11 @@ class _CompartilhaPage extends State<CompartilhaPage> {
   }
 
   getLista() async {
-    await gb.banco.getCoisa(idLista: gb.codigoList, idUser: gb.codigoUser).then((value) {
+    await gb.banco.getCoisa(idLista: gb.codigoList!, idUser: gb.codigoUser!).then((value) {
       gb.isLoading = false;
       lista = Coisas.fromSnapshot(value);
     });
-    await gb.banco.getUser(idUser: gb.codigoUser).then((value) {
+    await gb.banco.getUser(idUser: gb.codigoUser!).then((value) {
       gb.isLoading = false;
       user = UserP.fromSnapshot(value);
       setState(() {});
@@ -63,7 +63,7 @@ class _CompartilhaPage extends State<CompartilhaPage> {
                     .where((element) => element.idLista == comp.idLista && element.idUser == comp.idUser)
                     .isEmpty) {
                   gb.lisComp.add(comp);
-                  await gb.banco.criaAlteraComp(user: gb.usuario, coisas: comp);
+                  await gb.banco.criaAlteraComp(user: gb.usuario!, coisas: comp);
                   await HomeController.atualizaLista();
                 } else {
                   await Fluttertoast.showToast(
@@ -101,7 +101,7 @@ class _CompartilhaPage extends State<CompartilhaPage> {
                   children: [
                     Text(
                       'Desejar anexar a seguinte lista?',
-                      style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.white),
+                      style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white),
                     ),
                     SizedBox(
                       height: 10,
