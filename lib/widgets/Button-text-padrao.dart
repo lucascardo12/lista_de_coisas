@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:listadecoisa/controller/global.dart' as global;
+import 'package:get/get.dart';
+import 'package:listadecoisa/services/global.dart';
 
-class ButtonTextPadrao extends StatelessWidget {
+class ButtonTextPadrao extends GetView {
+  final gb = Get.find<Global>();
   final Function()? onPressed;
   final String label;
-  const ButtonTextPadrao({
+  ButtonTextPadrao({
     this.onPressed,
     required this.label,
   });
@@ -14,11 +16,11 @@ class ButtonTextPadrao extends StatelessWidget {
         padding: EdgeInsets.only(left: 20, right: 20),
         child: TextButton(
             style: TextButton.styleFrom(
-              onSurface: global.getSecondary(),
+              onSurface: gb.getSecondary(),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
               ),
-              backgroundColor: global.getPrimary(),
+              backgroundColor: gb.getPrimary(),
             ),
             onPressed: onPressed,
             child: Text(

@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:listadecoisa/services/global.dart';
 
 class SelectTheme extends GetView {
   final List items;
-  bool valuet = false;
+  final gb = Get.find<Global>();
   SelectTheme({required this.items});
   @override
   Widget build(BuildContext context) {
@@ -30,10 +31,16 @@ class SelectTheme extends GetView {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Radio(
-                        value: valuet,
-                        groupValue: valuet,
-                        onChanged: (bool? valor) {
-                          valuet = valor!;
+                        value: gb.box.get(
+                          e['nome'],
+                          defaultValue: false,
+                        ),
+                        groupValue: gb.box.get(
+                          e['nome'],
+                          defaultValue: false,
+                        ),
+                        onChanged: (dynamic valor) async {
+                          await gb.box.put(e['nome'], valor);
                           Get.back();
                         },
                       ),
