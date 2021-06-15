@@ -118,9 +118,9 @@ class BancoFire {
       DocumentSnapshot result = await db.collection('user').doc(_value.user.uid).get();
 
       UserP auxi = new UserP(
-        login: result.data()['login'],
-        id: result.data()['id'],
-        nome: result.data()['nome'],
+        login: result.get('login'),
+        id: result.get('id'),
+        nome: result.get('nome'),
         //senha: result.data()['senha'],
       );
 
@@ -146,7 +146,7 @@ class BancoFire {
       if (axui.isNotEmpty) {
         DocumentSnapshot result = await db.collection('user').doc(prefs.getString('userAnonimo')).get();
 
-        user.id = result.data()['id'];
+        user.id = result.get('id');
       } else {
         var _value = await _firebaseAuth.signInAnonymously();
         user.id = _value.user.uid;

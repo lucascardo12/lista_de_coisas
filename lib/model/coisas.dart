@@ -38,14 +38,14 @@ class Coisas {
       };
 
   Coisas.fromSnapshot(DocumentSnapshot snapshot) {
-    nome = snapshot.data()['nome'];
-    descricao = snapshot.data()["descricao"];
+    nome = snapshot.get('nome');
+    descricao = snapshot.get("descricao");
     idFire = snapshot.id;
-    if (snapshot.data()['checklist'] != null)
-      checklist = snapshot.data()['checklist'].map((i) => new Checklist.fromJson(i)).toList();
-    if (snapshot.data()['checkCompras'] != null)
-      checkCompras = snapshot.data()['checkCompras'].map((i) => new CheckCompras.fromJson(i)).toList();
-    tipo = snapshot.data()['tipo'];
+    if (snapshot.get('checklist') != null)
+      checklist = snapshot.get('checklist').map((i) => new Checklist.fromJson(i)).toList();
+    if (snapshot.get('checkCompras') != null)
+      checkCompras = snapshot.get('checkCompras').map((i) => new CheckCompras.fromJson(i)).toList();
+    tipo = snapshot.get('tipo');
   }
 }
 

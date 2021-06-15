@@ -21,9 +21,9 @@ class Compartilha {
     map['idFire'] = idFire;
   }
   Compartilha.fromSnapshot(DocumentSnapshot snapshot) {
-    idUser = snapshot.data()['idUser'];
-    idLista = snapshot.data()['idLista'];
-    isRead = snapshot.data()['isRead'];
+    idUser = snapshot.get('idUser');
+    idLista = snapshot.get('idLista');
+    isRead = snapshot.get('isRead');
     idFire = snapshot.id;
   }
 

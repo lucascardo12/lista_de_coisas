@@ -25,8 +25,8 @@ class UserP {
   }
 
   UserP.fromSnapshot(DocumentSnapshot snapshot) {
-    nome = snapshot.data()['nome'];
-    login = snapshot.data()["login"];
+    nome = snapshot.get('nome');
+    login = snapshot.get("login");
     id = snapshot.id;
   }
 }
