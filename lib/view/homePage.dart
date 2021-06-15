@@ -23,7 +23,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomeviewtate extends State<MyHomePage> {
-  GlobalKey<ScaffoldState> _scaffoldKe = new GlobalKey();
+  GlobalKey<ScaffoldState> scaffoldKe = new GlobalKey();
   bool isAnonimo = false;
   bool isLoading = false;
   bool isread = false;
