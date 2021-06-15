@@ -2,75 +2,81 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/user.dart';
-import 'package:listadecoisa/view/homePage.dart';
-import 'package:listadecoisa/controller/global.dart' as global;
+import 'package:listadecoisa/services/banco.dart';
+import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/borda-padrao.dart';
 
 class Cadastro extends StatefulWidget {
   Cadastro();
   @override
-  State<StatefulWidget> createState() => new _Cadastro();
+  State<StatefulWidget> createState() => _Cadastro();
 }
 
 class _Cadastro extends State<Cadastro> {
+  final gb = Get.find<Global>();
+  final banco = Get.find<BancoFire>();
   TextEditingController loginControler = TextEditingController();
   TextEditingController senhaControler = TextEditingController();
   TextEditingController nomeControler = TextEditingController();
   bool isVali = false;
   bool lObescure = true;
   void valida() {
-    UserP us = new UserP(id: null, login: loginControler.text.trim(), senha: senhaControler.text.trim());
-    global.banco.criaUser(us).then((value) {
+    UserP us = UserP(id: null, login: loginControler.text.trim(), senha: senhaControler.text.trim());
+    banco.criaUser(us).then((value) {
       if (value.isNotEmpty) {
         setState(() {
-          global.isLoading = false;
+          gb.isLoading = false;
         });
         _submit();
       } else {
         setState(() {
-          global.isLoading = false;
+          gb.isLoading = false;
         });
       }
     });
   }
 
   void _submit() {
-    global.banco
-        .login(email: loginControler.text.trim(), password: senhaControler.text.trim())
+    banco
+        .login(
+      email: loginControler.text.trim(),
+      password: senhaControler.text.trim(),
+    )
         .then((value) async {
       setState(() {
-        global.usuario = value;
-        global.isLoading = false;
+        gb.usuario = value;
+        gb.isLoading = false;
       });
       if (value != null) {
-        List<dynamic> listCat = await global.banco.getCoisas(user: global.usuario!);
-        global.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
+        List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
+        gb.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
         setState(() {
           var userCo = jsonEncode(value);
-          global.prefs.setString('user', userCo);
-          global.prefs.setBool("fezLogin", true);
+          gb.box.put('user', userCo);
+          gb.box.put("fezLogin", true);
         });
-        Navigator.push(
-          context,
-          new MaterialPageRoute(
-            builder: (BuildContext context) => HomePage(),
-          ),
-        );
+        Get.offAllNamed('/home');
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
         body: Container(
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [global.getPrimary(), global.getSecondary()])),
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            gb.getPrimary(),
+            gb.getSecondary(),
+          ],
+        ),
+      ),
       child: ListView(
         padding: EdgeInsets.all(15),
         children: [
@@ -164,7 +170,7 @@ class _Cadastro extends State<Cadastro> {
                         padding: EdgeInsets.all(15),
                         child: Text(
                           'Cadastro',
-                          style: TextStyle(color: global.getPrimary()),
+                          style: TextStyle(color: gb.getPrimary()),
                         )),
                     onPressed: () {
                       valida();
@@ -175,7 +181,7 @@ class _Cadastro extends State<Cadastro> {
                   'Voltar',
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Get.back(),
               )
             ],
           )

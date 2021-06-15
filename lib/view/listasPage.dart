@@ -1,22 +1,21 @@
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:listadecoisa/controller/listas-controller.dart';
 import 'package:listadecoisa/model/coisas.dart';
-import 'package:listadecoisa/controller/global.dart' as global;
+import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/borda-padrao.dart';
 
 class ListasPage extends StatefulWidget {
-  ListasPage({
-    required this.coisa,
-    this.isComp = false,
-  });
-  final Coisas coisa;
-  final bool isComp;
+  final Coisas coisa = Get.arguments[0];
+  final bool isComp = Get.arguments[1];
   @override
   _ListasPageState createState() => _ListasPageState();
 }
 
 class _ListasPageState extends State<ListasPage> {
+  final gb = Get.find<Global>();
+  final ct = ListasController();
   late AdmobBannerSize bannerSize;
   final formKey = GlobalKey<FormState>();
   late Coisas coisas;
@@ -62,9 +61,7 @@ class _ListasPageState extends State<ListasPage> {
                           Icons.clear,
                           color: Colors.white,
                         ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                        onPressed: () => Get.back(),
                       ),
                       SizedBox(
                         width: 15,
@@ -76,14 +73,14 @@ class _ListasPageState extends State<ListasPage> {
                         ),
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
-                            var day = global.prefs.getInt('day');
+                            var day = gb.box.get('day', defaultValue: 1);
                             if ((await interstitialAd.isLoaded ?? false) &&
                                 (day != DateTime.now().day || day == null)) {
-                              global.prefs.setInt('day', DateTime.now().day);
+                              gb.box.put('day', DateTime.now().day);
                               interstitialAd.show();
                             }
-                            await ListasController.criaCoisa(coisa: coisas);
-                            Navigator.pop(context, coisas);
+                            await ct.criaCoisa(coisa: coisas);
+                            Get.back(result: coisas);
                           }
                         },
                       ),
@@ -97,10 +94,10 @@ class _ListasPageState extends State<ListasPage> {
           children: [
             Container(
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [global.getPrimary(), global.getSecondary()])),
+                  gradient: LinearGradient(begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [
+                gb.getPrimary(),
+                gb.getSecondary(),
+              ])),
             ),
             retornaBody(tipo: coisas.tipo),
           ],
@@ -221,7 +218,7 @@ class _ListasPageState extends State<ListasPage> {
                           child: IconButton(
                               icon: Icon(
                                 Icons.add,
-                                color: global.getPrimary(),
+                                color: gb.getPrimary(),
                               ),
                               onPressed: () =>
                                   setState(() => coisas.checklist!.add(Checklist(feito: false, item: '')))))
@@ -239,7 +236,7 @@ class _ListasPageState extends State<ListasPage> {
                         !widget.isComp
                             ? Checkbox(
                                 fillColor: MaterialStateProperty.all(Colors.white),
-                                checkColor: global.getPrimary(),
+                                checkColor: gb.getPrimary(),
                                 onChanged: (bool? value) {
                                   setState(() {
                                     coisas.checklist![i].feito = value;
@@ -328,7 +325,7 @@ class _ListasPageState extends State<ListasPage> {
                       child: IconButton(
                           icon: Icon(
                             Icons.add,
-                            color: global.getPrimary(),
+                            color: gb.getPrimary(),
                           ),
                           onPressed: () => setState(() => coisas.checkCompras!.add(CheckCompras(
                                 feito: false,
@@ -347,7 +344,7 @@ class _ListasPageState extends State<ListasPage> {
                       children: [
                         Checkbox(
                           fillColor: MaterialStateProperty.all(Colors.white),
-                          checkColor: global.getPrimary(),
+                          checkColor: gb.getPrimary(),
                           onChanged: (bool? value) {
                             setState(() {
                               coisas.checkCompras![i].feito = value;

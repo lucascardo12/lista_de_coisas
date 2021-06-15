@@ -1,32 +1,17 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:listadecoisa/controller/login-controller.dart';
-import 'package:listadecoisa/view/cadastroPage.dart';
-import 'package:listadecoisa/controller/global.dart' as global;
+import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/borda-padrao.dart';
 import 'package:listadecoisa/widgets/loading-padrao.dart';
 
-class Login extends StatefulWidget {
-  Login();
-
-  @override
-  _LoginState createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
-  TextEditingController loginControler = TextEditingController(text: global.prefs.getString('login') ?? "");
-  TextEditingController senhaControler = TextEditingController(text: global.prefs.getString('senha') ?? "");
-  bool isVali = false;
-  bool lObescure = true;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class Login extends GetView {
+  final gb = Get.find<Global>();
+  final ct = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
         floatingActionButton: TextButton(
           style: TextButton.styleFrom(
             padding: EdgeInsets.all(0),
@@ -35,15 +20,15 @@ class _LoginState extends State<Login> {
             'Esqueceu sua senha?',
             style: TextStyle(color: Colors.white),
           ),
-          onPressed: () => showAlertDialog2(context: context, loginControler: loginControler),
+          onPressed: () => ct.showAlertDialog2(context: context),
         ),
         body: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [global.getPrimary(), global.getSecondary()])),
-          child: global.isLoading
+              gradient: LinearGradient(begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [
+            gb.getPrimary(),
+            gb.getSecondary(),
+          ])),
+          child: gb.isLoading
               ? LoadPadrao()
               : ListView(
                   padding: EdgeInsets.all(0),
@@ -82,32 +67,31 @@ class _LoginState extends State<Login> {
                                   focusedBorder: BordaPadrao.build(),
                                   hintStyle: TextStyle(color: Colors.white),
                                   hintText: 'E-mail'),
-                              controller: loginControler,
+                              controller: ct.loginControler,
                             )),
                         Padding(
                             padding: EdgeInsets.all(15),
-                            child: TextFormField(
-                              cursorColor: Colors.white,
-                              obscureText: lObescure,
-                              style: TextStyle(color: Colors.white),
-                              textAlign: TextAlign.left,
-                              decoration: InputDecoration(
-                                  suffixIcon: IconButton(
-                                    color: Colors.white,
-                                    icon: Icon(lObescure ? Icons.visibility : Icons.visibility_off),
-                                    onPressed: () {
-                                      setState(() {
-                                        lObescure = !lObescure;
-                                      });
-                                    },
-                                  ),
-                                  border: BordaPadrao.build(),
-                                  enabledBorder: BordaPadrao.build(),
-                                  focusedBorder: BordaPadrao.build(),
-                                  hintStyle: TextStyle(color: Colors.white),
-                                  hintText: 'Senha'),
-                              controller: senhaControler,
-                            )),
+                            child: Obx(() => TextFormField(
+                                  cursorColor: Colors.white,
+                                  obscureText: ct.lObescure.value,
+                                  style: TextStyle(color: Colors.white),
+                                  textAlign: TextAlign.left,
+                                  decoration: InputDecoration(
+                                      suffixIcon: IconButton(
+                                        color: Colors.white,
+                                        icon: Icon(
+                                            ct.lObescure.value ? Icons.visibility : Icons.visibility_off),
+                                        onPressed: () {
+                                          ct.lObescure.value = !ct.lObescure.value;
+                                        },
+                                      ),
+                                      border: BordaPadrao.build(),
+                                      enabledBorder: BordaPadrao.build(),
+                                      focusedBorder: BordaPadrao.build(),
+                                      hintStyle: TextStyle(color: Colors.white),
+                                      hintText: 'Senha'),
+                                  controller: ct.senhaControler,
+                                ))),
                         Padding(
                             padding: EdgeInsets.all(15),
                             child: TextButton(
@@ -121,16 +105,12 @@ class _LoginState extends State<Login> {
                               ),
                               child: Text(
                                 'Login',
-                                style: TextStyle(color: global.getPrimary()),
+                                style: TextStyle(color: gb.getPrimary()),
                               ),
                               onPressed: () {
-                                setState(() {
-                                  global.isLoading = true;
-                                });
-                                logar(
-                                    context: context,
-                                    loginControler: loginControler,
-                                    senhaControler: senhaControler);
+                                gb.isLoading = true;
+
+                                ct.logar(context: context);
                               },
                             )),
                         TextButton(
@@ -138,10 +118,7 @@ class _LoginState extends State<Login> {
                             'Cadastrar-se',
                             style: TextStyle(color: Colors.white),
                           ),
-                          onPressed: () {
-                            Navigator.push(context,
-                                new MaterialPageRoute(builder: (BuildContext context) => Cadastro()));
-                          },
+                          onPressed: () => Get.toNamed('/cadastro'),
                         ),
                         TextButton(
                           style: TextButton.styleFrom(
@@ -152,10 +129,10 @@ class _LoginState extends State<Login> {
                           ),
                           child: Text(
                             'Modo anônimo',
-                            style: TextStyle(color: global.getPrimary()),
+                            style: TextStyle(color: gb.getPrimary()),
                           ),
                           onPressed: () {
-                            loginAnonimo(context: context);
+                            ct.loginAnonimo(context: context);
                           },
                         ),
                       ],

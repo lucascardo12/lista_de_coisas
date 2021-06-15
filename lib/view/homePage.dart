@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:listadecoisa/controller/home-controller.dart';
 import 'package:listadecoisa/model/coisas.dart';
-import 'package:listadecoisa/view/listasPage.dart';
-import 'package:listadecoisa/view/loginPage.dart';
-import 'package:listadecoisa/controller/global.dart' as gb;
+import 'package:listadecoisa/services/banco.dart';
+import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/Button-text-padrao.dart';
 import 'package:listadecoisa/widgets/loading-padrao.dart';
 import 'package:listadecoisa/widgets/selectTheme.dart';
@@ -22,7 +21,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomeviewtate extends State<HomePage> {
-  GlobalKey<ScaffoldState> scaffoldKe = new GlobalKey();
+  final gb = Get.find<Global>();
+  final banco = Get.find<BancoFire>();
+  final ct = HomeController();
+  GlobalKey<ScaffoldState> scaffoldKe = GlobalKey();
   bool isAnonimo = false;
   bool isLoading = false;
   bool isread = false;
@@ -56,7 +58,7 @@ class _MyHomeviewtate extends State<HomePage> {
                   activeColor: gb.getPrimary(),
                   onChanged: (bool value) {
                     isread = value;
-                    Navigator.pop(context);
+                    Get.back();
                     showCompartilha(context: context, index: index);
                   },
                 ),
@@ -123,7 +125,7 @@ class _MyHomeviewtate extends State<HomePage> {
                     setState(() {
                       tipo = value ?? 1;
                     });
-                    Navigator.pop(context);
+                    Get.back();
                     showCria(context: context);
                   },
                   groupValue: tipo,
@@ -136,7 +138,7 @@ class _MyHomeviewtate extends State<HomePage> {
                   children: [
                     Expanded(
                         child: TextButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => Get.back(),
                       child: Text(
                         "Cancelar",
                         style: theme.textTheme.subtitle1!.copyWith(color: Colors.black),
@@ -148,24 +150,13 @@ class _MyHomeviewtate extends State<HomePage> {
                     ),
                     Expanded(
                         child: TextButton(
-                            onPressed: () => Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (BuildContext context) => ListasPage(
-                                              coisa: Coisas(
-                                                  tipo: tipo,
-                                                  checkCompras: [],
-                                                  checklist: [],
-                                                  descricao: '',
-                                                  nome: ''),
-                                            ))).then((value) {
-                                  if (value != null) {
-                                    setState(() {
-                                      gb.lisCoisa.add(value);
-                                    });
-                                  }
-                                  Navigator.pop(context);
-                                }),
+                            onPressed: () => Get.toNamed(
+                                  '/listas',
+                                  arguments: [
+                                    Coisas(
+                                        tipo: tipo, checkCompras: [], checklist: [], descricao: '', nome: ''),
+                                  ],
+                                ),
                             child: Text(
                               "Continuar",
                               style: theme.textTheme.subtitle1!.copyWith(color: gb.getWhiteOrBlack()),
@@ -190,14 +181,14 @@ class _MyHomeviewtate extends State<HomePage> {
             TextButton(
               child: Text("Cancelar"),
               onPressed: () {
-                Navigator.pop(context);
+                Get.back();
               },
             ),
             TextButton(
               child: Text("Confirmar"),
               onPressed: () {
-                gb.banco.resetarSenha(user: gb.usuario!);
-                Navigator.pop(context);
+                banco.resetarSenha(user: gb.usuario!);
+                Get.back();
               },
             ),
           ],
@@ -209,11 +200,11 @@ class _MyHomeviewtate extends State<HomePage> {
   @override
   void initState() {
     isLoading = true;
-    isAnonimo = gb.prefs.getBool('isAnonimo') ?? false;
-    HomeController.atualizaLista().then((value) => setState(() {
+    isAnonimo = gb.box.get('isAnonimo', defaultValue: false);
+    ct.atualizaLista().then((value) => setState(() {
           isLoading = false;
         }));
-    HomeController.initPlatformStateForStringUniLinks(context: context).then((value) {
+    ct.initPlatformStateForStringUniLinks(context: context).then((value) {
       setState(() => isLoading = false);
     });
     super.initState();
@@ -229,7 +220,7 @@ class _MyHomeviewtate extends State<HomePage> {
     return DefaultTabController(
         length: 2,
         child: WillPopScope(
-          onWillPop: () => HomeController.showExit(context: context),
+          onWillPop: () => ct.showExit(context: context),
           child: Scaffold(
             appBar: AppBar(
               bottom: TabBar(
@@ -298,21 +289,17 @@ class _MyHomeviewtate extends State<HomePage> {
                           style: TextStyle(color: Colors.white, fontSize: 22),
                         )),
                   ),
-                  !isAnonimo
-                      ? ButtonTextPadrao(
-                          onPressed: () {
-                            HomeController.logoff();
-                            Navigator.push(
-                                context, new MaterialPageRoute(builder: (BuildContext context) => Login()));
-                          },
-                          label: "Logout",
-                        )
-                      : Container(),
+                  // !isAnonimo
+                  //     ? ButtonTextPadrao(
+                  //         onPressed: () {
+                  //           ct.logoff();
+                  //           ;
+                  //         },
+                  //         label: "Logout",
+                  //       )
+                  //     : Container(),
                   ButtonTextPadrao(
-                    onPressed: () {
-                      Navigator.push(
-                          context, new MaterialPageRoute(builder: (BuildContext context) => Login()));
-                    },
+                    onPressed: () => Get.offAllNamed('/login'),
                     label: "Voltar",
                   ),
                   !isAnonimo
@@ -406,19 +393,12 @@ class _MyHomeviewtate extends State<HomePage> {
             itemCount: gb.lisCoisa.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) => ListasPage(
-                                  coisa: gb.lisCoisa[index],
-                                ))).then((value) {
-                      if (value != null)
-                        setState(() {
-                          gb.lisCoisa[index] = value;
-                        });
-                    });
-                  },
+                  onTap: () => Get.toNamed(
+                        '/listas',
+                        arguments: [
+                          gb.lisCoisa[index],
+                        ],
+                      ),
                   child: Card(
                     child: Padding(
                         padding: EdgeInsets.only(left: 10, right: 10),
@@ -454,8 +434,7 @@ class _MyHomeviewtate extends State<HomePage> {
                                   showCompartilha(context: context, index: index);
                                   break;
                                 case 1:
-                                  await HomeController.showAlertDialog2(
-                                      coisas: gb.lisCoisa[index], context: context);
+                                  await ct.showAlertDialog2(coisas: gb.lisCoisa[index], context: context);
                                   setState(() {});
                                   break;
                                 default:
@@ -480,19 +459,12 @@ class _MyHomeviewtate extends State<HomePage> {
             itemCount: gb.lisCoisaComp.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) => ListasPage(
-                                  coisa: gb.lisCoisaComp[index],
-                                ))).then((value) {
-                      if (value != null)
-                        setState(() {
-                          gb.lisCoisaComp[index] = value;
-                        });
-                    });
-                  },
+                  onTap: () => Get.toNamed(
+                        '/listas',
+                        arguments: [
+                          gb.lisCoisaComp[index],
+                        ],
+                      ),
                   child: Card(
                     child: Padding(
                         padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:listadecoisa/controller/home-controller.dart';
 import 'package:listadecoisa/model/coisas.dart';
-import 'package:listadecoisa/controller/global.dart' as gb;
+import 'package:listadecoisa/services/banco.dart';
 import 'package:listadecoisa/model/compartilha.dart';
 import 'package:listadecoisa/model/user.dart';
-import 'package:listadecoisa/view/listasPage.dart';
+import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/Button-text-padrao.dart';
 import 'package:listadecoisa/widgets/loading-padrao.dart';
 
@@ -13,10 +14,13 @@ class CompartilhaPage extends StatefulWidget {
   CompartilhaPage();
 
   @override
-  State<StatefulWidget> createState() => new _CompartilhaPage();
+  State<StatefulWidget> createState() => _CompartilhaPage();
 }
 
 class _CompartilhaPage extends State<CompartilhaPage> {
+  final gb = Get.find<Global>();
+  final banco = Get.find<BancoFire>();
+  final ct = HomeController();
   late Coisas lista;
   late UserP user;
   @override
@@ -27,11 +31,11 @@ class _CompartilhaPage extends State<CompartilhaPage> {
   }
 
   getLista() async {
-    await gb.banco.getCoisa(idLista: gb.codigoList!, idUser: gb.codigoUser!).then((value) {
+    await banco.getCoisa(idLista: gb.codigoList!, idUser: gb.codigoUser!).then((value) {
       gb.isLoading = false;
       lista = Coisas.fromSnapshot(value);
     });
-    await gb.banco.getUser(idUser: gb.codigoUser!).then((value) {
+    await banco.getUser(idUser: gb.codigoUser!).then((value) {
       gb.isLoading = false;
       user = UserP.fromSnapshot(value);
       setState(() {});
@@ -49,7 +53,7 @@ class _CompartilhaPage extends State<CompartilhaPage> {
           children: [
             ButtonTextPadrao(
               label: '  Cancelar  ',
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Get.back(),
             ),
             ButtonTextPadrao(
               label: '  Confirmar  ',
@@ -63,8 +67,8 @@ class _CompartilhaPage extends State<CompartilhaPage> {
                     .where((element) => element.idLista == comp.idLista && element.idUser == comp.idUser)
                     .isEmpty) {
                   gb.lisComp.add(comp);
-                  await gb.banco.criaAlteraComp(user: gb.usuario!, coisas: comp);
-                  await HomeController.atualizaLista();
+                  await banco.criaAlteraComp(user: gb.usuario!, coisas: comp);
+                  await ct.atualizaLista();
                 } else {
                   await Fluttertoast.showToast(
                       msg: "A lista já foi salva!!",
@@ -75,7 +79,7 @@ class _CompartilhaPage extends State<CompartilhaPage> {
                       textColor: Colors.white,
                       fontSize: 18.0);
                 }
-                Navigator.pop(context);
+                Get.back();
               },
             )
           ],
@@ -108,13 +112,10 @@ class _CompartilhaPage extends State<CompartilhaPage> {
                     ),
                     ButtonTextPadrao(
                       label: "${lista.nome}",
-                      onPressed: () => Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (BuildContext context) => ListasPage(
-                                    coisa: lista,
-                                    isComp: true,
-                                  ))),
+                      onPressed: () => Get.toNamed(
+                        '/listas',
+                        arguments: [lista, true],
+                      ),
                     )
                   ],
                 )

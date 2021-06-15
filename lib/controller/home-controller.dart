@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:listadecoisa/model/coisas.dart';
-import 'package:listadecoisa/controller/global.dart' as gb;
 import 'package:listadecoisa/model/compartilha.dart';
+import 'package:listadecoisa/services/banco.dart';
+import 'package:listadecoisa/services/global.dart';
 import 'package:uni_links/uni_links.dart';
 
 class HomeController {
-  static Future<void> atualizaLista() async {
-    List<dynamic> listCat = await gb.banco.getCoisas(user: gb.usuario!);
+  final gb = Get.find<Global>();
+  final banco = Get.find<BancoFire>();
+  Future<void> atualizaLista() async {
+    List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
     if (listCat != null) {
       gb.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
     }
 
-    List<dynamic> listcomp = await gb.banco.getComps(user: gb.usuario!);
+    List<dynamic> listcomp = await banco.getComps(user: gb.usuario!);
     if (listcomp != null && listcomp.isNotEmpty) {
       gb.lisComp = listcomp.map((i) => Compartilha.fromSnapshot(i)).toList();
     }
     if (gb.lisComp != null && gb.lisComp.isNotEmpty) {
       for (var i = 0; i < gb.lisComp.length; i++) {
         var auxi =
-            await gb.banco.getCoisa(idUser: gb.lisComp[i].idUser ?? '', idLista: gb.lisComp[i].idLista ?? '');
+            await banco.getCoisa(idUser: gb.lisComp[i].idUser ?? '', idLista: gb.lisComp[i].idLista ?? '');
         if (auxi != null) {
           gb.lisCoisaComp.add(Coisas.fromSnapshot(auxi));
         }
@@ -27,18 +31,18 @@ class HomeController {
     }
   }
 
-  static void logoff() {
-    gb.prefs.setString('user', '');
-    gb.prefs.setBool("fezLogin", false);
+  void logoff() {
+    gb.box.put('user', '');
+    gb.box.put("fezLogin", false);
     gb.usuario = null;
   }
 
-  static Future<void> deleteList({required Coisas coisa}) async {
-    await gb.banco.removeCoisas(user: gb.usuario!, cat: coisa);
+  Future<void> deleteList({required Coisas coisa}) async {
+    await banco.removeCoisas(user: gb.usuario!, cat: coisa);
     gb.lisCoisa.remove(coisa);
   }
 
-  static Future showAlertDialog2({required BuildContext context, required Coisas coisas}) {
+  Future showAlertDialog2({required BuildContext context, required Coisas coisas}) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -48,15 +52,13 @@ class HomeController {
           actions: [
             TextButton(
               child: Text("Cancelar"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Get.back(),
             ),
             TextButton(
               child: Text("Continar"),
               onPressed: () async {
-                await HomeController.deleteList(coisa: coisas);
-                Navigator.pop(context);
+                await deleteList(coisa: coisas);
+                Get.back();
               },
             ),
           ],
@@ -65,7 +67,7 @@ class HomeController {
     );
   }
 
-  static Future initPlatformStateForStringUniLinks({required BuildContext context}) async {
+  Future initPlatformStateForStringUniLinks({required BuildContext context}) async {
     String? initialLink;
 
     try {
@@ -76,7 +78,7 @@ class HomeController {
         gb.codigoUser = initialLink.substring(initialLink.indexOf('@') + 1, initialLink.indexOf('*'));
         gb.codigRead = initialLink.substring(initialLink.indexOf('*') + 1, initialLink.length);
         var rota = initialLink.substring(28, 33);
-        return Navigator.pushNamed(context, rota);
+        return Get.toNamed(rota);
       }
     } on PlatformException {
       initialLink = 'Failed to get initial link.';
@@ -85,7 +87,7 @@ class HomeController {
     }
   }
 
-  static showExit({
+  showExit({
     required BuildContext context,
   }) {
     showDialog(
@@ -103,9 +105,7 @@ class HomeController {
             ),
             TextButton(
               child: Text("Não"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Get.back(),
             ),
           ],
         );
