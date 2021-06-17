@@ -53,6 +53,10 @@ class MyApp extends GetView {
         GetPage(
           name: '/home',
           page: () => HomePage(),
+        ),
+        GetPage(
+          name: '/login',
+          page: () => Login(),
         )
       ],
     );
