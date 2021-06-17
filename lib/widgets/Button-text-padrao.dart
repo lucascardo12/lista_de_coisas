@@ -6,9 +6,13 @@ class ButtonTextPadrao extends GetView {
   final gb = Get.find<Global>();
   final Function()? onPressed;
   final String label;
+  final Color? color;
+  final Color? textColor;
   ButtonTextPadrao({
     this.onPressed,
     required this.label,
+    this.color,
+    this.textColor,
   });
   @override
   Widget build(BuildContext context) {
@@ -20,12 +24,13 @@ class ButtonTextPadrao extends GetView {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
               ),
-              backgroundColor: gb.getPrimary(),
+              backgroundColor: color ?? gb.getPrimary(),
             ),
             onPressed: onPressed,
             child: Text(
               label,
-              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.end,
+              style: TextStyle(color: textColor ?? Colors.white),
             )));
   }
 }
