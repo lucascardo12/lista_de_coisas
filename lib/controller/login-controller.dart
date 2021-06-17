@@ -44,23 +44,28 @@ class LoginController extends GetxController {
     }
   }
 
-  showAlertDialog2({required BuildContext context}) {
+  showAlertRedefinir({required BuildContext context}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Redefinir a senha do login abaixo"),
+          title: Text("Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam."),
           content: TextField(
             controller: loginControler,
           ),
           actions: [
             TextButton(
               child: Text("Cancelar"),
-              onPressed: () => Get.back(),
+              onPressed: () {
+                Get.back();
+              },
             ),
             TextButton(
               child: Text("Confirmar"),
-              onPressed: () => Get.back(),
+              onPressed: () {
+                banco.resetarSenha(user: gb.usuario!);
+                Get.back();
+              },
             ),
           ],
         );
