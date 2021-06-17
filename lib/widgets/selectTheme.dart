@@ -24,27 +24,24 @@ class SelectTheme extends GetView {
                 color: CupertinoColors.white,
                 borderRadius: BorderRadius.circular(25),
               ),
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(15),
               child: Wrap(
                 children: items.map((e) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Radio(
-                        value: gb.box.get(
-                          e['nome'],
-                          defaultValue: false,
-                        ),
-                        groupValue: gb.box.get(
-                          e['nome'],
-                          defaultValue: false,
-                        ),
+                        value: e,
+                        activeColor: gb.getPrimary(),
+                        groupValue: gb.box.get('tema', defaultValue: 1),
                         onChanged: (dynamic valor) async {
-                          await gb.box.put(e['nome'], valor);
+                          gb.tema = valor;
+                          await gb.box.put('tema', valor);
+                          Get.changeTheme(Theme.of(context));
                           Get.back();
                         },
                       ),
-                      Text(e['nome'])
+                      Text(e)
                     ],
                   );
                 }).toList(),
