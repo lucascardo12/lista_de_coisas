@@ -73,8 +73,9 @@ class LoginController extends GetxController {
     );
   }
 
-  void logar({required BuildContext context}) {
-    banco.login(email: loginControler.text, password: senhaControler.text).then((value) async {
+  Future<void> logar({required BuildContext context}) async {
+    gb.load();
+    await banco.login(email: loginControler.text, password: senhaControler.text).then((value) async {
       if (value != null) {
         gb.usuario = value;
         List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
@@ -87,17 +88,16 @@ class LoginController extends GetxController {
         gb.box.put('senha', senhaControler.text);
         gb.box.put('isAnonimo', false);
 
-        gb.isLoading = false;
         Get.offAllNamed('/home');
       }
     });
+    Get.back();
   }
 
-  void loginAnonimo({required BuildContext context}) {
-    banco.criaUserAnonimo().then((value) async {
+  Future<void> loginAnonimo({required BuildContext context}) async {
+    gb.load();
+    await banco.criaUserAnonimo().then((value) async {
       gb.usuario = value;
-      gb.isLoading = false;
-
       if (value != null) {
         List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
         gb.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
@@ -110,5 +110,6 @@ class LoginController extends GetxController {
         Get.offAllNamed('/home');
       }
     });
+    Get.back();
   }
 }
