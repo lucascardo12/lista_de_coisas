@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:listadecoisa/controller/login-controller.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/Button-text-padrao.dart';
-import 'package:listadecoisa/widgets/borda-padrao.dart';
+import 'package:listadecoisa/widgets/compo-padrao.dart';
 import 'package:listadecoisa/widgets/loading-padrao.dart';
 
 class Login extends GetView {
@@ -15,10 +15,15 @@ class Login extends GetView {
     return Scaffold(
         body: Container(
       decoration: BoxDecoration(
-          gradient: LinearGradient(begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [
-        gb.getPrimary(),
-        gb.getSecondary(),
-      ])),
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            gb.getPrimary(),
+            gb.getSecondary(),
+          ],
+        ),
+      ),
       child: gb.isLoading
           ? LoadPadrao()
           : ListView(
@@ -39,42 +44,19 @@ class Login extends GetView {
                         ),
                       ),
                     )),
-                TextFormField(
-                  cursorColor: Colors.white,
-                  style: TextStyle(color: Colors.white),
-                  textAlign: TextAlign.left,
-                  decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        color: Colors.transparent,
-                        icon: Icon(Icons.visibility_off),
-                        onPressed: () {},
-                      ),
-                      border: BordaPadrao.build(),
-                      enabledBorder: BordaPadrao.build(),
-                      focusedBorder: BordaPadrao.build(),
-                      hintStyle: TextStyle(color: Colors.white),
-                      hintText: 'E-mail'),
+                CampoPadrao(
+                  hintText: 'E-mail',
                   controller: ct.loginControler,
                 ),
                 SizedBox(height: 10),
-                Obx(() => TextFormField(
-                      cursorColor: Colors.white,
-                      obscureText: ct.lObescure.value,
-                      style: TextStyle(color: Colors.white),
-                      textAlign: TextAlign.left,
-                      decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            color: Colors.white,
-                            icon: Icon(ct.lObescure.value ? Icons.visibility : Icons.visibility_off),
-                            onPressed: () {
-                              ct.lObescure.value = !ct.lObescure.value;
-                            },
-                          ),
-                          border: BordaPadrao.build(),
-                          enabledBorder: BordaPadrao.build(),
-                          focusedBorder: BordaPadrao.build(),
-                          hintStyle: TextStyle(color: Colors.white),
-                          hintText: 'Senha'),
+                Obx(() => CampoPadrao(
+                      lObescure: ct.lObescure.value,
+                      suffixIcon: IconButton(
+                        color: Colors.white,
+                        icon: Icon(ct.lObescure.value ? Icons.visibility : Icons.visibility_off),
+                        onPressed: () => ct.lObescure.value = !ct.lObescure.value,
+                      ),
+                      hintText: 'Senha',
                       controller: ct.senhaControler,
                     )),
                 ButtonTextPadrao(
