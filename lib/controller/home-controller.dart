@@ -12,19 +12,19 @@ class HomeController {
   final banco = Get.find<BancoFire>();
   Future<void> atualizaLista() async {
     List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
-    if (listCat != null) {
+    if (listCat.isNotEmpty) {
       gb.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
     }
 
     List<dynamic> listcomp = await banco.getComps(user: gb.usuario!);
-    if (listcomp != null && listcomp.isNotEmpty) {
+    if (listcomp.isNotEmpty) {
       gb.lisComp = listcomp.map((i) => Compartilha.fromSnapshot(i)).toList();
     }
-    if (gb.lisComp != null && gb.lisComp.isNotEmpty) {
+    if (gb.lisComp.isNotEmpty) {
       for (var i = 0; i < gb.lisComp.length; i++) {
         var auxi =
             await banco.getCoisa(idUser: gb.lisComp[i].idUser ?? '', idLista: gb.lisComp[i].idLista ?? '');
-        if (auxi != null) {
+        if (auxi.exists) {
           gb.lisCoisaComp.add(Coisas.fromSnapshot(auxi));
         }
       }

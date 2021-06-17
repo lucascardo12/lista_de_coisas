@@ -13,11 +13,13 @@ import 'package:firebase_core/firebase_core.dart';
 
 class BancoFire extends GetxService {
   final translator = GoogleTranslator();
-  final FirebaseFirestore db = FirebaseFirestore.instance;
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  late FirebaseFirestore db;
+  late FirebaseAuth firebaseAuth;
   late UserP usuario;
   Future<BancoFire> inicia() async {
     await Firebase.initializeApp();
+    db = FirebaseFirestore.instance;
+    firebaseAuth = FirebaseAuth.instance;
     db.settings = Settings(persistenceEnabled: true);
     return this;
   }
@@ -36,7 +38,7 @@ class BancoFire extends GetxService {
     db.collection('user').doc(user.id).collection('compartilha').doc(coisas.idFire).set(coisas.toJson());
   }
 
-  getCoisas({required UserP user}) async {
+  Future<List> getCoisas({required UserP user}) async {
     try {
       var result = await db.collection('user').doc(user.id).collection('coisas').get();
       return result.docs;
@@ -50,11 +52,11 @@ class BancoFire extends GetxService {
           backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 18.0);
-      return null;
+      return [];
     }
   }
 
-  getComps({required UserP user}) async {
+  Future<List> getComps({required UserP user}) async {
     try {
       var result = await db.collection('user').doc(user.id).collection('compartilha').get();
       return result.docs;
@@ -68,7 +70,7 @@ class BancoFire extends GetxService {
           backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 18.0);
-      return null;
+      return [];
     }
   }
 
@@ -97,7 +99,7 @@ class BancoFire extends GetxService {
 
   Future<String> criaUser(UserP user) async {
     try {
-      var userFire = await _firebaseAuth.createUserWithEmailAndPassword(
+      var userFire = await firebaseAuth.createUserWithEmailAndPassword(
           email: user.login ?? '', password: user.senha ?? '');
 
       user.id = userFire.user!.uid;
@@ -119,7 +121,7 @@ class BancoFire extends GetxService {
 
   Future<UserP?> login({required String email, required String password}) async {
     try {
-      var _value = await _firebaseAuth.signInWithEmailAndPassword(email: email.trim(), password: password);
+      var _value = await firebaseAuth.signInWithEmailAndPassword(email: email.trim(), password: password);
 
       DocumentSnapshot result = await db.collection('user').doc(_value.user!.uid).get();
 
@@ -158,7 +160,7 @@ class BancoFire extends GetxService {
 
         user.id = result.get('id');
       } else {
-        var _value = await _firebaseAuth.signInAnonymously();
+        var _value = await firebaseAuth.signInAnonymously();
         user.id = _value.user!.uid;
         db.collection('user').doc(user.id).set(user.toJson());
         gb.box.put('userAnonimo', user.id ?? '');
@@ -180,7 +182,7 @@ class BancoFire extends GetxService {
   }
 
   void resetarSenha({required UserP user}) {
-    _firebaseAuth.sendPasswordResetEmail(email: user.login ?? '');
+    firebaseAuth.sendPasswordResetEmail(email: user.login ?? '');
   }
 
   Future<UserCredential> signInWithGoogle() async {
