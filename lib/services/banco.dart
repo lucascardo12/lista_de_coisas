@@ -43,7 +43,8 @@ class BancoFire extends GetxService {
       var result = await db.collection('user').doc(user.id).collection('coisas').get();
       return result.docs;
     } catch (e) {
-      var auxi = await translator.translate(e.toString(), from: 'en', to: 'pt');
+      e as FirebaseAuthException;
+      var auxi = await translator.translate(e.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -61,7 +62,8 @@ class BancoFire extends GetxService {
       var result = await db.collection('user').doc(user.id).collection('compartilha').get();
       return result.docs;
     } catch (e) {
-      var auxi = await translator.translate(e.toString(), from: 'en', to: 'pt');
+      e as FirebaseAuthException;
+      var auxi = await translator.translate(e.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -106,7 +108,8 @@ class BancoFire extends GetxService {
       db.collection('user').doc(userFire.user!.uid).set(user.toJson());
       return userFire.user!.uid;
     } catch (erro) {
-      var auxi = await translator.translate(erro.toString(), from: 'en', to: 'pt');
+      erro as FirebaseAuthException;
+      var auxi = await translator.translate(erro.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -134,7 +137,8 @@ class BancoFire extends GetxService {
 
       return auxi;
     } catch (e) {
-      var auxi = await translator.translate(e.toString(), from: 'en', to: 'pt');
+      e as FirebaseAuthException;
+      var auxi = await translator.translate(e.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -168,7 +172,8 @@ class BancoFire extends GetxService {
 
       return user;
     } catch (e) {
-      var auxi = await translator.translate(e.toString(), from: 'en', to: 'pt');
+      e as FirebaseAuthException;
+      var auxi = await translator.translate(e.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
