@@ -12,66 +12,70 @@ class ListasPage extends GetView {
   Widget build(BuildContext context) {
     ct.node = FocusScope.of(context);
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              ct.gb.getPrimary(),
-              ct.gb.getSecondary(),
-            ],
+      body: WillPopScope(
+        onWillPop: () => ct.bottonVoltar(),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                ct.gb.getPrimary(),
+                ct.gb.getSecondary(),
+              ],
+            ),
           ),
-        ),
-        child: Form(
-          key: ct.formKey,
-          child: Column(
-            children: [
-              SizedBox(
-                height: 60,
-              ),
-              Expanded(
-                child: TextFormField(
-                  readOnly: ct.isComp,
-                  validator: (value) {
-                    if (value!.isEmpty) return "Titulo não pode ser vazio";
-                    return null;
-                  },
-                  onChanged: (value) => ct.coisas.nome = value,
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                  initialValue: ct.coisas.nome ?? '',
-                  textAlign: TextAlign.center,
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    labelText: ct.coisas.nome!.isEmpty ? "Digite um Titulo" : null,
-                    labelStyle: TextStyle(
-                      color: Colors.white,
+          child: Form(
+            key: ct.formKey,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 60,
+                ),
+                Expanded(
+                  child: TextFormField(
+                    readOnly: ct.isComp,
+                    validator: (value) {
+                      if (value!.isEmpty) return "Titulo não pode ser vazio";
+                      return null;
+                    },
+                    onChanged: (value) => ct.coisas.nome = value,
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    initialValue: ct.coisas.nome ?? '',
+                    textAlign: TextAlign.center,
+                    cursorColor: Colors.white,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText: ct.coisas.nome!.isEmpty ? "    Digite um Titulo" : null,
+                      alignLabelWithHint: true,
+                      labelStyle: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 8,
-                child: GetBuilder(
-                  init: ct,
-                  builder: (ListasController controller) => [
-                    ListaTexto(
-                      isComp: ct.isComp,
-                      ct: controller,
-                    ),
-                    ListaCheck(
-                      isComp: ct.isComp,
-                      ct: controller,
-                    ),
-                    ListaCompras(
-                      isComp: ct.isComp,
-                      ct: controller,
-                    ),
-                  ].elementAt(ct.coisas.tipo ?? 0),
+                Expanded(
+                  flex: 8,
+                  child: GetBuilder(
+                    init: ct,
+                    builder: (ListasController controller) => [
+                      ListaTexto(
+                        isComp: ct.isComp,
+                        ct: controller,
+                      ),
+                      ListaCheck(
+                        isComp: ct.isComp,
+                        ct: controller,
+                      ),
+                      ListaCompras(
+                        isComp: ct.isComp,
+                        ct: controller,
+                      ),
+                    ].elementAt(ct.coisas.tipo ?? 0),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

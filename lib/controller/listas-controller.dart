@@ -47,4 +47,37 @@ class ListasController extends GetxController {
         textColor: Colors.white,
         fontSize: 18.0);
   }
+
+  Future<bool> bottonVoltar() async {
+    if (coisas.idFire == null) {
+      if (coisas.checkCompras!.isNotEmpty || coisas.checklist!.isNotEmpty || coisas.descricao!.isNotEmpty) {
+        await showDialog(
+          context: Get.context!,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Atenção !!!"),
+              content: Text("Deseja descartar essa lista ?"),
+              actions: [
+                TextButton(
+                  child: Text("Sim"),
+                  onPressed: () {
+                    Get.back();
+                    Get.back();
+                  },
+                ),
+                TextButton(
+                  child: Text("Não"),
+                  onPressed: () => Get.back(),
+                ),
+              ],
+            );
+          },
+        );
+        return false;
+      }
+      return true;
+    } else {
+      return true;
+    }
+  }
 }
