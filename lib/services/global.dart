@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/compartilha.dart';
 import 'package:listadecoisa/model/user.dart';
+import 'package:listadecoisa/widgets/loading-padrao.dart';
 
 class Global extends GetxService {
   bool isLoading = false;
@@ -15,9 +16,9 @@ class Global extends GetxService {
   bool isSwitched = false;
   bool isSwitched2 = false;
   bool isSwitched3 = false;
-  List<Coisas> lisCoisa = [];
-  List<Coisas> lisCoisaComp = [];
-  List<Compartilha> lisComp = [];
+  List lisCoisa = [].obs;
+  List lisCoisaComp = [].obs;
+  List lisComp = [].obs;
   UserP? usuario;
   int hora = 12;
   int dia = 12;
@@ -41,6 +42,15 @@ class Global extends GetxService {
     }
 
     return this;
+  }
+
+  void load() {
+    print('load');
+    Get.dialog(
+      LoadPadrao(),
+      barrierColor: Colors.white,
+      barrierDismissible: false,
+    );
   }
 
   Color getPrimary() {

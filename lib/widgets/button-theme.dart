@@ -28,9 +28,9 @@ class ButtonTema extends GetView {
             ),
             Text(
               'Temas',
-              style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                    color: gb.getPrimary(),
-                  ),
+              style: Get.textTheme.subtitle1!.copyWith(
+                color: gb.getPrimary(),
+              ),
             ),
             Spacer(),
             TextButton.icon(

@@ -79,7 +79,7 @@ class LoginController extends GetxController {
       if (value != null) {
         gb.usuario = value;
         List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
-        gb.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
+        listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
 
         var userCo = jsonEncode(value);
         gb.box.put('user', userCo);
@@ -100,7 +100,7 @@ class LoginController extends GetxController {
       gb.usuario = value;
       if (value != null) {
         List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
-        gb.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
+        listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
 
         var userCo = jsonEncode(value);
         gb.box.put('user', userCo);
