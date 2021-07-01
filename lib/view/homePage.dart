@@ -95,11 +95,24 @@ class HomePage extends GetView {
                       ),
                     ),
                     child: Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text(
-                          gb.usuario!.nome ?? '',
-                          style: TextStyle(color: Colors.white, fontSize: 22),
-                        )),
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            gb.usuario!.nome ?? '',
+                            style: TextStyle(color: Colors.white, fontSize: 22),
+                          ),
+                          Text(
+                            gb.packageInfo.version,
+                            style: Get.textTheme.subtitle1!.copyWith(
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                   ButtonTextPadrao(
                     onPressed: () => Get.offAllNamed('/login'),

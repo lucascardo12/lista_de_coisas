@@ -8,8 +8,10 @@ import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/compartilha.dart';
 import 'package:listadecoisa/model/user.dart';
 import 'package:listadecoisa/widgets/loading-padrao.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class Global extends GetxService {
+  late PackageInfo packageInfo;
   bool isLoading = false;
   late Box box;
   String app = "Anote";
@@ -33,6 +35,7 @@ class Global extends GetxService {
   Color secondaryLight = Color(0xFF6ec5ff);
   Color secondaryDark = Color(0xFF0068bf);
   Future<Global> inicia() async {
+    packageInfo = await PackageInfo.fromPlatform();
     await Hive.initFlutter();
     box = await Hive.openBox('global');
     tema = box.get("tema", defaultValue: "Original");
