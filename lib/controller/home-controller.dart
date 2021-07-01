@@ -5,20 +5,41 @@ import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/compartilha.dart';
 import 'package:listadecoisa/services/banco.dart';
 import 'package:listadecoisa/services/global.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:scan/scan.dart';
+import 'package:share/share.dart';
 import 'package:uni_links/uni_links.dart';
 
-class HomeController {
+class HomeController extends GetxController {
   final gb = Get.find<Global>();
   final banco = Get.find<BancoFire>();
+  GlobalKey<ScaffoldState> scaffoldKe = GlobalKey();
+  bool isAnonimo = false;
+  bool isread = false;
+  int tipo = 1;
+  ScanController controller = ScanController();
+  List<String> listaTipo = ["Texto Simples", "Check-List", "Lista de Compras"];
+  @override
+  void onInit() {
+    isAnonimo = gb.box.get('isAnonimo', defaultValue: false);
+    atualizaLista();
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
   Future<void> atualizaLista() async {
     List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
     if (listCat.isNotEmpty) {
-      gb.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
+      listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
     }
 
     List<dynamic> listcomp = await banco.getComps(user: gb.usuario!);
     if (listcomp.isNotEmpty) {
-      gb.lisComp = listcomp.map((i) => Compartilha.fromSnapshot(i)).toList();
+      listcomp.forEach((element) => gb.lisComp.add(Compartilha.fromSnapshot(element)));
     }
     if (gb.lisComp.isNotEmpty) {
       for (var i = 0; i < gb.lisComp.length; i++) {
@@ -106,6 +127,182 @@ class HomeController {
             TextButton(
               child: Text("Não"),
               onPressed: () => Get.back(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  showCompartilha({required BuildContext context, required int index}) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ListView(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          children: [
+            Text(
+              'Mostre o QR code ou compartilhe o link',
+              style: Get.textTheme.headline5,
+            ),
+            Text(
+              'Quem for receber a lista precisa abri com o app o link ou escanear o QRcode',
+              style: Get.textTheme.bodyText1,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Somente visualização?',
+                  style: Get.textTheme.subtitle1!.copyWith(color: gb.primary),
+                ),
+                Switch(
+                  value: isread,
+                  activeColor: gb.getPrimary(),
+                  onChanged: (bool value) {
+                    isread = value;
+                    Get.back();
+                    showCompartilha(context: context, index: index);
+                  },
+                ),
+              ],
+            ),
+            Center(
+                child: QrImage(
+              data: 'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario!.id}*$isread',
+              version: QrVersions.auto,
+              size: 200.0,
+            )),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 60, right: 60),
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.only(top: 15, bottom: 15),
+                      onSurface: gb.getSecondary(),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      backgroundColor: gb.getPrimary(),
+                    ),
+                    onPressed: () => Share.share(
+                        'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario!.id}*$isread'),
+                    child: Text(
+                      "Compartilhar link",
+                      style: TextStyle(color: Colors.white),
+                    )))
+          ],
+        );
+      },
+    );
+  }
+
+  showCria({
+    required BuildContext context,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        final theme = Theme.of(context);
+        return Wrap(
+          children: [
+            ListTile(
+              title: Text(
+                'Escolha o tipo de Lista',
+                style: theme.textTheme.subtitle1!.copyWith(color: gb.getWhiteOrBlack()),
+              ),
+              tileColor: gb.getPrimary(),
+            ),
+            for (int i = 0; i < listaTipo.length; i++)
+              ListTile(
+                title: Text(
+                  '${listaTipo[i]}',
+                  style: Get.textTheme.subtitle1!.copyWith(color: Colors.black),
+                ),
+                leading: Radio(
+                  value: i,
+                  activeColor: gb.getPrimary(),
+                  onChanged: (int? value) {
+                    tipo = value ?? 1;
+
+                    Get.back();
+                    showCria(context: context);
+                  },
+                  groupValue: tipo,
+                ),
+              ),
+            Padding(
+                padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                        child: TextButton(
+                      onPressed: () => Get.back(),
+                      child: Text(
+                        "Cancelar",
+                        style: theme.textTheme.subtitle1!.copyWith(color: Colors.black),
+                      ),
+                      style: TextButton.styleFrom(backgroundColor: Colors.white),
+                    )),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () {
+                          Get.back();
+                          Get.toNamed(
+                            '/listas',
+                            arguments: [
+                              Coisas(
+                                tipo: tipo,
+                                checkCompras: [],
+                                checklist: [],
+                                descricao: '',
+                                nome: '',
+                              ),
+                              false
+                            ],
+                          );
+                        },
+                        child: Text(
+                          "Continuar",
+                          style: theme.textTheme.subtitle1!.copyWith(color: gb.getWhiteOrBlack()),
+                        ),
+                        style: TextButton.styleFrom(backgroundColor: Colors.green),
+                      ),
+                    )
+                  ],
+                )),
+          ],
+        );
+      },
+    );
+  }
+
+  showAlertRedefinir({required BuildContext context}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirma redefinição de senha!!"),
+          content: Text('Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam.'),
+          actions: [
+            TextButton(
+              child: Text("Cancelar"),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+            TextButton(
+              child: Text("Confirmar"),
+              onPressed: () {
+                banco.resetarSenha(user: gb.usuario!);
+                Get.back();
+              },
             ),
           ],
         );
