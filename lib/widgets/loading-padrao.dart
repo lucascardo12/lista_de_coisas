@@ -17,7 +17,7 @@ class LoadPadrao extends GetView {
           SizedBox(height: 20),
           Text(
             '...Carregando 📑',
-            style: Theme.of(context).textTheme.headline5!.copyWith(color: gb.getSecondary()),
+            style: Get.textTheme.headline5!.copyWith(color: gb.getSecondary()),
           )
         ],
       ),
