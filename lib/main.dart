@@ -25,7 +25,7 @@ class MyApp extends GetView {
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       title: 'Lista de Coisas',
-      theme: ThemeData(
+      theme: ThemeData.light().copyWith(
         accentColor: gb.getSecondary(),
         primaryColor: gb.getSecondary(),
         colorScheme: Theme.of(context).colorScheme.copyWith(

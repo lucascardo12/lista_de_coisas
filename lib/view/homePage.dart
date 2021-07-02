@@ -20,6 +20,7 @@ class HomePage extends GetView {
           child: Scaffold(
             appBar: AppBar(
               bottom: TabBar(
+                indicatorColor: gb.getWhiteOrBlack(),
                 tabs: [
                   Tab(
                     icon: Icon(
