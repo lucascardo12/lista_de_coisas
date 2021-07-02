@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -23,6 +26,7 @@ class HomeController extends GetxController {
   void onInit() {
     isAnonimo = gb.box.get('isAnonimo', defaultValue: false);
     atualizaLista();
+    avaliaApp();
     super.onInit();
   }
 
@@ -31,7 +35,21 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
+  void avaliaApp() {
+    Timer(
+      Duration(milliseconds: 500),
+      () => AppReview.requestReview.then(
+        (onValue) {
+          print(onValue);
+        },
+      ),
+    );
+  }
+
   Future<void> atualizaLista() async {
+    gb.lisCoisa.clear();
+    gb.lisCoisaComp.clear();
+    gb.lisComp.clear();
     List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
     if (listCat.isNotEmpty) {
       listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
@@ -308,5 +326,42 @@ class HomeController extends GetxController {
         );
       },
     );
+  }
+
+  Future<void> lembrarAvaliacao() async {
+    if (gb.box.get('lembrarDia', defaultValue: 1) != DateTime.now().day &&
+        gb.box.get('lembrarAva', defaultValue: true)) {
+      Timer(
+        Duration(milliseconds: 500),
+        () => Get.defaultDialog(
+          title: 'Avaliação do Aplicativo',
+          radius: 20,
+          content: Text(
+            'Gostaria de avaliar o App ?',
+            style: Get.textTheme.subtitle1,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                gb.box.put('lembrarAva', false);
+                Get.back();
+              },
+              child: Text('Não Mostrar'),
+            ),
+            TextButton(
+              onPressed: () {
+                gb.box.put('lembrarDia', DateTime.now().day);
+                Get.back();
+              },
+              child: Text('Depois'),
+            ),
+            TextButton(
+              onPressed: () => null,
+              child: Text('Agora'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
