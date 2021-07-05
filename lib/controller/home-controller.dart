@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:app_review/app_review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -12,6 +10,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:scan/scan.dart';
 import 'package:share/share.dart';
 import 'package:uni_links/uni_links.dart';
+import 'package:in_app_update/in_app_update.dart';
 
 class HomeController extends GetxController {
   final gb = Get.find<Global>();
@@ -27,6 +26,7 @@ class HomeController extends GetxController {
     isAnonimo = gb.box.get('isAnonimo', defaultValue: false);
     atualizaLista();
     avaliaApp();
+    checkForUpdate();
     super.onInit();
   }
 
@@ -35,15 +35,25 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  void avaliaApp() {
-    Timer(
-      Duration(milliseconds: 500),
-      () => AppReview.requestReview.then(
-        (onValue) {
-          print(onValue);
-        },
-      ),
-    );
+  Future<void> avaliaApp() async {
+    var dia = gb.box.get('avaliaDias');
+    if (dia == null) {
+      gb.box.put('avaliaDias', DateTime.now().day);
+    } else {
+      if (dia != DateTime.now().day) {
+        if (await gb.inAppReview.isAvailable()) {
+          gb.inAppReview.requestReview();
+        }
+      }
+    }
+  }
+
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) async {
+      info.updateAvailability == UpdateAvailability.updateAvailable
+          ? await InAppUpdate.performImmediateUpdate()
+          : print('teste');
+    });
   }
 
   Future<void> atualizaLista() async {

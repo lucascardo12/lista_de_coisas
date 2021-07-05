@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/compartilha.dart';
 import 'package:listadecoisa/model/user.dart';
@@ -11,6 +12,7 @@ import 'package:listadecoisa/widgets/loading-padrao.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class Global extends GetxService {
+  final InAppReview inAppReview = InAppReview.instance;
   late PackageInfo packageInfo;
   bool isLoading = false;
   late Box box;
@@ -34,6 +36,7 @@ class Global extends GetxService {
   Color secondary = Color(0xFF2195f2);
   Color secondaryLight = Color(0xFF6ec5ff);
   Color secondaryDark = Color(0xFF0068bf);
+
   Future<Global> inicia() async {
     packageInfo = await PackageInfo.fromPlatform();
     await Hive.initFlutter();

@@ -3,7 +3,7 @@ description: App simples para todo tipo de listas.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.0+9
+version: 1.1.0+13
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
@@ -11,9 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^2.2.2
+  cloud_firestore: ^2.3.0
   fluttertoast: ^8.0.3
-  firebase_auth: ^1.0.1
+  firebase_auth: ^2.0.0
   translator: ^0.1.6+1
   admob_flutter: ^2.0.0-nullsafety.0
   flutter_launcher_icons: ^0.9.0
@@ -27,7 +27,8 @@ dependencies:
   hive: ^2.0.4
   hive_flutter: ^1.0.0
   package_info_plus: ^1.0.3
-  app_review: ^2.1.1+1
+  in_app_review: ^2.0.2
+  in_app_update: ^2.0.0
  
 
 dev_dependencies:
@@ -39,13 +40,14 @@ flutter_native_splash:
   color: "FF406F"
   android_disable_fullscreen: false
   fill: false
+# flutter pub run flutter_launcher_icons:main
 
 flutter_icons:
   android: "launcher_icon"
-  ios: true
+  ios: false
   image_path: "assets/icon.png"
 
-# The following section is specific to Flutter.
+# flutter pub run flutter_native_splash:create
 flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:

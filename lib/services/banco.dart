@@ -20,7 +20,6 @@ class BancoFire extends GetxService {
     await Firebase.initializeApp();
     db = FirebaseFirestore.instance;
     firebaseAuth = FirebaseAuth.instance;
-    db.settings = Settings(persistenceEnabled: true);
     return this;
   }
 
@@ -124,9 +123,12 @@ class BancoFire extends GetxService {
 
   Future<UserP?> login({required String email, required String password}) async {
     try {
-      var _value = await firebaseAuth.signInWithEmailAndPassword(email: email.trim(), password: password);
+      var user = await firebaseAuth.signInWithEmailAndPassword(
+        email: email.trim(),
+        password: password.trim(),
+      );
 
-      DocumentSnapshot result = await db.collection('user').doc(_value.user!.uid).get();
+      DocumentSnapshot result = await db.collection('user').doc(user.user!.uid).get();
 
       UserP auxi = UserP(
         login: result.get('login'),
@@ -137,8 +139,7 @@ class BancoFire extends GetxService {
 
       return auxi;
     } catch (e) {
-      e as FirebaseAuthException;
-      var auxi = await translator.translate(e.message ?? '', from: 'en', to: 'pt');
+      var auxi = await translator.translate(e.toString(), from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,

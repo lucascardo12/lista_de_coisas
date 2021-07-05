@@ -66,11 +66,7 @@ class Login extends GetView {
             label: 'Login',
             color: gb.getWhiteOrBlack(),
             textColor: gb.getPrimary(),
-            onPressed: () {
-              gb.isLoading = true;
-
-              ct.logar(context: context);
-            },
+            onPressed: () => ct.logar(context: context),
           ),
           ButtonTextPadrao(
             color: gb.getWhiteOrBlack(),

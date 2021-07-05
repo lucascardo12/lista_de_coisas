@@ -80,7 +80,6 @@ class LoginController extends GetxController {
         gb.usuario = value;
         List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
         listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
-
         var userCo = jsonEncode(value);
         gb.box.put('user', userCo);
         gb.box.put("fezLogin", true);
