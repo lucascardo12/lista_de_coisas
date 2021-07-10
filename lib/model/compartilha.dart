@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Compartilha {
-  String idFire;
-  String idUser;
-  String idLista;
-  bool isRead;
-  Compartilha({this.idUser, this.idLista, this.isRead, this.idFire});
+  String? idFire;
+  String? idUser;
+  String? idLista;
+  bool? isRead;
+  Compartilha({
+    this.idUser,
+    this.idLista,
+    this.isRead,
+    this.idFire,
+  });
 
   Compartilha.fromJson(Map<String, dynamic> xjson) {
     idUser = xjson['idUser'];
@@ -21,9 +26,9 @@ class Compartilha {
     map['idFire'] = idFire;
   }
   Compartilha.fromSnapshot(DocumentSnapshot snapshot) {
-    idUser = snapshot.data()['idUser'];
-    idLista = snapshot.data()['idLista'];
-    isRead = snapshot.data()['isRead'];
+    idUser = snapshot.get('idUser');
+    idLista = snapshot.get('idLista');
+    isRead = snapshot.get('isRead');
     idFire = snapshot.id;
   }
 

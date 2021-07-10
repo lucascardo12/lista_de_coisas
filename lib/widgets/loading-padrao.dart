@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:listadecoisa/services/global.dart';
 
-class LoadPadrao extends StatelessWidget {
+class LoadPadrao extends GetView {
+  final gb = Get.find<Global>();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Center(
-          child: Container(
-              child: Wrap(
-                  alignment: WrapAlignment.center,
-                  direction: Axis.vertical,
-                  runAlignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-            Image.asset(
-              'assets/tenor.gif',
-            ),
-            Text(
-              'Procurando coisas...',
-              style: TextStyle(color: Colors.black, fontSize: 28),
-            )
-          ]))),
+    return Material(
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        runAlignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        direction: Axis.vertical,
+        children: [
+          CircularProgressIndicator.adaptive(),
+          SizedBox(height: 20),
+          Text(
+            '...Carregando 📑',
+            style: Get.textTheme.headline5!.copyWith(color: gb.getSecondary()),
+          )
+        ],
+      ),
     );
   }
 }

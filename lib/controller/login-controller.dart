@@ -1,98 +1,114 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:listadecoisa/controller/global.dart' as global;
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/model/coisas.dart';
-import 'package:listadecoisa/view/homePage.dart';
+import 'package:listadecoisa/services/banco.dart';
+import 'package:listadecoisa/services/global.dart';
 
-Future<bool> verificarConexao() async {
-  try {
-    final result = await InternetAddress.lookup('google.com');
-    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-      print('connected');
-      return true;
-    }
-  } on SocketException catch (_) {
-    Fluttertoast.showToast(
-        msg: 'Sem Conexão',
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 5,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 18.0);
-    return false;
+class LoginController extends GetxController {
+  final gb = Get.find<Global>();
+  final banco = Get.find<BancoFire>();
+  TextEditingController loginControler = TextEditingController();
+  TextEditingController senhaControler = TextEditingController();
+  bool isVali = false;
+  RxBool lObescure = true.obs;
+
+  @override
+  void onInit() {
+    loginControler.text = gb.box.get('login', defaultValue: "");
+    senhaControler.text = gb.box.get('senha', defaultValue: "");
+    super.onInit();
   }
-  return null;
-}
 
-showAlertDialog2({BuildContext context, TextEditingController loginControler}) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("Redefinir a senha do login abaixo"),
-        content: TextField(
-          controller: loginControler,
-        ),
-        actions: [
-          TextButton(
-            child: Text("Cancelar"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          TextButton(
-            child: Text("Confirmar"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
-
-void logar(
-    {TextEditingController loginControler, TextEditingController senhaControler, BuildContext context}) {
-  global.banco.login(email: loginControler.text, password: senhaControler.text).then((value) async {
-    if (value != null) {
-      global.usuario = value;
-      List<dynamic> listCat = await global.banco.getCoisas(user: global.usuario);
-      global.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
-
-      var userCo = jsonEncode(value);
-      global.prefs.setString('user', userCo);
-      global.prefs.setBool("fezLogin", true);
-      global.prefs.setString('login', loginControler.text);
-      global.prefs.setString('senha', senhaControler.text);
-      global.prefs.setBool('isAnonimo', false);
-
-      global.isLoading = false;
-      Navigator.push(context,
-          new MaterialPageRoute(builder: (BuildContext context) => MyHomePage(title: 'Lista de Coisas')));
+  Future<bool> verificarConexao() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print('connected');
+        return true;
+      } else {
+        return false;
+      }
+    } on SocketException catch (_) {
+      Fluttertoast.showToast(
+          msg: 'Sem Conexão',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 18.0);
+      return false;
     }
-  });
-}
+  }
 
-void loginAnonimo({BuildContext context}) {
-  global.banco.criaUserAnonimo().then((value) async {
-    global.usuario = value;
-    global.isLoading = false;
+  showAlertRedefinir({required BuildContext context}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam."),
+          content: TextField(
+            controller: loginControler,
+          ),
+          actions: [
+            TextButton(
+              child: Text("Cancelar"),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+            TextButton(
+              child: Text("Confirmar"),
+              onPressed: () {
+                banco.resetarSenha(user: gb.usuario!);
+                Get.back();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-    if (value != null) {
-      List<dynamic> listCat = await global.banco.getCoisas(user: global.usuario);
-      global.lisCoisa = listCat.map((i) => Coisas.fromSnapshot(i)).toList();
+  Future<void> logar({required BuildContext context}) async {
+    gb.load();
+    await banco.login(email: loginControler.text, password: senhaControler.text).then((value) async {
+      if (value != null) {
+        gb.usuario = value;
+        List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
+        listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
+        var userCo = jsonEncode(value);
+        gb.box.put('user', userCo);
+        gb.box.put("fezLogin", true);
+        gb.box.put('login', loginControler.text);
+        gb.box.put('senha', senhaControler.text);
+        gb.box.put('isAnonimo', false);
 
-      var userCo = jsonEncode(value);
-      global.prefs.setString('user', userCo);
-      global.prefs.setBool("fezLogin", true);
-      global.prefs.setBool('isAnonimo', true);
+        Get.offAllNamed('/home');
+      }
+    });
+    Get.back();
+  }
 
-      Navigator.push(context,
-          new MaterialPageRoute(builder: (BuildContext context) => MyHomePage(title: 'Lista de Coisas')));
-    }
-  });
+  Future<void> loginAnonimo({required BuildContext context}) async {
+    gb.load();
+    await banco.criaUserAnonimo().then((value) async {
+      gb.usuario = value;
+      if (value != null) {
+        List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
+        listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
+
+        var userCo = jsonEncode(value);
+        gb.box.put('user', userCo);
+        gb.box.put("fezLogin", true);
+        gb.box.put('isAnonimo', true);
+
+        Get.offAllNamed('/home');
+      }
+    });
+    Get.back();
+  }
 }

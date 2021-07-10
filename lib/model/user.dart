@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserP {
-  String id;
-  String nome;
-  String senha;
-  String login;
+  String? id;
+  String? nome;
+  String? senha;
+  String? login;
   UserP({this.id, this.nome, this.login, this.senha});
 
   UserP.fromJson(Map<String, dynamic> xjson) {
@@ -25,8 +25,8 @@ class UserP {
   }
 
   UserP.fromSnapshot(DocumentSnapshot snapshot) {
-    nome = snapshot.data()['nome'];
-    login = snapshot.data()["login"];
+    nome = snapshot.get('nome');
+    login = snapshot.get("login");
     id = snapshot.id;
   }
 }
