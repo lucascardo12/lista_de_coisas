@@ -27,9 +27,12 @@ class MyApp extends GetView {
       title: 'Lista de Coisas',
       theme: ThemeData.light().copyWith(
         accentColor: gb.getSecondary(),
-        primaryColor: gb.getSecondary(),
+        primaryColor: gb.getPrimary(),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.white,
+        ),
         colorScheme: Theme.of(context).colorScheme.copyWith(
-              primary: gb.getSecondary(),
+              primary: gb.getPrimary(),
               secondary: gb.getSecondary(),
             ),
       ),

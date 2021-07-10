@@ -8,7 +8,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:337919947963:android:4c0064e92c7c571be5e59e",
+        "mobilesdk_app_id": "1:337919947963:android:678f0ba153d88ae3e5e59e",
         "android_client_info": {
           "package_name": "com.lcm.listadecoisa"
         }
@@ -33,8 +33,7 @@
             }
           ]
         }
-      },
-      "admob_app_id": "ca-app-pub-1205611887737485~5958125847"
+      }
     }
   ],
   "configuration_version": "1"

@@ -92,7 +92,10 @@ class ListaCompras extends GetView {
                                 if (value!.isEmpty) return "Conteudo não pode ser vazio";
                                 return null;
                               },
-                              onChanged: (v) => ct.coisas.checkCompras![i].quant = int.tryParse(v) ?? 0,
+                              onChanged: (v) {
+                                ct.coisas.checkCompras![i].quant = int.tryParse(v) ?? 0;
+                                ct.update();
+                              },
                               autofocus: ct.coisas.checkCompras![i].quant == null ? true : false,
                               initialValue: ct.coisas.checkCompras![i].quant.toString(),
                               cursorColor: Colors.white,
