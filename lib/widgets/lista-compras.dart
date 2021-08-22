@@ -40,7 +40,7 @@ class ListaCompras extends GetView {
         Expanded(
           flex: 10,
           child: ListView.builder(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.only(top: 15),
             shrinkWrap: true,
             itemCount: ct.coisas.checkCompras!.length,
             itemBuilder: (BuildContext context, int i) {
@@ -79,7 +79,7 @@ class ListaCompras extends GetView {
                                 focusedBorder: BordaPadrao.check(),
                                 hintStyle: TextStyle(color: Colors.white),
                                 alignLabelWithHint: true,
-                                hintText: "item",
+                                hintText: "Digite o nome do item",
                                 labelStyle: TextStyle(color: Colors.white, fontSize: 18),
                               ),
                             )),
@@ -121,8 +121,9 @@ class ListaCompras extends GetView {
                                 if (value!.isEmpty) return "Conteudo não pode ser vazio";
                                 return null;
                               },
-                              onChanged: (value) {
-                                ct.coisas.checkCompras![i].valor = double.tryParse(value) ?? 0.0;
+                              onChanged: (v) {
+                                ct.coisas.checkCompras![i].valor =
+                                    double.tryParse(v.replaceAll(',', '.')) ?? 0.0;
                                 ct.update();
                               },
                               autofocus: ct.coisas.checkCompras![i].valor == null ? true : false,
@@ -165,18 +166,10 @@ class ListaCompras extends GetView {
         ),
         Container(
           height: 40,
-          child: Text("Valor total da compra R\u0024: ${retornaTotal(ct.coisas.checkCompras!)}",
+          child: Text("Valor total da compra R\u0024: ${ct.retornaTotal(ct.coisas.checkCompras!)}",
               style: Get.theme.textTheme.headline6!.copyWith(color: Colors.white)),
         )
       ],
     );
-  }
-
-  retornaTotal(List<dynamic> lista) {
-    double total = 0;
-    lista.forEach((element) {
-      if (element.feito != null) total += element.quant * (element.valor ?? 0.0);
-    });
-    return total.toString();
   }
 }

@@ -80,4 +80,12 @@ class ListasController extends GetxController {
       return true;
     }
   }
+
+  retornaTotal(List<dynamic> lista) {
+    double total = 0;
+    lista.forEach((element) {
+      if (element.feito != null) total += element.quant * (element.valor ?? 0.0);
+    });
+    return total.toStringAsFixed(2);
+  }
 }

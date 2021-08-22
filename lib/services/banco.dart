@@ -42,8 +42,8 @@ class BancoFire extends GetxService {
       var result = await db.collection('user').doc(user.id).collection('coisas').get();
       return result.docs;
     } catch (e) {
-      e as FirebaseAuthException;
-      var auxi = await translator.translate(e.message ?? '', from: 'en', to: 'pt');
+      dynamic error = e;
+      var auxi = await translator.translate(error.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -61,8 +61,8 @@ class BancoFire extends GetxService {
       var result = await db.collection('user').doc(user.id).collection('compartilha').get();
       return result.docs;
     } catch (e) {
-      e as FirebaseAuthException;
-      var auxi = await translator.translate(e.message ?? '', from: 'en', to: 'pt');
+      dynamic error = e;
+      var auxi = await translator.translate(error.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -106,9 +106,9 @@ class BancoFire extends GetxService {
       user.id = userFire.user!.uid;
       db.collection('user').doc(userFire.user!.uid).set(user.toJson());
       return userFire.user!.uid;
-    } catch (erro) {
-      erro as FirebaseAuthException;
-      var auxi = await translator.translate(erro.message ?? '', from: 'en', to: 'pt');
+    } catch (e) {
+      dynamic error = e;
+      var auxi = await translator.translate(error.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,
@@ -139,7 +139,8 @@ class BancoFire extends GetxService {
 
       return auxi;
     } catch (e) {
-      var auxi = await translator.translate(e.toString(), from: 'en', to: 'pt');
+      dynamic error = e;
+      var auxi = await translator.translate(error.message, from: 'en', to: 'pt');
       Fluttertoast.showToast(
           msg: auxi.text,
           toastLength: Toast.LENGTH_LONG,

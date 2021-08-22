@@ -49,11 +49,17 @@ class HomeController extends GetxController {
   }
 
   Future<void> checkForUpdate() async {
-    InAppUpdate.checkForUpdate().then((info) async {
-      info.updateAvailability == UpdateAvailability.updateAvailable
-          ? await InAppUpdate.performImmediateUpdate()
-          : print('teste');
-    });
+    try {
+      InAppUpdate.checkForUpdate().then(
+        (info) async {
+          info.updateAvailability == UpdateAvailability.updateAvailable
+              ? await InAppUpdate.performImmediateUpdate()
+              : print('teste');
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<void> atualizaLista() async {
