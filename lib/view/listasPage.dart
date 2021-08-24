@@ -120,17 +120,23 @@ class ListasPage extends GetView {
                         ),
                         onPressed: () async {
                           if (ct.formKey.currentState!.validate()) {
-                            var day = ct.gb.box.get('day', defaultValue: 1);
-                            if ((await ct.interstitialAd.isLoaded ?? false) &&
-                                (day != DateTime.now().day || day == null)) {
+                            var day = ct.gb.box.get('day', defaultValue: DateTime.now().day);
+                            var load = await ct.interstitialAd.isLoaded ?? false;
+                            if (load && day != DateTime.now().day) {
+                              int diasCount = ct.gb.box.get('diasCount', defaultValue: 2);
                               ct.gb.box.put('day', DateTime.now().day);
-                              ct.interstitialAd.show();
+                              if (diasCount == 0) {
+                                ct.interstitialAd.show();
+                                ct.gb.box.put('diasCount', 1);
+                              } else {
+                                ct.gb.box.put('diasCount', --diasCount);
+                              }
                             }
-                            int index =
-                                ct.gb.lisCoisa.indexWhere((element) => element.idFire == ct.coisas.idFire);
+                            int index = ct.gb.lisCoisa.indexWhere(
+                              (element) => element.idFire == ct.coisas.idFire,
+                            );
                             index < 0 ? ct.gb.lisCoisa.add(ct.coisas) : ct.gb.lisCoisa[index] = ct.coisas;
                             await ct.criaCoisa(coisa: ct.coisas);
-
                             Get.back();
                           }
                         },
