@@ -37,7 +37,7 @@ class SelectTheme extends GetView {
                         onChanged: (dynamic valor) async {
                           gb.tema = valor;
                           await gb.box.put('tema', valor);
-                          Get.changeTheme(Get.theme);
+                          Get.forceAppUpdate();
                           Get.back();
                         },
                       ),

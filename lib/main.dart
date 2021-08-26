@@ -22,7 +22,7 @@ class MyApp extends GetView {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
       title: 'Lista de Coisas',
       theme: ThemeData.light().copyWith(

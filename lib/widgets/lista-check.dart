@@ -45,7 +45,7 @@ class ListaCheck extends GetView {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 4),
             child: Scrollbar(
-              interactive: true,
+              interactive: false,
               thickness: 5,
               isAlwaysShown: true,
               child: ListView.builder(
