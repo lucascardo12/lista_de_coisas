@@ -1,13 +1,15 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:listadecoisa/controller/listas-controller.dart';
+import 'package:listadecoisa/services/admob.dart';
 import 'package:listadecoisa/widgets/lista-check.dart';
 import 'package:listadecoisa/widgets/lista-compras.dart';
 import 'package:listadecoisa/widgets/lista-texto.dart';
 
 class ListasPage extends GetView {
   final ct = Get.put(ListasController());
+
   @override
   Widget build(BuildContext context) {
     ct.node = FocusScope.of(context);
@@ -81,14 +83,8 @@ class ListasPage extends GetView {
       ),
       bottomNavigationBar: Container(
         height: 50,
-        child: AdmobBanner(
-          adUnitId: 'ca-app-pub-1205611887737485/8760342564',
-          adSize: AdmobBannerSize.ADAPTIVE_BANNER(
-            width: Get.width.round(),
-          ),
-          onBannerCreated: (AdmobBannerController controller) {
-            //controller.dispose();
-          },
+        child: AdWidget(
+          ad: ct.admob.banner2,
         ),
       ),
       floatingActionButton: Padding(
@@ -121,12 +117,12 @@ class ListasPage extends GetView {
                         onPressed: () async {
                           if (ct.formKey.currentState!.validate()) {
                             var day = ct.gb.box.get('day', defaultValue: DateTime.now().day);
-                            var load = await ct.interstitialAd.isLoaded ?? false;
-                            if (load && day != DateTime.now().day) {
+
+                            if (day != DateTime.now().day) {
                               int diasCount = ct.gb.box.get('diasCount', defaultValue: 2);
                               ct.gb.box.put('day', DateTime.now().day);
                               if (diasCount == 0) {
-                                ct.interstitialAd.show();
+                                ct.admob.mostraTelaCheia();
                                 ct.gb.box.put('diasCount', 1);
                               } else {
                                 ct.gb.box.put('diasCount', --diasCount);

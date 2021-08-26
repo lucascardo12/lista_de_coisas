@@ -1,6 +1,6 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:listadecoisa/services/admob.dart';
 import 'package:listadecoisa/services/banco.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/view/cadastroPage.dart';
@@ -11,7 +11,7 @@ import 'package:listadecoisa/view/loginPage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Admob.initialize();
+  await Get.putAsync(() => AdMob().inicia());
   await Get.putAsync(() => Global().inicia());
   await Get.putAsync(() => BancoFire().inicia());
   runApp(MyApp());

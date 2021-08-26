@@ -1,9 +1,9 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/user.dart';
+import 'package:listadecoisa/services/admob.dart';
 import 'package:listadecoisa/services/banco.dart';
 import 'package:listadecoisa/services/global.dart';
 
@@ -11,22 +11,21 @@ class ListasController extends GetxController {
   final gb = Get.find<Global>();
   final banco = Get.find<BancoFire>();
   final bool isComp = Get.arguments[1];
-  late AdmobBannerSize bannerSize;
   final formKey = GlobalKey<FormState>();
   final Coisas coisas = Get.arguments[0];
   late FocusScopeNode node;
   final FocusNode nodeText1 = FocusNode();
-  late AdmobInterstitial interstitialAd;
+  final admob = Get.find<AdMob>();
   @override
   void onInit() {
-    interstitialAd = AdmobInterstitial(
-      adUnitId: 'ca-app-pub-1205611887737485/8086429884',
-      listener: (AdmobAdEvent event, Map<String, dynamic>? args) {
-        if (event == AdmobAdEvent.closed) interstitialAd.load();
-      },
-    );
-    interstitialAd.load();
+    admob.loadBanner2();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    admob.banner2.dispose();
+    super.onClose();
   }
 
   Future<void> criaCoisa({required Coisas coisa}) async {
