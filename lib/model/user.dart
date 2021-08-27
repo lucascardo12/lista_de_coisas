@@ -7,7 +7,7 @@ class UserP {
   String? login;
   UserP({this.id, this.nome, this.login, this.senha});
 
-  UserP.fromJson(Map<String, dynamic> xjson) {
+  UserP.fromJson(dynamic xjson) {
     nome = xjson['nome'];
     id = xjson['id'];
     login = xjson['login'];

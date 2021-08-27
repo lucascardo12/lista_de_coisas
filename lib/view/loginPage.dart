@@ -72,9 +72,13 @@ class Login extends GetView {
             color: gb.getWhiteOrBlack(),
             label: 'Modo anônimo',
             textColor: gb.getPrimary(),
-            onPressed: () {
-              ct.loginAnonimo(context: context);
-            },
+            onPressed: () => ct.loginAnonimo(),
+          ),
+          ButtonTextPadrao(
+            color: gb.getWhiteOrBlack(),
+            label: 'Google',
+            textColor: gb.getPrimary(),
+            onPressed: () => ct.loginGoogle(),
           ),
           ButtonTextPadrao(
             label: 'Cadastrar-se',

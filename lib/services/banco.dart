@@ -15,7 +15,8 @@ class BancoFire extends GetxService {
   final translator = GoogleTranslator();
   late FirebaseFirestore db;
   late FirebaseAuth firebaseAuth;
-  late UserP usuario;
+  final gb = Get.find<Global>();
+
   Future<BancoFire> inicia() async {
     await Firebase.initializeApp();
     db = FirebaseFirestore.instance;
@@ -154,7 +155,6 @@ class BancoFire extends GetxService {
   }
 
   Future<UserP?> criaUserAnonimo() async {
-    final gb = Get.find<Global>();
     try {
       UserP user = UserP();
       var axui = gb.box.get(
@@ -192,20 +192,45 @@ class BancoFire extends GetxService {
     firebaseAuth.sendPasswordResetEmail(email: user.login ?? '');
   }
 
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  Future<UserP?> criaUserGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      var value = await FirebaseAuth.instance.signInWithCredential(credential);
+      DocumentSnapshot result = await db.collection('user').doc(value.user!.uid).get();
+      if (result.exists) {
+        return UserP.fromJson(result.data());
+      }
+      UserP userTemp = UserP(
+        id: result.id,
+        login: result.get('login'),
+        nome: result.get('nome'),
+        senha: '',
+      );
+      db.collection('user').doc(userTemp.id).set(userTemp.toJson());
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
-
-    // Create a  credential
-    final OAuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+      return userTemp;
+    } catch (e) {
+      dynamic error = e;
+      var auxi = await translator.translate(
+        error.message ?? '',
+        from: 'en',
+        to: 'pt',
+      );
+      Fluttertoast.showToast(
+        msg: auxi.text,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
+      return null;
+    }
   }
 }
