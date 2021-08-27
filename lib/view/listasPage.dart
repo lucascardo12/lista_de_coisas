@@ -117,12 +117,11 @@ class ListasPage extends GetView {
                         onPressed: () async {
                           if (ct.formKey.currentState!.validate()) {
                             var day = ct.gb.box.get('day', defaultValue: DateTime.now().day);
-
                             if (day != DateTime.now().day) {
                               int diasCount = ct.gb.box.get('diasCount', defaultValue: 2);
                               ct.gb.box.put('day', DateTime.now().day);
                               if (diasCount == 0) {
-                                ct.admob.mostraTelaCheia();
+                                await ct.admob.mostraTelaCheia();
                                 ct.gb.box.put('diasCount', 1);
                               } else {
                                 ct.gb.box.put('diasCount', --diasCount);
