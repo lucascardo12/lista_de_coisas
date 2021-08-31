@@ -17,7 +17,11 @@ class CadastroController extends GetxController {
   RxBool lObescure = true.obs;
   Future<void> valida() async {
     gb.load();
-    UserP us = UserP(id: null, login: loginControler.text.trim(), senha: senhaControler.text.trim());
+    UserP us = UserP(
+      id: null,
+      login: loginControler.text.trim(),
+      senha: senhaControler.text.trim(),
+    );
     await banco.criaUser(us).then((value) async {
       if (value.isNotEmpty) {
         await submit();
@@ -27,21 +31,20 @@ class CadastroController extends GetxController {
   }
 
   Future<void> submit() async {
-    await banco
-        .login(email: loginControler.text.trim(), password: senhaControler.text.trim())
-        .then((value) async {
-      gb.usuario = value;
-      if (value != null) {
-        List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
-
-        listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
-
-        var userCo = jsonEncode(value);
-        gb.box.put('user', userCo);
-        gb.box.put("fezLogin", true);
-
-        Get.offAllNamed('/home');
-      }
-    });
+    await banco.login(email: loginControler.text.trim(), password: senhaControler.text.trim()).then(
+      (value) async {
+        gb.usuario = value;
+        if (value != null) {
+          List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
+          listCat.forEach(
+            (element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)),
+          );
+          var userCo = jsonEncode(value);
+          gb.box.put('user', userCo);
+          gb.box.put("fezLogin", true);
+          Get.offAllNamed('/home');
+        }
+      },
+    );
   }
 }

@@ -32,5 +32,10 @@ class Compartilha {
     idFire = snapshot.id;
   }
 
-  Map<String, dynamic> toJson() => {'idUser': idUser, 'idLista': idLista, 'isRead': isRead, 'idFire': idFire};
+  Map<String, dynamic> toJson() => {
+        'idUser': idUser,
+        'idLista': idLista,
+        'isRead': isRead,
+        'idFire': idFire,
+      };
 }

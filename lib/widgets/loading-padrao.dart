@@ -16,8 +16,10 @@ class LoadPadrao extends GetView {
           CircularProgressIndicator.adaptive(),
           SizedBox(height: 20),
           Text(
-            '...Carregando 📑',
-            style: Get.textTheme.headline5!.copyWith(color: gb.getSecondary()),
+            'Aguarde, carregando as coisas ⏳',
+            style: Get.textTheme.headline5!.copyWith(
+              color: gb.getSecondary(),
+            ),
           )
         ],
       ),
