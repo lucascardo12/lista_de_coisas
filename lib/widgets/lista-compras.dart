@@ -79,6 +79,7 @@ class ListaCompras extends GetView {
                                   autofocus: ct.coisas.checkCompras![i].item.isEmpty ? true : false,
                                   initialValue: ct.coisas.checkCompras![i].item,
                                   cursorColor: Colors.white,
+                                  onChanged: (v) => ct.coisas.checkCompras![i].item = v,
                                   style: TextStyle(color: Colors.white),
                                   textAlign: TextAlign.center,
                                   decoration: InputDecoration(

@@ -79,6 +79,7 @@ class ListaCheck extends GetView {
                                 if (value!.isEmpty) return "Conteudo não pode ser vazio";
                                 return null;
                               },
+                              onChanged: (v) => ct.coisas.checklist![i].item = v,
                               autofocus: ct.coisas.checklist![i].item.isEmpty ? true : false,
                               initialValue: ct.coisas.checklist![i].item,
                               cursorColor: Colors.white,
