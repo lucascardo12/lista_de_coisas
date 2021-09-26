@@ -207,8 +207,8 @@ class BancoFire extends GetxService {
       }
       UserP userTemp = UserP(
         id: result.id,
-        login: result.get('login'),
-        nome: result.get('nome'),
+        login: value.user!.email,
+        nome: value.user!.displayName,
         senha: '',
       );
       db.collection('user').doc(userTemp.id).set(userTemp.toJson());
