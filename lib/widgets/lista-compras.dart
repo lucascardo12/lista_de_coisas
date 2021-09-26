@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:listadecoisa/controller/listas-controller.dart';
 import 'package:listadecoisa/model/ckeckCompras.dart';
-import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/borda-padrao.dart';
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:listadecoisa/controller/listas-controller.dart';
-import 'package:listadecoisa/services/admob.dart';
 import 'package:listadecoisa/widgets/lista-check.dart';
 import 'package:listadecoisa/widgets/lista-compras.dart';
 import 'package:listadecoisa/widgets/lista-texto.dart';

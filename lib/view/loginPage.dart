@@ -5,7 +5,6 @@ import 'package:listadecoisa/controller/login-controller.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/Button-text-padrao.dart';
 import 'package:listadecoisa/widgets/compo-padrao.dart';
-import 'package:listadecoisa/widgets/loading-padrao.dart';
 
 class Login extends GetView {
   final gb = Get.find<Global>();

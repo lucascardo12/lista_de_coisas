@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:listadecoisa/controller/home-controller.dart';
-import 'package:listadecoisa/services/admob.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/Button-text-padrao.dart';
 import 'package:listadecoisa/widgets/button-theme.dart';

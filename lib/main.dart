@@ -30,15 +30,17 @@ class MyApp extends GetView {
       debugShowCheckedModeBanner: false,
       title: 'Lista de Coisas',
       theme: ThemeData.light().copyWith(
-        accentColor: gb.getSecondary(),
         primaryColor: gb.getPrimary(),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: Colors.white,
         ),
-        colorScheme: Theme.of(context).colorScheme.copyWith(
+        colorScheme: ThemeData.light()
+            .colorScheme
+            .copyWith(
               primary: gb.getPrimary(),
               secondary: gb.getSecondary(),
-            ),
+            )
+            .copyWith(secondary: gb.getSecondary()),
       ),
       getPages: [
         GetPage(
