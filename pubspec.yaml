@@ -29,8 +29,9 @@ dependencies:
   package_info_plus: ^1.0.6
   in_app_review: ^2.0.2
   in_app_update: ^2.0.0
-  android_alarm_manager_plus: ^1.2.0
+  android_alarm_manager_plus: ^1.1.0
   awesome_notifications: ^0.0.6+10
+  currency_text_input_formatter: ^2.1.2
  
 
 dev_dependencies:

@@ -82,6 +82,8 @@ class ListaCheck extends GetView {
                               autofocus: ct.coisas.checklist![i].item.isEmpty ? true : false,
                               initialValue: ct.coisas.checklist![i].item,
                               cursorColor: Colors.white,
+                              minLines: 1,
+                              maxLines: 2,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
