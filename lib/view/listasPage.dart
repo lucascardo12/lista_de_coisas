@@ -98,13 +98,6 @@ class ListasPage extends GetView {
                 ? Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.clear,
-                          color: Colors.white,
-                        ),
-                        onPressed: () => Get.back(),
-                      ),
                       SizedBox(
                         width: 15,
                       ),
