@@ -1,6 +1,6 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:listadecoisa/controller/home-controller.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/Button-text-padrao.dart';
@@ -130,11 +130,9 @@ class HomePage extends GetView {
               ),
             ),
             bottomNavigationBar: Container(
-              child: AdmobBanner(
-                adUnitId: 'ca-app-pub-1205611887737485/2150742777',
-                adSize: AdmobBannerSize.ADAPTIVE_BANNER(width: Get.width.round()),
-                listener: (AdmobAdEvent event, Map<String, dynamic>? args) {},
-                onBannerCreated: (AdmobBannerController controller) {},
+              height: 50,
+              child: AdWidget(
+                ad: ct.admob.banner,
               ),
             ),
           ),

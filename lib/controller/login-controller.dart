@@ -93,19 +93,34 @@ class LoginController extends GetxController {
     Get.back();
   }
 
-  Future<void> loginAnonimo({required BuildContext context}) async {
+  Future<void> loginAnonimo() async {
     gb.load();
     await banco.criaUserAnonimo().then((value) async {
       gb.usuario = value;
       if (value != null) {
         List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
         listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
-
         var userCo = jsonEncode(value);
         gb.box.put('user', userCo);
         gb.box.put("fezLogin", true);
         gb.box.put('isAnonimo', true);
 
+        Get.offAllNamed('/home');
+      }
+    });
+    Get.back();
+  }
+
+  Future<void> loginGoogle() async {
+    gb.load();
+    await banco.criaUserGoogle().then((value) async {
+      gb.usuario = value;
+      if (value != null) {
+        List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
+        listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
+        var userCo = jsonEncode(value);
+        gb.box.put('user', userCo);
+        gb.box.put("fezLogin", true);
         Get.offAllNamed('/home');
       }
     });

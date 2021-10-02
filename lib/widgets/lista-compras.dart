@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:listadecoisa/controller/listas-controller.dart';
-import 'package:listadecoisa/model/coisas.dart';
+import 'package:listadecoisa/model/ckeckCompras.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/borda-padrao.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 class ListaCompras extends GetView {
   final gb = Get.find<Global>();
@@ -82,6 +84,9 @@ class ListaCompras extends GetView {
                                   onChanged: (v) => ct.coisas.checkCompras![i].item = v,
                                   style: TextStyle(color: Colors.white),
                                   textAlign: TextAlign.center,
+                                  minLines: 1,
+                                  maxLines: 2,
+                                  maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.zero,
                                     border: BordaPadrao.check(),
@@ -109,6 +114,7 @@ class ListaCompras extends GetView {
                                   autofocus: ct.coisas.checkCompras![i].quant == null ? true : false,
                                   initialValue: ct.coisas.checkCompras![i].quant.toString(),
                                   cursorColor: Colors.white,
+                                  keyboardType: TextInputType.number,
                                   style: TextStyle(color: Colors.white),
                                   textAlign: TextAlign.center,
                                   decoration: InputDecoration(
@@ -126,6 +132,7 @@ class ListaCompras extends GetView {
                                 flex: 2,
                                 child: TextFormField(
                                   readOnly: isComp,
+                                  keyboardType: TextInputType.number,
                                   onEditingComplete: () => ct.node.nextFocus(),
                                   validator: (value) {
                                     if (value!.isEmpty) return "Conteudo não pode ser vazio";
@@ -142,6 +149,9 @@ class ListaCompras extends GetView {
                                       : ct.coisas.checkCompras![i].valor.toString(),
                                   cursorColor: Colors.white,
                                   style: TextStyle(color: Colors.white),
+                                  inputFormatters: [
+                                    CurrencyTextInputFormatter(decimalDigits: 2, symbol: '', locale: 'pt-br'),
+                                  ],
                                   textAlign: TextAlign.center,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.zero,

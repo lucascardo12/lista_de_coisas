@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:listadecoisa/model/coisas.dart';
-import 'package:listadecoisa/model/compartilha.dart';
 import 'package:listadecoisa/model/user.dart';
 import 'package:listadecoisa/widgets/loading-padrao.dart';
 import 'package:package_info_plus/package_info_plus.dart';

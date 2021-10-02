@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/compartilha.dart';
+import 'package:listadecoisa/services/admob.dart';
 import 'package:listadecoisa/services/banco.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -15,14 +16,21 @@ import 'package:in_app_update/in_app_update.dart';
 class HomeController extends GetxController {
   final gb = Get.find<Global>();
   final banco = Get.find<BancoFire>();
+  final admob = Get.find<AdMob>();
   GlobalKey<ScaffoldState> scaffoldKe = GlobalKey();
   bool isAnonimo = false;
   bool isread = false;
   int tipo = 1;
   ScanController controller = ScanController();
-  List<String> listaTipo = ["Texto Simples", "Check-List", "Lista de Compras"];
+  List<String> listaTipo = [
+    "Texto Simples",
+    "Check-List",
+    "Lista de Compras",
+  ];
+
   @override
   void onInit() {
+    admob.loadBanner();
     isAnonimo = gb.box.get('isAnonimo', defaultValue: false);
     atualizaLista();
     avaliaApp();
@@ -32,6 +40,7 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
+    admob.banner.dispose();
     super.onClose();
   }
 
@@ -268,49 +277,50 @@ class HomeController extends GetxController {
                 ),
               ),
             Padding(
-                padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                        child: TextButton(
-                      onPressed: () => Get.back(),
-                      child: Text(
-                        "Cancelar",
-                        style: theme.textTheme.subtitle1!.copyWith(color: Colors.black),
-                      ),
-                      style: TextButton.styleFrom(backgroundColor: Colors.white),
-                    )),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Expanded(
+              padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
                       child: TextButton(
-                        onPressed: () {
-                          Get.back();
-                          Get.toNamed(
-                            '/listas',
-                            arguments: [
-                              Coisas(
-                                tipo: tipo,
-                                checkCompras: [],
-                                checklist: [],
-                                descricao: '',
-                                nome: '',
-                              ),
-                              false
-                            ],
-                          );
-                        },
-                        child: Text(
-                          "Continuar",
-                          style: theme.textTheme.subtitle1!.copyWith(color: gb.getWhiteOrBlack()),
-                        ),
-                        style: TextButton.styleFrom(backgroundColor: Colors.green),
+                    onPressed: () => Get.back(),
+                    child: Text(
+                      "Cancelar",
+                      style: theme.textTheme.subtitle1!.copyWith(color: Colors.black),
+                    ),
+                    style: TextButton.styleFrom(backgroundColor: Colors.white),
+                  )),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () {
+                        Get.back();
+                        Get.toNamed(
+                          '/listas',
+                          arguments: [
+                            Coisas(
+                              tipo: tipo,
+                              checkCompras: [],
+                              checklist: [],
+                              descricao: '',
+                              nome: '',
+                            ),
+                            false
+                          ],
+                        );
+                      },
+                      child: Text(
+                        "Continuar",
+                        style: theme.textTheme.subtitle1!.copyWith(color: gb.getWhiteOrBlack()),
                       ),
-                    )
-                  ],
-                )),
+                      style: TextButton.styleFrom(backgroundColor: Colors.green),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ],
         );
       },

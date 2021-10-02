@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:listadecoisa/controller/listas-controller.dart';
-import 'package:listadecoisa/model/coisas.dart';
+import 'package:listadecoisa/model/checkList.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/borda-padrao.dart';
 
@@ -83,6 +83,8 @@ class ListaCheck extends GetView {
                               autofocus: ct.coisas.checklist![i].item.isEmpty ? true : false,
                               initialValue: ct.coisas.checklist![i].item,
                               cursorColor: Colors.white,
+                              minLines: 1,
+                              maxLines: 2,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
