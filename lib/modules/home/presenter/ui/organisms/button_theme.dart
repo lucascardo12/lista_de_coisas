@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:listadecoisa/core/configs/app_helps.dart';
+import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/services/global.dart';
-import 'package:listadecoisa/widgets/select_theme.dart';
+import 'package:listadecoisa/modules/home/presenter/ui/organisms/select_theme.dart';
 
-class ButtonTema extends GetView {
-  final gb = Get.find<Global>();
+class ButtonTema extends StatelessWidget {
+  final gb = di.get<Global>();
 
   ButtonTema({super.key});
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => Get.dialog(
-          SelectTheme(
+      onPressed: () => AppHelps.defaultDialog(
+          context: context,
+          child: SelectTheme(
+            gb: gb,
             items: const ['Original', 'Dark', 'Azul', 'Roxo'],
           ),
           barrierColor: Colors.transparent),
@@ -30,9 +33,9 @@ class ButtonTema extends GetView {
           ),
           Text(
             'Temas',
-            style: Get.textTheme.subtitle1!.copyWith(
-              color: gb.getPrimary(),
-            ),
+            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                  color: gb.getPrimary(),
+                ),
           ),
           const Spacer(),
           TextButton.icon(

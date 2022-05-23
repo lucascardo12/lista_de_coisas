@@ -1,19 +1,25 @@
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:listadecoisa/core/interfaces/controller_interface.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/user.dart';
 import 'package:listadecoisa/services/banco.dart';
 import 'package:listadecoisa/services/global.dart';
 
-class CompartilhaController extends GetxController {
-  final gb = Get.find<Global>();
-  final banco = Get.find<BancoFire>();
+class CompartilhaController extends IController {
+  final Global gb;
+  final BancoFire banco;
   late Coisas lista;
   late UserP user;
+
+  CompartilhaController({required this.gb, required this.banco});
+
   @override
-  void onInit() {
+  void dispose() {}
+
+  @override
+  void init(BuildContext context) {
     gb.isLoading = true;
     getLista();
-    super.onInit();
   }
 
   getLista() async {

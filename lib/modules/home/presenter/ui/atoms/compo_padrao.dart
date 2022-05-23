@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/borda_padrao.dart';
 
 class CampoPadrao extends StatelessWidget {
-  final gb = Get.find<Global>();
+  final Global gb;
   final Widget? suffixIcon;
   final bool? lObescure;
   final String hintText;
   final TextEditingController? controller;
-  CampoPadrao({
+  const CampoPadrao({
     super.key,
     required this.hintText,
     this.lObescure,
     this.suffixIcon,
     this.controller,
+    required this.gb,
   });
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:listadecoisa/core/interfaces/controller_interface.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/compartilha.dart';
+import 'package:listadecoisa/modules/home/presenter/ui/pages/compartilha_page.dart';
+import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
 import 'package:listadecoisa/services/admob.dart';
 import 'package:listadecoisa/services/banco.dart';
 import 'package:listadecoisa/services/global.dart';
@@ -12,58 +14,55 @@ import 'package:scan/scan.dart';
 import 'package:share/share.dart';
 import 'package:uni_links/uni_links.dart';
 
-class HomeController extends GetxController {
-  final gb = Get.find<Global>();
-  final banco = Get.find<BancoFire>();
-  final admob = Get.find<AdMob>();
-  GlobalKey<ScaffoldState> scaffoldKe = GlobalKey();
-  bool isAnonimo = false;
-  bool isread = false;
-  int tipo = 1;
-  ScanController controller = ScanController();
-  List<String> listaTipo = [
+class HomeController extends IController {
+  final Global gb;
+  final BancoFire banco;
+  final AdMob admob;
+  var scaffoldKe = GlobalKey<ScaffoldState>();
+  var isAnonimo = false;
+  var isread = false;
+  var tipo = 1;
+  var controller = ScanController();
+  var listaTipo = [
     "Texto Simples",
     "Check-List",
     "Lista de Compras",
   ];
 
-  @override
-  void onInit() {
-    admob.loadBanner();
-    isAnonimo = gb.box.get('isAnonimo', defaultValue: false);
-    atualizaLista();
-    super.onInit();
-  }
+  HomeController({
+    required this.gb,
+    required this.banco,
+    required this.admob,
+  });
 
   @override
-  void onClose() {
-    admob.banner.dispose();
-    super.onClose();
+  void dispose() {}
+
+  @override
+  void init(BuildContext context) {
+    isAnonimo = gb.box.get('isAnonimo', defaultValue: false);
+    atualizaLista();
   }
 
   Future<void> atualizaLista() async {
-    gb.lisCoisa.clear();
-    gb.lisCoisaComp.clear();
-    gb.lisComp.clear();
+    gb.lisCoisaComp.value.clear();
     List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
     if (listCat.isNotEmpty) {
-      for (var element in listCat) {
-        gb.lisCoisa.add(Coisas.fromSnapshot(element));
-      }
+      gb.lisCoisa.value = listCat.map((e) => Coisas.fromSnapshot(e)).toList();
     }
 
     List<dynamic> listcomp = await banco.getComps(user: gb.usuario!);
     if (listcomp.isNotEmpty) {
-      for (var element in listcomp) {
-        gb.lisComp.add(Compartilha.fromSnapshot(element));
-      }
+      gb.lisComp.value = listcomp.map((e) => Compartilha.fromSnapshot(e)).toList();
     }
-    if (gb.lisComp.isNotEmpty) {
-      for (var i = 0; i < gb.lisComp.length; i++) {
-        var auxi =
-            await banco.getCoisa(idUser: gb.lisComp[i].idUser ?? '', idLista: gb.lisComp[i].idLista ?? '');
+    if (gb.lisComp.value.isNotEmpty) {
+      for (var i = 0; i < gb.lisComp.value.length; i++) {
+        var auxi = await banco.getCoisa(
+          idUser: gb.lisComp.value[i].idUser ?? '',
+          idLista: gb.lisComp.value[i].idLista ?? '',
+        );
         if (auxi.exists) {
-          gb.lisCoisaComp.add(Coisas.fromSnapshot(auxi));
+          gb.lisCoisaComp.value.add(Coisas.fromSnapshot(auxi));
         }
       }
     }
@@ -77,7 +76,7 @@ class HomeController extends GetxController {
 
   Future<void> deleteList({required Coisas coisa}) async {
     await banco.removeCoisas(user: gb.usuario!, cat: coisa);
-    gb.lisCoisa.remove(coisa);
+    gb.lisCoisa.value.remove(coisa);
   }
 
   Future showAlertDialog2({required BuildContext context, required Coisas coisas}) {
@@ -90,13 +89,13 @@ class HomeController extends GetxController {
           actions: [
             TextButton(
               child: const Text("Cancelar"),
-              onPressed: () => Get.back(),
+              onPressed: () => Navigator.pop(context),
             ),
             TextButton(
               child: const Text("Continar"),
               onPressed: () async {
                 await deleteList(coisa: coisas);
-                Get.back();
+                Navigator.pop(context);
               },
             ),
           ],
@@ -115,7 +114,7 @@ class HomeController extends GetxController {
         gb.codigoUser = initialLink.substring(initialLink.indexOf('@') + 1, initialLink.indexOf('*'));
         gb.codigRead = initialLink.substring(initialLink.indexOf('*') + 1, initialLink.length);
         var rota = initialLink.substring(28, 33);
-        return Get.toNamed(rota);
+        return Navigator.pushNamed(context, CompartilhaPage.route);
       }
     } on PlatformException {
       initialLink = 'Failed to get initial link.';
@@ -124,33 +123,34 @@ class HomeController extends GetxController {
     }
   }
 
-  showExit({
+  Future<bool> showExit({
     required BuildContext context,
-  }) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Atenção !!!"),
-          content: const Text("Deseja sair do app ?"),
-          actions: [
-            TextButton(
-              child: const Text("Sim"),
-              onPressed: () {
-                SystemNavigator.pop();
-              },
-            ),
-            TextButton(
-              child: const Text("Não"),
-              onPressed: () => Get.back(),
-            ),
-          ],
-        );
-      },
-    );
+  }) async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Atenção !!!"),
+              content: const Text("Deseja sair do app ?"),
+              actions: [
+                TextButton(
+                  child: const Text("Sim"),
+                  onPressed: () {
+                    SystemNavigator.pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text("Não"),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
   }
 
-  showCompartilha({required BuildContext context, required int index}) {
+  void showCompartilha({required BuildContext context, required int index}) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -159,25 +159,25 @@ class HomeController extends GetxController {
           children: [
             Text(
               'Mostre o QR code ou compartilhe o link',
-              style: Get.textTheme.headline5,
+              style: Theme.of(context).textTheme.headline5,
             ),
             Text(
               'Quem for receber a lista precisa abri com o app o link ou escanear o QRcode',
-              style: Get.textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyText1,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Somente visualização?',
-                  style: Get.textTheme.subtitle1!.copyWith(color: gb.primary),
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: gb.primary),
                 ),
                 Switch(
                   value: isread,
                   activeColor: gb.getPrimary(),
                   onChanged: (bool value) {
                     isread = value;
-                    Get.back();
+                    Navigator.pop(context);
                     showCompartilha(context: context, index: index);
                   },
                 ),
@@ -185,7 +185,8 @@ class HomeController extends GetxController {
             ),
             Center(
                 child: QrImage(
-              data: 'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario!.id}*$isread',
+              data:
+                  'http://lcm.listadecoisas.com/comp${gb.lisCoisa.value[index].idFire}@${gb.usuario!.id}*$isread',
               version: QrVersions.auto,
               size: 200.0,
             )),
@@ -193,29 +194,31 @@ class HomeController extends GetxController {
               height: 10,
             ),
             Padding(
-                padding: const EdgeInsets.only(left: 60, right: 60),
-                child: TextButton(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.only(top: 15, bottom: 15),
-                      onSurface: gb.getSecondary(),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      backgroundColor: gb.getPrimary(),
-                    ),
-                    onPressed: () => Share.share(
-                        'http://lcm.listadecoisas.com/comp${gb.lisCoisa[index].idFire}@${gb.usuario!.id}*$isread'),
-                    child: const Text(
-                      "Compartilhar link",
-                      style: TextStyle(color: Colors.white),
-                    )))
+              padding: const EdgeInsets.only(left: 60, right: 60),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.only(top: 15, bottom: 15),
+                  onSurface: gb.getSecondary(),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  backgroundColor: gb.getPrimary(),
+                ),
+                onPressed: () => Share.share(
+                    'http://lcm.listadecoisas.com/comp${gb.lisCoisa.value[index].idFire}@${gb.usuario!.id}*$isread'),
+                child: const Text(
+                  "Compartilhar link",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
           ],
         );
       },
     );
   }
 
-  showCria({
+  void showCria({
     required BuildContext context,
   }) {
     showModalBottomSheet(
@@ -235,15 +238,14 @@ class HomeController extends GetxController {
               ListTile(
                 title: Text(
                   listaTipo[i],
-                  style: Get.textTheme.subtitle1!.copyWith(color: Colors.black),
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),
                 ),
                 leading: Radio(
                   value: i,
                   activeColor: gb.getPrimary(),
                   onChanged: (int? value) {
                     tipo = value ?? 1;
-
-                    Get.back();
+                    Navigator.pop(context);
                     showCria(context: context);
                   },
                   groupValue: tipo,
@@ -256,7 +258,7 @@ class HomeController extends GetxController {
                 children: [
                   Expanded(
                       child: TextButton(
-                    onPressed: () => Get.back(),
+                    onPressed: () => Navigator.pop(context),
                     style: TextButton.styleFrom(backgroundColor: Colors.white),
                     child: Text(
                       "Cancelar",
@@ -269,9 +271,10 @@ class HomeController extends GetxController {
                   Expanded(
                     child: TextButton(
                       onPressed: () {
-                        Get.back();
-                        Get.toNamed(
-                          '/listas',
+                        Navigator.pop(context);
+                        Navigator.pushNamed(
+                          context,
+                          ListasPage.route,
                           arguments: [
                             Coisas(
                               tipo: tipo,
@@ -300,7 +303,7 @@ class HomeController extends GetxController {
     );
   }
 
-  showAlertRedefinir({required BuildContext context}) {
+  void showAlertRedefinir({required BuildContext context}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -311,15 +314,13 @@ class HomeController extends GetxController {
           actions: [
             TextButton(
               child: const Text("Cancelar"),
-              onPressed: () {
-                Get.back();
-              },
+              onPressed: () => Navigator.pop(context),
             ),
             TextButton(
               child: const Text("Confirmar"),
               onPressed: () {
                 banco.resetarSenha(user: gb.usuario!);
-                Get.back();
+                Navigator.pop(context);
               },
             ),
           ],

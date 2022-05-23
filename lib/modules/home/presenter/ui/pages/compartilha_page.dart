@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:listadecoisa/controller/compartilha_controller.dart';
+import 'package:listadecoisa/modules/home/presenter/controllers/compartilha_controller.dart';
+import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/model/compartilha.dart';
-import 'package:listadecoisa/widgets/button_text_padrao.dart';
-import 'package:listadecoisa/widgets/loading_padrao.dart';
+import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.dart';
+import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.dart';
+import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
 
-class CompartilhaPage extends GetView {
-  final ct = Get.put(CompartilhaController());
+class CompartilhaPage extends StatefulWidget {
+  static const route = '/Compartilha';
+  const CompartilhaPage({Key? key}) : super(key: key);
+  @override
+  State<CompartilhaPage> createState() => _CompartilhaPageState();
+}
 
-  CompartilhaPage({super.key});
+class _CompartilhaPageState extends State<CompartilhaPage> {
+  final ct = di.get<CompartilhaController>();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => ct.init(context));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    ct.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +38,7 @@ class CompartilhaPage extends GetView {
         children: [
           ButtonTextPadrao(
             label: '  Cancelar  ',
-            onPressed: () => Get.back(),
+            onPressed: () => Navigator.pop(context),
           ),
           ButtonTextPadrao(
             label: '  Confirmar  ',
@@ -30,10 +49,10 @@ class CompartilhaPage extends GetView {
                 isRead: ct.gb.codigRead == 'true' ? true : false,
               );
 
-              if (ct.gb.lisComp
+              if (ct.gb.lisComp.value
                   .where((element) => element.idLista == comp.idLista && element.idUser == comp.idUser)
                   .isEmpty) {
-                ct.gb.lisComp.add(comp);
+                ct.gb.lisComp.value.add(comp);
                 await ct.banco.criaAlteraComp(user: ct.gb.usuario!, coisas: comp);
               } else {
                 await Fluttertoast.showToast(
@@ -45,7 +64,7 @@ class CompartilhaPage extends GetView {
                     textColor: Colors.white,
                     fontSize: 18.0);
               }
-              Get.back();
+              Navigator.pop(context);
             },
           )
         ],
@@ -77,15 +96,16 @@ class CompartilhaPage extends GetView {
                 children: [
                   Text(
                     'Desejar anexar a seguinte lista?',
-                    style: Get.textTheme.headline5!.copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   ButtonTextPadrao(
                     label: "${ct.lista.nome}",
-                    onPressed: () => Get.toNamed(
-                      '/listas',
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      ListasPage.route,
                       arguments: [ct.lista, true],
                     ),
                   )

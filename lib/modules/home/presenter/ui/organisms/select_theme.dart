@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:listadecoisa/services/global.dart';
 
-class SelectTheme extends GetView {
+class SelectTheme extends StatelessWidget {
   final List items;
-  final gb = Get.find<Global>();
+  final Global gb;
 
-  SelectTheme({super.key, required this.items});
+  const SelectTheme({super.key, required this.items, required this.gb});
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +39,8 @@ class SelectTheme extends GetView {
                         onChanged: (dynamic valor) async {
                           gb.tema = valor;
                           await gb.box.put('tema', valor);
-                          Get.forceAppUpdate();
-                          Get.back();
+                          //Get.forceAppUpdate();
+                          Navigator.pop(context);
                         },
                       ),
                       Text(e)
