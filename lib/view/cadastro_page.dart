@@ -1,14 +1,15 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:listadecoisa/controller/cadastro-controller.dart';
+import 'package:listadecoisa/controller/cadastro_controller.dart';
 import 'package:listadecoisa/services/global.dart';
-import 'package:listadecoisa/widgets/Button-text-padrao.dart';
-import 'package:listadecoisa/widgets/compo-padrao.dart';
+import 'package:listadecoisa/widgets/button_text_padrao.dart';
+import 'package:listadecoisa/widgets/compo_padrao.dart';
 
 class Cadastro extends GetView {
   final gb = Get.find<Global>();
   final ct = Get.put(CadastroController());
+
+  Cadastro({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +26,9 @@ class Cadastro extends GetView {
         ),
       ),
       child: ListView(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         children: [
-          Padding(
+          const Padding(
               padding: EdgeInsets.only(top: 50, bottom: 50),
               child: Align(
                 alignment: Alignment.center,
@@ -46,7 +47,7 @@ class Cadastro extends GetView {
             hintText: 'E-mail',
             controller: ct.loginControler,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Obx(() => CampoPadrao(
                 hintText: 'Senha',
                 lObescure: ct.lObescure.value,
@@ -57,12 +58,12 @@ class Cadastro extends GetView {
                 ),
                 controller: ct.senhaControler,
               )),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CampoPadrao(
             hintText: 'Nome',
             controller: ct.nomeControler,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ButtonTextPadrao(
             label: 'Cadastro',
             color: gb.getWhiteOrBlack(),

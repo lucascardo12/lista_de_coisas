@@ -1,17 +1,16 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:listadecoisa/controller/listas-controller.dart';
-import 'package:listadecoisa/model/checkList.dart';
+import 'package:listadecoisa/controller/listas_controller.dart';
+import 'package:listadecoisa/model/check_list.dart';
 import 'package:listadecoisa/services/global.dart';
-import 'package:listadecoisa/widgets/borda-padrao.dart';
+import 'package:listadecoisa/widgets/borda_padrao.dart';
 
 class ListaCheck extends GetView {
   final gb = Get.find<Global>();
   final bool isComp;
   final ListasController ct;
   ListaCheck({
+    super.key,
     required this.isComp,
     required this.ct,
   });
@@ -35,21 +34,21 @@ class ListaCheck extends GetView {
                   },
                 ),
               )
-            : SizedBox(),
-        SizedBox(height: 5),
-        Divider(
+            : const SizedBox(),
+        const SizedBox(height: 5),
+        const Divider(
           color: Colors.white,
         ),
         Expanded(
           flex: 10,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Scrollbar(
               interactive: false,
               thickness: 5,
-              isAlwaysShown: true,
+              thumbVisibility: true,
               child: ListView.builder(
-                padding: EdgeInsets.all(4),
+                padding: const EdgeInsets.all(4),
                 shrinkWrap: true,
                 itemCount: ct.coisas.checklist!.length,
                 itemBuilder: (BuildContext context, int i) {
@@ -67,7 +66,7 @@ class ListaCheck extends GetView {
                                     },
                                     value: ct.coisas.checklist![i].feito ?? false,
                                   )
-                                : SizedBox(
+                                : const SizedBox(
                                     width: 20,
                                   ),
                             Expanded(
@@ -98,15 +97,15 @@ class ListaCheck extends GetView {
                                 border: BordaPadrao.check(),
                                 enabledBorder: BordaPadrao.check(),
                                 focusedBorder: BordaPadrao.check(),
-                                hintStyle: TextStyle(color: Colors.white),
+                                hintStyle: const TextStyle(color: Colors.white),
                                 alignLabelWithHint: true,
                                 hintText: "",
-                                labelStyle: TextStyle(color: Colors.white, fontSize: 18),
+                                labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
                               ),
                             )),
                             !isComp
                                 ? IconButton(
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.clear,
                                       color: Colors.red,
                                     ),
@@ -115,7 +114,7 @@ class ListaCheck extends GetView {
                                       ct.update();
                                     },
                                   )
-                                : SizedBox(
+                                : const SizedBox(
                                     width: 20,
                                   )
                           ],
@@ -126,7 +125,7 @@ class ListaCheck extends GetView {
             ),
           ),
         ),
-        SizedBox(height: 10)
+        const SizedBox(height: 10)
       ],
     );
   }

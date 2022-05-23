@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:listadecoisa/controller/listas-controller.dart';
-import 'package:listadecoisa/widgets/lista-check.dart';
-import 'package:listadecoisa/widgets/lista-compras.dart';
-import 'package:listadecoisa/widgets/lista-texto.dart';
+import 'package:listadecoisa/controller/listas_controller.dart';
+import 'package:listadecoisa/widgets/lista_check.dart';
+import 'package:listadecoisa/widgets/lista_compras.dart';
+import 'package:listadecoisa/widgets/lista_texto.dart';
 
 class ListasPage extends GetView {
   final ct = Get.put(ListasController());
+
+  ListasPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class ListasPage extends GetView {
             key: ct.formKey,
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 60,
                 ),
                 Expanded(
@@ -41,7 +43,7 @@ class ListasPage extends GetView {
                       return null;
                     },
                     onChanged: (value) => ct.coisas.nome = value,
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
                     initialValue: ct.coisas.nome ?? '',
                     textAlign: TextAlign.center,
                     cursorColor: Colors.white,
@@ -49,7 +51,7 @@ class ListasPage extends GetView {
                       border: InputBorder.none,
                       labelText: ct.coisas.nome!.isEmpty ? "    Digite um Titulo" : null,
                       alignLabelWithHint: true,
-                      labelStyle: TextStyle(
+                      labelStyle: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -80,29 +82,29 @@ class ListasPage extends GetView {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: SizedBox(
         height: 50,
         child: AdWidget(
           ad: ct.admob.banner2,
         ),
       ),
       floatingActionButton: Padding(
-        padding: EdgeInsets.only(left: 20, right: 0),
+        padding: const EdgeInsets.only(left: 20, right: 0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            BackButton(
+            const BackButton(
               color: Colors.white,
             ),
             !ct.isComp
                 ? Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       ),
                       IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.done,
                           color: Colors.white,
                         ),
@@ -130,7 +132,7 @@ class ListasPage extends GetView {
                       ),
                     ],
                   )
-                : SizedBox(
+                : const SizedBox(
                     width: 15,
                   )
           ],

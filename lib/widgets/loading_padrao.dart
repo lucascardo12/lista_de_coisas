@@ -4,6 +4,8 @@ import 'package:listadecoisa/services/global.dart';
 
 class LoadPadrao extends GetView {
   final gb = Get.find<Global>();
+
+  LoadPadrao({super.key});
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -13,8 +15,8 @@ class LoadPadrao extends GetView {
         crossAxisAlignment: WrapCrossAlignment.center,
         direction: Axis.vertical,
         children: [
-          CircularProgressIndicator.adaptive(),
-          SizedBox(height: 20),
+          const CircularProgressIndicator.adaptive(),
+          const SizedBox(height: 20),
           Text(
             'Aguarde, carregando as coisas ⏳',
             style: Get.textTheme.headline5!.copyWith(

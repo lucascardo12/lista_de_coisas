@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:listadecoisa/controller/compartilha-controller.dart';
+import 'package:listadecoisa/controller/compartilha_controller.dart';
 import 'package:listadecoisa/model/compartilha.dart';
-import 'package:listadecoisa/widgets/Button-text-padrao.dart';
-import 'package:listadecoisa/widgets/loading-padrao.dart';
+import 'package:listadecoisa/widgets/button_text_padrao.dart';
+import 'package:listadecoisa/widgets/loading_padrao.dart';
 
 class CompartilhaPage extends GetView {
   final ct = Get.put(CompartilhaController());
+
+  CompartilhaPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,11 +51,10 @@ class CompartilhaPage extends GetView {
         ],
       ),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
-        actions: [],
+        iconTheme: const IconThemeData(color: Colors.white),
         centerTitle: true,
         backgroundColor: ct.gb.getPrimary(),
-        title: Text(
+        title: const Text(
           'Lista Compartilhada',
           style: TextStyle(
             color: Colors.white,
@@ -72,13 +73,13 @@ class CompartilhaPage extends GetView {
         child: ct.gb.isLoading
             ? LoadPadrao()
             : ListView(
-                padding: EdgeInsets.all(30),
+                padding: const EdgeInsets.all(30),
                 children: [
                   Text(
                     'Desejar anexar a seguinte lista?',
                     style: Get.textTheme.headline5!.copyWith(color: Colors.white),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   ButtonTextPadrao(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:listadecoisa/controller/listas-controller.dart';
+import 'package:listadecoisa/controller/listas_controller.dart';
 import 'package:listadecoisa/services/global.dart';
-import 'package:listadecoisa/widgets/borda-padrao.dart';
+import 'package:listadecoisa/widgets/borda_padrao.dart';
 
 class ListaTexto extends GetView {
   final gb = Get.find<Global>();
@@ -10,13 +10,14 @@ class ListaTexto extends GetView {
   final bool isComp;
 
   ListaTexto({
+    super.key,
     required this.ct,
     required this.isComp,
   });
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       shrinkWrap: true,
       children: [
         TextFormField(
@@ -32,16 +33,16 @@ class ListaTexto extends GetView {
           onChanged: (value) => ct.coisas.descricao = value,
           minLines: 20,
           cursorColor: Colors.white,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
           textAlign: TextAlign.center,
           decoration: InputDecoration(
             border: BordaPadrao.build(),
             enabledBorder: BordaPadrao.build(),
             focusedBorder: BordaPadrao.build(),
-            hintStyle: TextStyle(color: Colors.white),
+            hintStyle: const TextStyle(color: Colors.white),
             alignLabelWithHint: true,
             labelText: 'Conteudo da lista',
-            labelStyle: TextStyle(color: Colors.white, fontSize: 18),
+            labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
           ),
         )
       ],

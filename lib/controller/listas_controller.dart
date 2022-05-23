@@ -54,18 +54,18 @@ class ListasController extends GetxController {
           context: Get.context!,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Atenção !!!"),
-              content: Text("Deseja descartar essa lista ?"),
+              title: const Text("Atenção !!!"),
+              content: const Text("Deseja descartar essa lista ?"),
               actions: [
                 TextButton(
-                  child: Text("Sim"),
+                  child: const Text("Sim"),
                   onPressed: () {
                     Get.back();
                     Get.back();
                   },
                 ),
                 TextButton(
-                  child: Text("Não"),
+                  child: const Text("Não"),
                   onPressed: () => Get.back(),
                 ),
               ],
@@ -82,9 +82,9 @@ class ListasController extends GetxController {
 
   retornaTotal(List<dynamic> lista) {
     double total = 0;
-    lista.forEach((element) {
+    for (var element in lista) {
       if (element.feito != null) total += element.quant * (element.valor ?? 0.0);
-    });
+    }
     return total.toStringAsFixed(2);
   }
 }

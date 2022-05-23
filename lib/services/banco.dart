@@ -25,16 +25,12 @@ class BancoFire extends GetxService {
   }
 
   criaAlteraCoisas({required Coisas coisas, required UserP user}) {
-    if (coisas.idFire == null) {
-      coisas.idFire = db.collection('user').doc(user.id).collection('coisas').doc().id;
-    }
+    coisas.idFire ??= db.collection('user').doc(user.id).collection('coisas').doc().id;
     db.collection('user').doc(user.id).collection('coisas').doc(coisas.idFire).set(coisas.toJson());
   }
 
   Future<void> criaAlteraComp({required UserP user, required Compartilha coisas}) async {
-    if (coisas.idFire == null) {
-      coisas.idFire = db.collection('user').doc(user.id).collection('compartilha').doc().id;
-    }
+    coisas.idFire ??= db.collection('user').doc(user.id).collection('compartilha').doc().id;
     db.collection('user').doc(user.id).collection('compartilha').doc(coisas.idFire).set(coisas.toJson());
   }
 
@@ -166,8 +162,8 @@ class BancoFire extends GetxService {
 
         user.id = result.get('id');
       } else {
-        var _value = await firebaseAuth.signInAnonymously();
-        user.id = _value.user!.uid;
+        var value = await firebaseAuth.signInAnonymously();
+        user.id = value.user!.uid;
         db.collection('user').doc(user.id).set(user.toJson());
         gb.box.put('userAnonimo', user.id ?? '');
       }

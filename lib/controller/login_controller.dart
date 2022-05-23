@@ -26,7 +26,6 @@ class LoginController extends GetxController {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        print('connected');
         return true;
       } else {
         return false;
@@ -49,19 +48,20 @@ class LoginController extends GetxController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam."),
+          title: const Text(
+              "Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam."),
           content: TextField(
             controller: loginControler,
           ),
           actions: [
             TextButton(
-              child: Text("Cancelar"),
+              child: const Text("Cancelar"),
               onPressed: () {
                 Get.back();
               },
             ),
             TextButton(
-              child: Text("Confirmar"),
+              child: const Text("Confirmar"),
               onPressed: () {
                 banco.resetarSenha(user: gb.usuario!);
                 Get.back();
@@ -79,7 +79,9 @@ class LoginController extends GetxController {
       if (value != null) {
         gb.usuario = value;
         List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
-        listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
+        for (var element in listCat) {
+          gb.lisCoisa.add(Coisas.fromSnapshot(element));
+        }
         var userCo = jsonEncode(value);
         gb.box.put('user', userCo);
         gb.box.put("fezLogin", true);
@@ -99,7 +101,9 @@ class LoginController extends GetxController {
       gb.usuario = value;
       if (value != null) {
         List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
-        listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
+        for (var element in listCat) {
+          gb.lisCoisa.add(Coisas.fromSnapshot(element));
+        }
         var userCo = jsonEncode(value);
         gb.box.put('user', userCo);
         gb.box.put("fezLogin", true);
@@ -117,7 +121,9 @@ class LoginController extends GetxController {
       gb.usuario = value;
       if (value != null) {
         List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
-        listCat.forEach((element) => gb.lisCoisa.add(Coisas.fromSnapshot(element)));
+        for (var element in listCat) {
+          gb.lisCoisa.add(Coisas.fromSnapshot(element));
+        }
         var userCo = jsonEncode(value);
         gb.box.put('user', userCo);
         gb.box.put("fezLogin", true);

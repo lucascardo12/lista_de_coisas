@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:listadecoisa/model/checkList.dart';
-import 'package:listadecoisa/model/ckeckCompras.dart';
+import 'package:listadecoisa/model/check_list.dart';
+import 'package:listadecoisa/model/ckeck_compras.dart';
 
 class Coisas {
   String? nome;
@@ -47,14 +47,16 @@ class Coisas {
       };
 
   Coisas.fromSnapshot(DocumentSnapshot snapshot) {
-    Map data = snapshot.exists ? snapshot.data() as Map : Map();
+    Map data = snapshot.exists ? snapshot.data() as Map : {};
     idFire = snapshot.id;
     nome = data['nome'];
     descricao = data["descricao"];
-    if (data.containsKey('checklist'))
+    if (data.containsKey('checklist')) {
       checklist = data['checklist'].map((i) => Checklist.fromJson(i)).toList();
-    if (data.containsKey('checkCompras'))
+    }
+    if (data.containsKey('checkCompras')) {
       checkCompras = data['checkCompras'].map((i) => CheckCompras.fromJson(i)).toList();
+    }
     tipo = data['tipo'];
   }
 }

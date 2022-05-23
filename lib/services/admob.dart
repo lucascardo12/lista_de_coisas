@@ -14,11 +14,12 @@ class AdMob extends GetxService {
   String get bannerAdUnitId => 'ca-app-pub-1205611887737485/2150742777';
   String get bannerAdUnitId2 => 'ca-app-pub-1205611887737485/8760342564';
   String get telacheiaId => 'ca-app-pub-1205611887737485/8086429884';
+
   Future<void> loadBanner() async {
     banner = BannerAd(
       adUnitId: bannerAdUnitId,
       size: AdSize.getSmartBanner(Orientation.portrait),
-      request: AdRequest(),
+      request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (_) {},
         onAdFailedToLoad: (ad, error) {
@@ -34,7 +35,7 @@ class AdMob extends GetxService {
     banner2 = BannerAd(
       adUnitId: bannerAdUnitId2,
       size: AdSize.getSmartBanner(Orientation.portrait),
-      request: AdRequest(),
+      request: const AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (_) {},
         onAdFailedToLoad: (ad, error) {
@@ -53,16 +54,13 @@ class AdMob extends GetxService {
   Future<void> mostraTelaCheia() async {
     await InterstitialAd.load(
       adUnitId: telacheiaId,
-      request: AdRequest(),
+      request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) async {
-          print('load telacheia');
           await ad.show();
           ad.dispose();
         },
-        onAdFailedToLoad: (LoadAdError error) {
-          print('InterstitialAd failed to load: $error');
-        },
+        onAdFailedToLoad: (LoadAdError error) {},
       ),
     );
   }

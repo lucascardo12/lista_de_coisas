@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:listadecoisa/controller/listas-controller.dart';
-import 'package:listadecoisa/model/ckeckCompras.dart';
+import 'package:listadecoisa/controller/listas_controller.dart';
+import 'package:listadecoisa/model/ckeck_compras.dart';
 import 'package:listadecoisa/services/global.dart';
-import 'package:listadecoisa/widgets/borda-padrao.dart';
+import 'package:listadecoisa/widgets/borda_padrao.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
 class ListaCompras extends GetView {
@@ -13,6 +13,7 @@ class ListaCompras extends GetView {
   final bool isComp;
 
   ListaCompras({
+    super.key,
     required this.ct,
     required this.isComp,
   });
@@ -39,19 +40,19 @@ class ListaCompras extends GetView {
             },
           ),
         ),
-        Divider(
+        const Divider(
           color: Colors.white,
         ),
         Expanded(
           flex: 10,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Scrollbar(
               interactive: false,
               thickness: 5,
-              isAlwaysShown: true,
+              thumbVisibility: true,
               child: ListView.builder(
-                padding: EdgeInsets.only(top: 15),
+                padding: const EdgeInsets.only(top: 15),
                 shrinkWrap: true,
                 itemCount: ct.coisas.checkCompras!.length,
                 itemBuilder: (BuildContext context, int i) {
@@ -82,7 +83,7 @@ class ListaCompras extends GetView {
                                   initialValue: ct.coisas.checkCompras![i].item,
                                   cursorColor: Colors.white,
                                   onChanged: (v) => ct.coisas.checkCompras![i].item = v,
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                   textAlign: TextAlign.center,
                                   minLines: 1,
                                   maxLines: 2,
@@ -92,10 +93,10 @@ class ListaCompras extends GetView {
                                     border: BordaPadrao.check(),
                                     enabledBorder: BordaPadrao.check(),
                                     focusedBorder: BordaPadrao.check(),
-                                    hintStyle: TextStyle(color: Colors.white),
+                                    hintStyle: const TextStyle(color: Colors.white),
                                     alignLabelWithHint: true,
                                     hintText: "",
-                                    labelStyle: TextStyle(color: Colors.white, fontSize: 18),
+                                    labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
                                   ),
                                 )),
                             Expanded(
@@ -115,7 +116,7 @@ class ListaCompras extends GetView {
                                   initialValue: ct.coisas.checkCompras![i].quant.toString(),
                                   cursorColor: Colors.white,
                                   keyboardType: TextInputType.number,
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                   textAlign: TextAlign.center,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.zero,
@@ -123,9 +124,9 @@ class ListaCompras extends GetView {
                                     border: BordaPadrao.check(),
                                     enabledBorder: BordaPadrao.check(),
                                     focusedBorder: BordaPadrao.check(),
-                                    hintStyle: TextStyle(color: Colors.white),
+                                    hintStyle: const TextStyle(color: Colors.white),
                                     alignLabelWithHint: true,
-                                    labelStyle: TextStyle(color: Colors.white, fontSize: 18),
+                                    labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
                                   ),
                                 )),
                             Expanded(
@@ -148,7 +149,7 @@ class ListaCompras extends GetView {
                                       ? ''
                                       : ct.coisas.checkCompras![i].valor.toString(),
                                   cursorColor: Colors.white,
-                                  style: TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                   inputFormatters: [
                                     CurrencyTextInputFormatter(decimalDigits: 2, symbol: '', locale: 'pt-br'),
                                   ],
@@ -159,14 +160,14 @@ class ListaCompras extends GetView {
                                     border: BordaPadrao.check(),
                                     enabledBorder: BordaPadrao.check(),
                                     focusedBorder: BordaPadrao.check(),
-                                    hintStyle: TextStyle(color: Colors.white),
+                                    hintStyle: const TextStyle(color: Colors.white),
                                     alignLabelWithHint: true,
-                                    labelStyle: TextStyle(color: Colors.white, fontSize: 18),
+                                    labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
                                   ),
                                 )),
                             IconButton(
                               padding: EdgeInsets.zero,
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.clear,
                                 color: Colors.white,
                               ),
@@ -183,10 +184,10 @@ class ListaCompras extends GetView {
             ),
           ),
         ),
-        Divider(
+        const Divider(
           color: Colors.white,
         ),
-        Container(
+        SizedBox(
           height: 40,
           child: Text(
             "Valor total da compra R\u0024: ${ct.retornaTotal(ct.coisas.checkCompras!)}",

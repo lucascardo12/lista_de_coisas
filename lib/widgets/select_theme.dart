@@ -6,7 +6,9 @@ import 'package:listadecoisa/services/global.dart';
 class SelectTheme extends GetView {
   final List items;
   final gb = Get.find<Global>();
-  SelectTheme({required this.items});
+
+  SelectTheme({super.key, required this.items});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -14,19 +16,20 @@ class SelectTheme extends GetView {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+          margin: const EdgeInsets.symmetric(horizontal: 40),
+          child: Container(
+            decoration: BoxDecoration(
+              color: CupertinoColors.white,
               borderRadius: BorderRadius.circular(25),
             ),
-            margin: EdgeInsets.symmetric(horizontal: 40),
-            child: Container(
-              decoration: BoxDecoration(
-                color: CupertinoColors.white,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              padding: EdgeInsets.all(15),
-              child: Wrap(
-                children: items.map((e) {
+            padding: const EdgeInsets.all(15),
+            child: Wrap(
+              children: items.map(
+                (e) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -44,9 +47,11 @@ class SelectTheme extends GetView {
                       Text(e)
                     ],
                   );
-                }).toList(),
-              ),
-            )),
+                },
+              ).toList(),
+            ),
+          ),
+        ),
       ],
     );
   }

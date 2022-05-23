@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:listadecoisa/controller/home-controller.dart';
+import 'package:listadecoisa/controller/home_controller.dart';
 import 'package:listadecoisa/services/global.dart';
-import 'package:listadecoisa/widgets/Button-text-padrao.dart';
-import 'package:listadecoisa/widgets/button-theme.dart';
+import 'package:listadecoisa/widgets/button_text_padrao.dart';
+import 'package:listadecoisa/widgets/button_theme.dart';
 
 class HomePage extends GetView {
   final gb = Get.find<Global>();
   final ct = Get.put(HomeController());
+
+  HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class HomePage extends GetView {
             appBar: AppBar(
               bottom: TabBar(
                 indicatorColor: gb.getWhiteOrBlack(),
-                tabs: [
+                tabs: const [
                   Tab(
                     icon: Icon(
                       Icons.list_alt,
@@ -35,16 +37,16 @@ class HomePage extends GetView {
                   )),
                 ],
               ),
-              iconTheme: IconThemeData(color: Colors.white),
+              iconTheme: const IconThemeData(color: Colors.white),
               actions: [
                 Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       left: 10,
                       right: 10,
                     ),
                     child: IconButton(
                       color: Colors.white,
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.add_circle,
                         size: 32,
                       ),
@@ -53,7 +55,7 @@ class HomePage extends GetView {
               ],
               centerTitle: true,
               backgroundColor: gb.getPrimary(),
-              title: Text(
+              title: const Text(
                 'Listas',
                 style: TextStyle(
                   color: Colors.white,
@@ -83,8 +85,8 @@ class HomePage extends GetView {
               child: ListView(
                 children: [
                   DrawerHeader(
-                    margin: EdgeInsets.all(0),
-                    padding: EdgeInsets.all(0),
+                    margin: const EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(0),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topRight,
@@ -96,14 +98,14 @@ class HomePage extends GetView {
                       ),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             gb.usuario!.nome ?? '',
-                            style: TextStyle(color: Colors.white, fontSize: 22),
+                            style: const TextStyle(color: Colors.white, fontSize: 22),
                           ),
                           Text(
                             gb.packageInfo.version,
@@ -129,7 +131,7 @@ class HomePage extends GetView {
                 ],
               ),
             ),
-            bottomNavigationBar: Container(
+            bottomNavigationBar: SizedBox(
               height: 50,
               child: AdWidget(
                 ad: ct.admob.banner,
@@ -142,7 +144,7 @@ class HomePage extends GetView {
   Widget listasNormais() {
     return Obx(
       () => ListView.builder(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: 10,
           right: 10,
           top: 10,
@@ -160,13 +162,13 @@ class HomePage extends GetView {
             ),
             child: Card(
               child: Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(gb.lisCoisa[index].nome ?? ''),
                     PopupMenuButton(
-                      icon: Icon(Icons.more_vert),
+                      icon: const Icon(Icons.more_vert),
                       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
                         PopupMenuItem(
                           value: 0,
@@ -175,7 +177,7 @@ class HomePage extends GetView {
                               Icons.qr_code_scanner_rounded,
                               color: gb.getPrimary(),
                             ),
-                            title: Text('Compartilhar'),
+                            title: const Text('Compartilhar'),
                           ),
                         ),
                         PopupMenuItem(
@@ -185,7 +187,7 @@ class HomePage extends GetView {
                               Icons.delete,
                               color: gb.getPrimary(),
                             ),
-                            title: Text('Excluir'),
+                            title: const Text('Excluir'),
                           ),
                         ),
                       ],
@@ -214,7 +216,7 @@ class HomePage extends GetView {
   Widget listasComp() {
     return Obx(
       () => ListView.builder(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: 10,
           right: 10,
           top: 10,
@@ -232,7 +234,7 @@ class HomePage extends GetView {
             ),
             child: Card(
               child: Padding(
-                padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

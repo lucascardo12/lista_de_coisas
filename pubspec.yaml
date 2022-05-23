@@ -27,11 +27,8 @@ dependencies:
   hive: ^2.0.4
   hive_flutter: ^1.1.0
   package_info_plus: ^1.4.2
-  in_app_review: ^2.0.4
-  in_app_update: ^3.0.0
-  android_alarm_manager_plus: ^2.0.5
-  awesome_notifications: ^0.6.21
   currency_text_input_formatter: ^2.1.5
+  firebase_core: ^1.17.0
  
 
 dev_dependencies:
