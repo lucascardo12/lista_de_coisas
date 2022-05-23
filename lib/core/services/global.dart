@@ -1,13 +1,13 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:listadecoisa/core/configs/app_helps.dart';
+import 'package:listadecoisa/core/interfaces/service_interface.dart';
 import 'package:listadecoisa/model/user.dart';
-import 'package:listadecoisa/widgets/loading_padrao.dart';
+import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-class Global extends GetxService {
+class Global extends IService {
   late PackageInfo packageInfo;
   bool isLoading = false;
   late Box box;
@@ -15,9 +15,9 @@ class Global extends GetxService {
   bool isSwitched = false;
   bool isSwitched2 = false;
   bool isSwitched3 = false;
-  List lisCoisa = [].obs;
-  List lisCoisaComp = [].obs;
-  List lisComp = [].obs;
+  var lisCoisa = ValueNotifier([]);
+  var lisCoisaComp = ValueNotifier([]);
+  var lisComp = ValueNotifier([]);
   UserP? usuario;
   int hora = 12;
   int dia = 12;
@@ -32,7 +32,8 @@ class Global extends GetxService {
   Color secondaryLight = const Color(0xFF6ec5ff);
   Color secondaryDark = const Color(0xFF0068bf);
 
-  Future<Global> inicia() async {
+  @override
+  Future<void> start() async {
     packageInfo = await PackageInfo.fromPlatform();
     await Hive.initFlutter();
     box = await Hive.openBox('global');
@@ -41,15 +42,13 @@ class Global extends GetxService {
     if (box.get('fezLogin', defaultValue: false)) {
       usuario = UserP.fromJson(json.decode(auxi));
     }
-
-    return this;
   }
 
-  void load() {
-    Get.dialog(
-      LoadPadrao(),
+  void load(BuildContext context) {
+    AppHelps.defaultDialog(
+      context: context,
       barrierColor: Colors.white,
-      barrierDismissible: false,
+      child: LoadPadrao(),
     );
   }
 
