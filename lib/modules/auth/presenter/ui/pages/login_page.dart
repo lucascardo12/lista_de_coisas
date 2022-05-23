@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:listadecoisa/controller/login_controller.dart';
+import 'package:listadecoisa/modules/auth/presenter/controllers/login_controller.dart';
+import 'package:listadecoisa/main.dart';
+import 'package:listadecoisa/modules/auth/presenter/ui/pages/cadastro_page.dart';
 import 'package:listadecoisa/services/global.dart';
-import 'package:listadecoisa/widgets/button_text_padrao.dart';
-import 'package:listadecoisa/widgets/compo_padrao.dart';
+import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.dart';
+import 'package:listadecoisa/modules/home/presenter/ui/atoms/compo_padrao.dart';
 
-class Login extends GetView {
-  final gb = Get.find<Global>();
-  final ct = Get.put(LoginController());
+class LoginPage extends StatefulWidget {
+  static const route = '/Login';
+  const LoginPage({Key? key}) : super(key: key);
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
 
-  Login({super.key});
+class _LoginPageState extends State<LoginPage> {
+  final gb = di.get<Global>();
+  final ct = di.get<LoginController>();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => ct.init(context));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    ct.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,9 +64,14 @@ class Login extends GetView {
             CampoPadrao(
               hintText: 'E-mail',
               controller: ct.loginControler,
+              gb: gb,
             ),
             const SizedBox(height: 10),
-            Obx(() => CampoPadrao(
+            ValueListenableBuilder(
+              valueListenable: ct.lObescure,
+              builder: (context, value, child) {
+                return CampoPadrao(
+                  gb: gb,
                   lObescure: ct.lObescure.value,
                   suffixIcon: IconButton(
                     color: Colors.white,
@@ -56,7 +80,9 @@ class Login extends GetView {
                   ),
                   hintText: 'Senha',
                   controller: ct.senhaControler,
-                )),
+                );
+              },
+            ),
             ButtonTextPadrao(
               label: 'Esqueceu sua senha?',
               color: Colors.transparent,
@@ -66,23 +92,23 @@ class Login extends GetView {
               label: 'Login',
               color: gb.getWhiteOrBlack(),
               textColor: gb.getPrimary(),
-              onPressed: () => ct.logar(context: context),
+              onPressed: () => ct.logar(mounted, context),
             ),
             ButtonTextPadrao(
               color: gb.getWhiteOrBlack(),
               label: 'Modo anônimo',
               textColor: gb.getPrimary(),
-              onPressed: () => ct.loginAnonimo(),
+              onPressed: () => ct.loginAnonimo(mounted, context),
             ),
             ButtonTextPadrao(
               color: gb.getWhiteOrBlack(),
               label: 'Google',
               textColor: gb.getPrimary(),
-              onPressed: () => ct.loginGoogle(),
+              onPressed: () => ct.loginGoogle(mounted, context),
             ),
             ButtonTextPadrao(
               label: 'Cadastrar-se',
-              onPressed: () => Get.toNamed('/cadastro'),
+              onPressed: () => Navigator.pushNamed(context, CadastroPage.route),
               color: Colors.transparent,
             ),
           ],
