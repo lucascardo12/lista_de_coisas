@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/main.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/core/services/global.dart';
 
 class LoadPadrao extends StatelessWidget {
   final gb = di.get<Global>();

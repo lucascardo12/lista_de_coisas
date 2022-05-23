@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:listadecoisa/services/global.dart';
-import 'package:listadecoisa/widgets/borda_padrao.dart';
+import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/modules/home/presenter/ui/atoms/borda_padrao.dart';
 
 class CampoPadrao extends StatelessWidget {
   final Global gb;

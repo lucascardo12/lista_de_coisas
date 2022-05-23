@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/core/services/global.dart';
 
 class ListCompartilhadaPage extends StatelessWidget {
   final Global gb;

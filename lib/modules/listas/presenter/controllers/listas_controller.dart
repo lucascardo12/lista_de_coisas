@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
-import 'package:listadecoisa/model/coisas.dart';
-import 'package:listadecoisa/model/user.dart';
-import 'package:listadecoisa/services/admob.dart';
-import 'package:listadecoisa/services/banco.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
+import 'package:listadecoisa/modules/auth/domain/models/user.dart';
+import 'package:listadecoisa/core/services/admob.dart';
+import 'package:listadecoisa/core/services/banco.dart';
+import 'package:listadecoisa/core/services/global.dart';
 
 const umaHora = 3600000;
 

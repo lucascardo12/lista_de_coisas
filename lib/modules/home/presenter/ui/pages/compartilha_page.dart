@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/modules/home/presenter/controllers/compartilha_controller.dart';
 import 'package:listadecoisa/main.dart';
-import 'package:listadecoisa/model/compartilha.dart';
+import 'package:listadecoisa/modules/home/domain/models/compartilha.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';

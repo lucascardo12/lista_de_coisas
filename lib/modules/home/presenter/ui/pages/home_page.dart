@@ -6,7 +6,7 @@ import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/list_compartilhada_page.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/list_text_page.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/organisms/button_theme.dart';
 
 class HomePage extends StatefulWidget {

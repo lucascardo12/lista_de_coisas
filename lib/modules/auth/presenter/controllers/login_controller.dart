@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
-import 'package:listadecoisa/model/coisas.dart';
+import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/home_page.dart';
-import 'package:listadecoisa/services/banco.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/core/services/banco.dart';
+import 'package:listadecoisa/core/services/global.dart';
 
 class LoginController extends IController {
   final Global gb;

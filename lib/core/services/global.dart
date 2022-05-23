@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:listadecoisa/core/configs/app_helps.dart';
 import 'package:listadecoisa/core/interfaces/service_interface.dart';
-import 'package:listadecoisa/model/user.dart';
+import 'package:listadecoisa/modules/auth/domain/models/user.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:listadecoisa/core/interfaces/service_interface.dart';
-import 'package:listadecoisa/model/coisas.dart';
-import 'package:listadecoisa/model/compartilha.dart';
-import 'package:listadecoisa/model/user.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
+import 'package:listadecoisa/modules/home/domain/models/compartilha.dart';
+import 'package:listadecoisa/modules/auth/domain/models/user.dart';
+import 'package:listadecoisa/core/services/global.dart';
 import 'package:translator/translator.dart';
 import 'package:firebase_core/firebase_core.dart';
 

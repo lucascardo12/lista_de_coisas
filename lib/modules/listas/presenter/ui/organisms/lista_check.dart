@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
 import 'package:listadecoisa/modules/listas/domain/models/check_list.dart';
-import 'package:listadecoisa/services/global.dart';
-import 'package:listadecoisa/widgets/borda_padrao.dart';
+import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/modules/home/presenter/ui/atoms/borda_padrao.dart';
 
 class ListaCheck extends StatelessWidget {
   final Global gb;

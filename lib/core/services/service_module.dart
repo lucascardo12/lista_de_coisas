@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/pages/login_page.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/home_page.dart';
-import 'package:listadecoisa/services/admob.dart';
-import 'package:listadecoisa/services/banco.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/core/services/admob.dart';
+import 'package:listadecoisa/core/services/banco.dart';
+import 'package:listadecoisa/core/services/global.dart';
 
 class ServiceModule {
   void register() {

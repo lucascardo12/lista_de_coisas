@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/core/services/global.dart';
 
 class SelectTheme extends StatelessWidget {
   final List items;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/configs/app_helps.dart';
 import 'package:listadecoisa/main.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/organisms/select_theme.dart';
 
 class ButtonTema extends StatelessWidget {

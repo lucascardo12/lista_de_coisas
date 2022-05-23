@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/modules/home/presenter/controllers/home_controller.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/core/services/global.dart';
 
 class ListTextoPage extends StatelessWidget {
   final Global gb;

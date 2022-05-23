@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/modules/auth/presenter/controllers/login_controller.dart';
 import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/pages/cadastro_page.dart';
-import 'package:listadecoisa/services/global.dart';
+import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/atoms/compo_padrao.dart';
 
