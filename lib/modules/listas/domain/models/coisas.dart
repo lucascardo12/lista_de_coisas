@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:listadecoisa/model/check_list.dart';
-import 'package:listadecoisa/model/ckeck_compras.dart';
+import 'package:listadecoisa/modules/listas/domain/models/check_list.dart';
+import 'package:listadecoisa/modules/listas/domain/models/ckeck_compras.dart';
 
 class Coisas {
   String? nome;

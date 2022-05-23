@@ -1,39 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
+import 'package:listadecoisa/core/interfaces/controller_interface.dart';
 import 'package:listadecoisa/model/coisas.dart';
 import 'package:listadecoisa/model/user.dart';
 import 'package:listadecoisa/services/admob.dart';
 import 'package:listadecoisa/services/banco.dart';
 import 'package:listadecoisa/services/global.dart';
 
-class ListasController extends GetxController {
-  final gb = Get.find<Global>();
-  final banco = Get.find<BancoFire>();
-  final bool isComp = Get.arguments[1];
+const umaHora = 3600000;
+
+class ListasController extends ChangeNotifier implements IController {
+  final Global gb;
+  final BancoFire banco;
+  final AdMob admob;
+  bool? isComp;
   final formKey = GlobalKey<FormState>();
-  final Coisas coisas = Get.arguments[0];
+  Coisas? coisas;
   late FocusScopeNode node;
   final FocusNode nodeText1 = FocusNode();
-  final admob = Get.find<AdMob>();
-  @override
-  void onInit() {
-    admob.loadBanner2();
-    super.onInit();
-  }
+
+  ListasController({
+    required this.gb,
+    required this.banco,
+    required this.admob,
+  });
 
   @override
-  void onClose() {
-    admob.banner2.dispose();
-    super.onClose();
+  void init(BuildContext context) {
+    var arguments = ModalRoute.of(context)!.settings.arguments as List;
+    if (verificaUltimaAds()) admob.loadInterstitialAd();
+    isComp = arguments[1];
+    coisas = arguments[0];
   }
 
   Future<void> criaCoisa({required Coisas coisa}) async {
-    var auxi = gb.lisComp.indexWhere((element) => element.idLista == coisa.idFire);
+    var auxi = gb.lisComp.value.indexWhere((element) => element.idLista == coisa.idFire);
     if (auxi >= 0) {
       await banco.criaAlteraCoisas(
           coisas: coisa,
-          user: UserP(id: gb.lisComp.firstWhere((element) => element.idLista == coisa.idFire).idUser));
+          user: UserP(id: gb.lisComp.value.firstWhere((element) => element.idLista == coisa.idFire).idUser));
     } else {
       await banco.criaAlteraCoisas(coisas: coisa, user: gb.usuario!);
     }
@@ -47,11 +52,13 @@ class ListasController extends GetxController {
         fontSize: 18.0);
   }
 
-  Future<bool> bottonVoltar() async {
-    if (coisas.idFire == null) {
-      if (coisas.checkCompras!.isNotEmpty || coisas.checklist!.isNotEmpty || coisas.descricao!.isNotEmpty) {
+  Future<bool> bottonVoltar(BuildContext context) async {
+    if (coisas!.idFire == null) {
+      if (coisas!.checkCompras!.isNotEmpty ||
+          coisas!.checklist!.isNotEmpty ||
+          coisas!.descricao!.isNotEmpty) {
         await showDialog(
-          context: Get.context!,
+          context: context,
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text("Atenção !!!"),
@@ -60,13 +67,13 @@ class ListasController extends GetxController {
                 TextButton(
                   child: const Text("Sim"),
                   onPressed: () {
-                    Get.back();
-                    Get.back();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                 ),
                 TextButton(
                   child: const Text("Não"),
-                  onPressed: () => Get.back(),
+                  onPressed: () => Navigator.pop(context),
                 ),
               ],
             );
@@ -80,11 +87,20 @@ class ListasController extends GetxController {
     }
   }
 
-  retornaTotal(List<dynamic> lista) {
+  String retornaTotal(List<dynamic> lista) {
     double total = 0;
     for (var element in lista) {
       if (element.feito != null) total += element.quant * (element.valor ?? 0.0);
     }
     return total.toStringAsFixed(2);
+  }
+
+  void update() => notifyListeners();
+  bool verificaUltimaAds() {
+    return true;
+    var agora = DateTime.now().millisecondsSinceEpoch;
+    var depois = gb.box.get('day') ?? DateTime.now().millisecondsSinceEpoch;
+    var dif = agora - depois;
+    return dif > umaHora || dif == 0 || dif == -1;
   }
 }

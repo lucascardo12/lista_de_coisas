@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:listadecoisa/controller/listas_controller.dart';
-import 'package:listadecoisa/model/ckeck_compras.dart';
+import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
+import 'package:listadecoisa/modules/listas/domain/models/ckeck_compras.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/borda_padrao.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
-class ListaCompras extends GetView {
-  final gb = Get.find<Global>();
+class ListaCompras extends StatelessWidget {
+  final Global gb;
   final ListasController ct;
   final bool isComp;
 
-  ListaCompras({
+  const ListaCompras({
     super.key,
     required this.ct,
     required this.isComp,
+    required this.gb,
   });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,7 +30,7 @@ class ListaCompras extends GetView {
               color: gb.getPrimary(),
             ),
             onPressed: () {
-              ct.coisas.checkCompras!.add(
+              ct.coisas!.checkCompras!.add(
                 CheckCompras(
                   feito: false,
                   item: '',
@@ -54,9 +55,9 @@ class ListaCompras extends GetView {
               child: ListView.builder(
                 padding: const EdgeInsets.only(top: 15),
                 shrinkWrap: true,
-                itemCount: ct.coisas.checkCompras!.length,
+                itemCount: ct.coisas!.checkCompras!.length,
                 itemBuilder: (BuildContext context, int i) {
-                  CheckCompras item = ct.coisas.checkCompras![i];
+                  CheckCompras item = ct.coisas!.checkCompras![i];
                   return item.feito != null
                       ? Row(
                           children: [
@@ -64,10 +65,10 @@ class ListaCompras extends GetView {
                               fillColor: MaterialStateProperty.all(Colors.white),
                               checkColor: gb.getPrimary(),
                               onChanged: (bool? value) {
-                                ct.coisas.checkCompras![i].feito = value;
+                                ct.coisas!.checkCompras![i].feito = value;
                                 ct.update();
                               },
-                              value: ct.coisas.checkCompras![i].feito ?? false,
+                              value: ct.coisas!.checkCompras![i].feito ?? false,
                             ),
                             Expanded(
                                 flex: 7,
@@ -75,14 +76,14 @@ class ListaCompras extends GetView {
                                   readOnly: isComp,
                                   onEditingComplete: () => ct.node.nextFocus(),
                                   validator: (value) {
-                                    ct.coisas.checkCompras![i].item = value;
+                                    ct.coisas!.checkCompras![i].item = value;
                                     if (value!.isEmpty) return "Conteudo não pode ser vazio";
                                     return null;
                                   },
-                                  autofocus: ct.coisas.checkCompras![i].item.isEmpty ? true : false,
-                                  initialValue: ct.coisas.checkCompras![i].item,
+                                  autofocus: ct.coisas!.checkCompras![i].item.isEmpty ? true : false,
+                                  initialValue: ct.coisas!.checkCompras![i].item,
                                   cursorColor: Colors.white,
-                                  onChanged: (v) => ct.coisas.checkCompras![i].item = v,
+                                  onChanged: (v) => ct.coisas!.checkCompras![i].item = v,
                                   style: const TextStyle(color: Colors.white),
                                   textAlign: TextAlign.center,
                                   minLines: 1,
@@ -109,11 +110,11 @@ class ListaCompras extends GetView {
                                     return null;
                                   },
                                   onChanged: (v) {
-                                    ct.coisas.checkCompras![i].quant = int.tryParse(v) ?? 0;
+                                    ct.coisas!.checkCompras![i].quant = int.tryParse(v) ?? 0;
                                     ct.update();
                                   },
-                                  autofocus: ct.coisas.checkCompras![i].quant == null ? true : false,
-                                  initialValue: ct.coisas.checkCompras![i].quant.toString(),
+                                  autofocus: ct.coisas!.checkCompras![i].quant == null ? true : false,
+                                  initialValue: ct.coisas!.checkCompras![i].quant.toString(),
                                   cursorColor: Colors.white,
                                   keyboardType: TextInputType.number,
                                   style: const TextStyle(color: Colors.white),
@@ -140,14 +141,14 @@ class ListaCompras extends GetView {
                                     return null;
                                   },
                                   onChanged: (v) {
-                                    ct.coisas.checkCompras![i].valor =
+                                    ct.coisas!.checkCompras![i].valor =
                                         double.tryParse(v.replaceAll(',', '.')) ?? 0.0;
                                     ct.update();
                                   },
-                                  autofocus: ct.coisas.checkCompras![i].valor == null ? true : false,
-                                  initialValue: ct.coisas.checkCompras![i].valor == null
+                                  autofocus: ct.coisas!.checkCompras![i].valor == null ? true : false,
+                                  initialValue: ct.coisas!.checkCompras![i].valor == null
                                       ? ''
-                                      : ct.coisas.checkCompras![i].valor.toString(),
+                                      : ct.coisas!.checkCompras![i].valor.toString(),
                                   cursorColor: Colors.white,
                                   style: const TextStyle(color: Colors.white),
                                   inputFormatters: [
@@ -172,7 +173,7 @@ class ListaCompras extends GetView {
                                 color: Colors.white,
                               ),
                               onPressed: () {
-                                ct.coisas.checkCompras![i] = CheckCompras(feito: null);
+                                ct.coisas!.checkCompras![i] = CheckCompras(feito: null);
                                 ct.update();
                               },
                             )
@@ -190,10 +191,10 @@ class ListaCompras extends GetView {
         SizedBox(
           height: 40,
           child: Text(
-            "Valor total da compra R\u0024: ${ct.retornaTotal(ct.coisas.checkCompras!)}",
-            style: Get.theme.textTheme.headline6!.copyWith(
-              color: Colors.white,
-            ),
+            "Valor total da compra R\u0024: ${ct.retornaTotal(ct.coisas!.checkCompras!)}",
+            style: Theme.of(context).textTheme.headline6!.copyWith(
+                  color: Colors.white,
+                ),
           ),
         )
       ],

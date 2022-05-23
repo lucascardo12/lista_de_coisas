@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:listadecoisa/controller/listas_controller.dart';
-import 'package:listadecoisa/model/check_list.dart';
+import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
+import 'package:listadecoisa/modules/listas/domain/models/check_list.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/borda_padrao.dart';
 
-class ListaCheck extends GetView {
-  final gb = Get.find<Global>();
+class ListaCheck extends StatelessWidget {
+  final Global gb;
   final bool isComp;
   final ListasController ct;
-  ListaCheck({
+
+  const ListaCheck({
     super.key,
     required this.isComp,
     required this.ct,
+    required this.gb,
   });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,7 +29,7 @@ class ListaCheck extends GetView {
                     color: gb.getPrimary(),
                   ),
                   onPressed: () {
-                    ct.coisas.checklist!.add(
+                    ct.coisas!.checklist!.add(
                       Checklist(feito: false, item: ''),
                     );
                     ct.update();
@@ -50,9 +52,9 @@ class ListaCheck extends GetView {
               child: ListView.builder(
                 padding: const EdgeInsets.all(4),
                 shrinkWrap: true,
-                itemCount: ct.coisas.checklist!.length,
+                itemCount: ct.coisas!.checklist!.length,
                 itemBuilder: (BuildContext context, int i) {
-                  Checklist item = ct.coisas.checklist![i];
+                  Checklist item = ct.coisas!.checklist![i];
                   return item.feito != null
                       ? Row(
                           children: [
@@ -61,10 +63,10 @@ class ListaCheck extends GetView {
                                     fillColor: MaterialStateProperty.all(Colors.white),
                                     checkColor: gb.getPrimary(),
                                     onChanged: (bool? value) {
-                                      ct.coisas.checklist![i].feito = value;
+                                      ct.coisas!.checklist![i].feito = value;
                                       ct.update();
                                     },
-                                    value: ct.coisas.checklist![i].feito ?? false,
+                                    value: ct.coisas!.checklist![i].feito ?? false,
                                   )
                                 : const SizedBox(
                                     width: 20,
@@ -74,20 +76,21 @@ class ListaCheck extends GetView {
                               readOnly: isComp,
                               onEditingComplete: () => ct.node.nextFocus(),
                               validator: (value) {
-                                ct.coisas.checklist![i].item = value;
+                                ct.coisas!.checklist![i].item = value;
                                 if (value!.isEmpty) return "Conteudo não pode ser vazio";
                                 return null;
                               },
-                              onChanged: (v) => ct.coisas.checklist![i].item = v,
-                              autofocus: ct.coisas.checklist![i].item.isEmpty ? true : false,
-                              initialValue: ct.coisas.checklist![i].item,
+                              onChanged: (v) => ct.coisas!.checklist![i].item = v,
+                              autofocus: ct.coisas!.checklist![i].item.isEmpty ? true : false,
+                              initialValue: ct.coisas!.checklist![i].item,
                               cursorColor: Colors.white,
                               minLines: 1,
                               maxLines: 2,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
-                                decoration: ct.coisas.checklist![i].feito ? TextDecoration.lineThrough : null,
+                                decoration:
+                                    ct.coisas!.checklist![i].feito ? TextDecoration.lineThrough : null,
                                 decorationThickness: 2.85,
                                 decorationColor: Colors.red,
                               ),
@@ -110,7 +113,7 @@ class ListaCheck extends GetView {
                                       color: Colors.red,
                                     ),
                                     onPressed: () {
-                                      ct.coisas.checklist![i] = Checklist(feito: null);
+                                      ct.coisas!.checklist![i] = Checklist(feito: null);
                                       ct.update();
                                     },
                                   )

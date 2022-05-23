@@ -1,22 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:listadecoisa/controller/listas_controller.dart';
-import 'package:listadecoisa/widgets/lista_check.dart';
-import 'package:listadecoisa/widgets/lista_compras.dart';
-import 'package:listadecoisa/widgets/lista_texto.dart';
+import 'package:listadecoisa/main.dart';
+import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
+import 'package:listadecoisa/modules/listas/presenter/ui/organisms/lista_check.dart';
+import 'package:listadecoisa/modules/listas/presenter/ui/organisms/lista_compras.dart';
+import 'package:listadecoisa/modules/listas/presenter/ui/organisms/lista_texto.dart';
 
-class ListasPage extends GetView {
-  final ct = Get.put(ListasController());
+class ListasPage extends StatefulWidget {
+  static const route = '/Listas';
 
-  ListasPage({super.key});
+  const ListasPage({super.key});
+
+  @override
+  State<ListasPage> createState() => _ListasPageState();
+}
+
+class _ListasPageState extends State<ListasPage> {
+  final ct = di.get<ListasController>();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => ct.init(context));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    ct.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     ct.node = FocusScope.of(context);
     return Scaffold(
       body: WillPopScope(
-        onWillPop: () => ct.bottonVoltar(),
+        onWillPop: () => ct.bottonVoltar(context),
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -37,19 +56,19 @@ class ListasPage extends GetView {
                 ),
                 Expanded(
                   child: TextFormField(
-                    readOnly: ct.isComp,
+                    readOnly: ct.isComp!,
                     validator: (value) {
                       if (value!.isEmpty) return "Titulo não pode ser vazio";
                       return null;
                     },
-                    onChanged: (value) => ct.coisas.nome = value,
+                    onChanged: (value) => ct.coisas!.nome = value,
                     style: const TextStyle(color: Colors.white, fontSize: 20),
-                    initialValue: ct.coisas.nome ?? '',
+                    initialValue: ct.coisas!.nome ?? '',
                     textAlign: TextAlign.center,
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      labelText: ct.coisas.nome!.isEmpty ? "    Digite um Titulo" : null,
+                      labelText: ct.coisas!.nome!.isEmpty ? "    Digite um Titulo" : null,
                       alignLabelWithHint: true,
                       labelStyle: const TextStyle(
                         color: Colors.white,
@@ -59,22 +78,25 @@ class ListasPage extends GetView {
                 ),
                 Expanded(
                   flex: 8,
-                  child: GetBuilder(
-                    init: ct,
-                    builder: (ListasController controller) => [
+                  child: AnimatedBuilder(
+                    animation: ct,
+                    builder: (context, child) => [
                       ListaTexto(
-                        isComp: ct.isComp,
-                        ct: controller,
+                        isComp: ct.isComp!,
+                        ct: ct,
+                        gb: ct.gb,
                       ),
                       ListaCheck(
-                        isComp: ct.isComp,
-                        ct: controller,
+                        isComp: ct.isComp!,
+                        ct: ct,
+                        gb: ct.gb,
                       ),
                       ListaCompras(
-                        isComp: ct.isComp,
-                        ct: controller,
+                        isComp: ct.isComp!,
+                        ct: ct,
+                        gb: ct.gb,
                       ),
-                    ].elementAt(ct.coisas.tipo ?? 0),
+                    ].elementAt(ct.coisas?.tipo ?? 0),
                   ),
                 ),
               ],
@@ -84,8 +106,21 @@ class ListasPage extends GetView {
       ),
       bottomNavigationBar: SizedBox(
         height: 50,
-        child: AdWidget(
-          ad: ct.admob.banner2,
+        child: FutureBuilder<BannerAd>(
+          future: ct.admob.loadBanner(adUnitId: ct.admob.bannerAdUnitId2),
+          builder: (context, value) {
+            if (value.hasError) {
+              return const Center(
+                child: Text('Erro na propaganda'),
+              );
+            }
+            if (value.hasData) {
+              return AdWidget(
+                ad: value.data!,
+              );
+            }
+            return const CircularProgressIndicator();
+          },
         ),
       ),
       floatingActionButton: Padding(
@@ -96,7 +131,7 @@ class ListasPage extends GetView {
             const BackButton(
               color: Colors.white,
             ),
-            !ct.isComp
+            !ct.isComp!
                 ? Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -110,23 +145,18 @@ class ListasPage extends GetView {
                         ),
                         onPressed: () async {
                           if (ct.formKey.currentState!.validate()) {
-                            var day = ct.gb.box.get('day', defaultValue: DateTime.now().day);
-                            if (day != DateTime.now().day) {
-                              int diasCount = ct.gb.box.get('diasCount', defaultValue: 2);
-                              ct.gb.box.put('day', DateTime.now().day);
-                              if (diasCount == 0) {
-                                await ct.admob.mostraTelaCheia();
-                                ct.gb.box.put('diasCount', 1);
-                              } else {
-                                ct.gb.box.put('diasCount', --diasCount);
-                              }
+                            if (ct.verificaUltimaAds()) {
+                              await ct.admob.mostraTelaCheia();
+                              ct.gb.box.put('day', DateTime.now().millisecondsSinceEpoch);
                             }
-                            int index = ct.gb.lisCoisa.indexWhere(
-                              (element) => element.idFire == ct.coisas.idFire,
+                            int index = ct.gb.lisCoisa.value.indexWhere(
+                              (element) => element.idFire == ct.coisas!.idFire,
                             );
-                            index < 0 ? ct.gb.lisCoisa.add(ct.coisas) : ct.gb.lisCoisa[index] = ct.coisas;
-                            await ct.criaCoisa(coisa: ct.coisas);
-                            Get.back();
+                            index < 0
+                                ? ct.gb.lisCoisa.value.add(ct.coisas)
+                                : ct.gb.lisCoisa.value[index] = ct.coisas;
+                            await ct.criaCoisa(coisa: ct.coisas!);
+                            Navigator.pop(context);
                           }
                         },
                       ),

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:listadecoisa/controller/listas_controller.dart';
+import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
 import 'package:listadecoisa/services/global.dart';
 import 'package:listadecoisa/widgets/borda_padrao.dart';
 
-class ListaTexto extends GetView {
-  final gb = Get.find<Global>();
+class ListaTexto extends StatelessWidget {
+  final Global gb;
   final ListasController ct;
   final bool isComp;
 
-  ListaTexto({
+  const ListaTexto({
     super.key,
     required this.ct,
     required this.isComp,
+    required this.gb,
   });
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -27,10 +28,10 @@ class ListaTexto extends GetView {
             return null;
           },
           focusNode: ct.nodeText1,
-          autofocus: ct.coisas.descricao!.isEmpty ? true : false,
+          autofocus: ct.coisas!.descricao!.isEmpty ? true : false,
           maxLines: 300,
-          initialValue: ct.coisas.descricao ?? '',
-          onChanged: (value) => ct.coisas.descricao = value,
+          initialValue: ct.coisas!.descricao ?? '',
+          onChanged: (value) => ct.coisas!.descricao = value,
           minLines: 20,
           cursorColor: Colors.white,
           style: const TextStyle(color: Colors.white),
