@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
+import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 import 'package:listadecoisa/modules/auth/domain/models/user.dart';
 import 'package:listadecoisa/core/services/admob.dart';
 import 'package:listadecoisa/core/services/banco.dart';
 import 'package:listadecoisa/core/services/global.dart';
 
-const umaHora = 3600000;
+const umaHora = 2880000;
 
 class ListasController extends ChangeNotifier implements IController {
   final Global gb;
@@ -18,6 +19,7 @@ class ListasController extends ChangeNotifier implements IController {
   Coisas? coisas;
   late FocusScopeNode node;
   final FocusNode nodeText1 = FocusNode();
+  var statusPage = ValueNotifier(StatusPage.loading);
 
   ListasController({
     required this.gb,
@@ -31,6 +33,7 @@ class ListasController extends ChangeNotifier implements IController {
     if (verificaUltimaAds()) admob.loadInterstitialAd();
     isComp = arguments[1];
     coisas = arguments[0];
+    statusPage.value = StatusPage.done;
   }
 
   Future<void> criaCoisa({required Coisas coisa}) async {
@@ -97,10 +100,9 @@ class ListasController extends ChangeNotifier implements IController {
 
   void update() => notifyListeners();
   bool verificaUltimaAds() {
-    return true;
     var agora = DateTime.now().millisecondsSinceEpoch;
     var depois = gb.box.get('day') ?? DateTime.now().millisecondsSinceEpoch;
     var dif = agora - depois;
-    return dif > umaHora || dif == 0 || dif == -1;
+    return dif > umaHora || dif <= 0;
   }
 }
