@@ -8,12 +8,36 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:337919947963:android:678f0ba153d88ae3e5e59e",
+        "mobilesdk_app_id": "1:337919947963:android:4c0064e92c7c571be5e59e",
         "android_client_info": {
           "package_name": "com.lcm.listadecoisa"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "337919947963-js07j12mo34oon7996scj7lb18anflr9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lcm.listadecoisa",
+            "certificate_hash": "ab019f6cf909384d682901064a7c2d55c51229c5"
+          }
+        },
+        {
+          "client_id": "337919947963-os8oiupk8ofe1oplqa84pejlgs7i34b0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lcm.listadecoisa",
+            "certificate_hash": "11f170b5896a0a5f06d07b5891b0a0102f0926b4"
+          }
+        },
+        {
+          "client_id": "337919947963-rq1mmb4tid5ba8qt7efl4pb1j7aoccqj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lcm.listadecoisa",
+            "certificate_hash": "59c7702983f92128bf89cdcd446889f71b29adb3"
+          }
+        },
         {
           "client_id": "337919947963-k03cjvefjm59mkc9tjjjsi08idouc066.apps.googleusercontent.com",
           "client_type": 3
@@ -33,7 +57,8 @@
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-1205611887737485~5958125847"
     }
   ],
   "configuration_version": "1"
