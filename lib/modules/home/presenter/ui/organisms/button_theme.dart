@@ -41,7 +41,7 @@ class ButtonTema extends StatelessWidget {
           TextButton.icon(
             onPressed: null,
             icon: Text(
-              gb.tema ?? '',
+              gb.tema.value,
               style: const TextStyle(color: Colors.black38, fontSize: 12),
             ),
             label: const Icon(

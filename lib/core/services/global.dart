@@ -9,7 +9,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 class Global extends IService {
   late PackageInfo packageInfo;
-  bool isLoading = false;
   late Box box;
   String app = "Anote";
   bool isSwitched = false;
@@ -21,7 +20,7 @@ class Global extends IService {
   UserP? usuario;
   int hora = 12;
   int dia = 12;
-  String? tema;
+  var tema = ValueNotifier('');
   String? codigoList;
   String? codigoUser;
   String? codigRead;
@@ -37,7 +36,7 @@ class Global extends IService {
     packageInfo = await PackageInfo.fromPlatform();
     await Hive.initFlutter();
     box = await Hive.openBox('global');
-    tema = box.get("tema", defaultValue: "Original");
+    tema.value = box.get("tema", defaultValue: "Original");
     var auxi = box.get("user", defaultValue: '');
     if (box.get('fezLogin', defaultValue: false)) {
       usuario = UserP.fromJson(json.decode(auxi));
@@ -53,7 +52,7 @@ class Global extends IService {
   }
 
   Color getPrimary() {
-    switch (tema) {
+    switch (tema.value) {
       case 'Original':
         return const Color.fromRGBO(255, 64, 111, 1);
 
@@ -67,12 +66,12 @@ class Global extends IService {
         return const Color.fromRGBO(90, 24, 154, 1);
 
       default:
-        return Colors.white;
+        return const Color.fromRGBO(255, 64, 111, 1);
     }
   }
 
   Color getSecondary() {
-    switch (tema) {
+    switch (tema.value) {
       case 'Original':
         return const Color.fromRGBO(255, 128, 111, 1);
       case "Dark":
@@ -82,12 +81,12 @@ class Global extends IService {
       case "Roxo":
         return const Color.fromRGBO(157, 78, 221, 1);
       default:
-        return Colors.white;
+        return const Color.fromRGBO(255, 128, 111, 1);
     }
   }
 
   Color getWhiteOrBlack() {
-    switch (tema) {
+    switch (tema.value) {
       case 'Original':
         return Colors.white;
 

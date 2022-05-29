@@ -30,33 +30,37 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      themeMode: ThemeMode.light,
-      debugShowCheckedModeBanner: false,
-      title: 'Lista de Coisas',
-      theme: ThemeData.light().copyWith(
-        primaryColor: gb.getPrimary(),
-        textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: Colors.white,
-        ),
-        colorScheme: ThemeData.light()
-            .colorScheme
-            .copyWith(
-              primary: gb.getPrimary(),
-              secondary: gb.getSecondary(),
-            )
-            .copyWith(secondary: gb.getSecondary()),
-      ),
-      initialRoute: SplashPage.route,
-      routes: {
-        '/': (context) => const SplashPage(),
-        SplashPage.route: (context) => const SplashPage(),
-        CompartilhaPage.route: (context) => const CompartilhaPage(),
-        CadastroPage.route: (context) => const CadastroPage(),
-        ListasPage.route: (context) => const ListasPage(),
-        HomePage.route: (context) => const HomePage(),
-        LoginPage.route: (context) => const LoginPage(),
-      },
-    );
+    return ValueListenableBuilder(
+        valueListenable: gb.tema,
+        builder: (context, value, child) {
+          return MaterialApp(
+            themeMode: ThemeMode.light,
+            debugShowCheckedModeBanner: false,
+            title: 'Lista de Coisas',
+            theme: ThemeData.light().copyWith(
+              primaryColor: gb.getPrimary(),
+              textSelectionTheme: const TextSelectionThemeData(
+                cursorColor: Colors.white,
+              ),
+              colorScheme: ThemeData.light()
+                  .colorScheme
+                  .copyWith(
+                    primary: gb.getPrimary(),
+                    secondary: gb.getSecondary(),
+                  )
+                  .copyWith(secondary: gb.getSecondary()),
+            ),
+            initialRoute: SplashPage.route,
+            routes: {
+              '/': (context) => const SplashPage(),
+              SplashPage.route: (context) => const SplashPage(),
+              CompartilhaPage.route: (context) => const CompartilhaPage(),
+              CadastroPage.route: (context) => const CadastroPage(),
+              ListasPage.route: (context) => const ListasPage(),
+              HomePage.route: (context) => const HomePage(),
+              LoginPage.route: (context) => const LoginPage(),
+            },
+          );
+        });
   }
 }
