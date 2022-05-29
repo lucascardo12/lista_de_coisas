@@ -92,7 +92,7 @@ class LoginController extends IController {
       gb.box.put('senha', senhaControler.text);
       gb.box.put('isAnonimo', false);
       if (!mounted) return;
-      Navigator.pushNamedAndRemoveUntil(
+      await Navigator.pushNamedAndRemoveUntil(
         context,
         HomePage.route,
         (route) => false,
@@ -116,10 +116,9 @@ class LoginController extends IController {
       gb.box.put("fezLogin", true);
       gb.box.put('isAnonimo', true);
       if (!mounted) return;
-      Navigator.pushNamedAndRemoveUntil(
-        context,
+      await Navigator.of(context).pushNamedAndRemoveUntil(
         HomePage.route,
-        (route) => false,
+        (Route<dynamic> route) => false,
       );
     }
     if (!mounted) return;
@@ -139,7 +138,7 @@ class LoginController extends IController {
       gb.box.put('user', userCo);
       gb.box.put("fezLogin", true);
       if (!mounted) return;
-      Navigator.pushNamedAndRemoveUntil(
+      await Navigator.pushNamedAndRemoveUntil(
         context,
         HomePage.route,
         (route) => false,

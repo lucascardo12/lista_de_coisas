@@ -39,7 +39,7 @@ class CadastroController extends IController {
     if (value.isNotEmpty) {
       await submit();
       if (!mounted) return;
-      Navigator.pushNamedAndRemoveUntil(
+      await Navigator.pushNamedAndRemoveUntil(
         context,
         HomePage.route,
         (route) => false,
