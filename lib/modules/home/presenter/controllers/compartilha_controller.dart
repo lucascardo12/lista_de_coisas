@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
+import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 import 'package:listadecoisa/modules/auth/domain/models/user.dart';
 import 'package:listadecoisa/core/services/banco.dart';
@@ -10,7 +11,7 @@ class CompartilhaController extends IController {
   final BancoFire banco;
   late Coisas lista;
   late UserP user;
-
+  var statusPage = ValueNotifier(StatusPage.loading);
   CompartilhaController({required this.gb, required this.banco});
 
   @override
@@ -18,18 +19,19 @@ class CompartilhaController extends IController {
 
   @override
   void init(BuildContext context) {
-    gb.isLoading = true;
     getLista();
   }
 
-  getLista() async {
-    await banco.getCoisa(idLista: gb.codigoList!, idUser: gb.codigoUser!).then((value) {
-      gb.isLoading = false;
-      lista = Coisas.fromSnapshot(value);
-    });
-    await banco.getUser(idUser: gb.codigoUser!).then((value) {
-      gb.isLoading = false;
-      user = UserP.fromSnapshot(value);
-    });
+  void getLista() async {
+    var valuelist = await banco.getCoisa(
+      idLista: gb.codigoList!,
+      idUser: gb.codigoUser!,
+    );
+    lista = Coisas.fromSnapshot(valuelist);
+    var valueUser = await banco.getUser(
+      idUser: gb.codigoUser!,
+    );
+    user = UserP.fromSnapshot(valueUser);
+    statusPage.value = StatusPage.done;
   }
 }

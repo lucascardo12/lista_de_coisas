@@ -110,6 +110,7 @@ class HomeController extends IController {
     try {
       initialLink = (await getInitialLink());
       if (initialLink != null) {
+        print(initialLink);
         gb.codigoList = initialLink.substring(33, initialLink.indexOf('@'));
         gb.codigoUser = initialLink.substring(initialLink.indexOf('@') + 1, initialLink.indexOf('*'));
         gb.codigRead = initialLink.substring(initialLink.indexOf('*') + 1, initialLink.length);

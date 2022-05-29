@@ -5,6 +5,7 @@ import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/modules/home/domain/models/compartilha.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.dart';
+import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
 
 class CompartilhaPage extends StatefulWidget {
@@ -31,67 +32,69 @@ class _CompartilhaPageState extends State<CompartilhaPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ct.gb.getSecondary(),
-      bottomNavigationBar: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          ButtonTextPadrao(
-            label: '  Cancelar  ',
-            onPressed: () => Navigator.pop(context),
-          ),
-          ButtonTextPadrao(
-            label: '  Confirmar  ',
-            onPressed: () async {
-              var comp = Compartilha(
-                idLista: ct.gb.codigoList,
-                idUser: ct.gb.codigoUser,
-                isRead: ct.gb.codigRead == 'true' ? true : false,
-              );
+    return ValueListenableBuilder(
+        valueListenable: ct.statusPage,
+        builder: (context, value, child) {
+          if (ct.statusPage.value == StatusPage.loading) return LoadPadrao();
+          return Scaffold(
+            backgroundColor: ct.gb.getSecondary(),
+            bottomNavigationBar: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ButtonTextPadrao(
+                  label: '  Cancelar  ',
+                  onPressed: () => Navigator.pop(context),
+                ),
+                ButtonTextPadrao(
+                  label: '  Confirmar  ',
+                  onPressed: () async {
+                    var comp = Compartilha(
+                      idLista: ct.gb.codigoList,
+                      idUser: ct.gb.codigoUser,
+                      isRead: ct.gb.codigRead == 'true' ? true : false,
+                    );
 
-              if (ct.gb.lisComp.value
-                  .where((element) => element.idLista == comp.idLista && element.idUser == comp.idUser)
-                  .isEmpty) {
-                ct.gb.lisComp.value.add(comp);
-                await ct.banco.criaAlteraComp(user: ct.gb.usuario!, coisas: comp);
-              } else {
-                await Fluttertoast.showToast(
-                    msg: "A lista já foi salva!!",
-                    toastLength: Toast.LENGTH_LONG,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 5,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 18.0);
-              }
-              Navigator.pop(context);
-            },
-          )
-        ],
-      ),
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        centerTitle: true,
-        backgroundColor: ct.gb.getPrimary(),
-        title: const Text(
-          'Lista Compartilhada',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-          ),
-        ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [ct.gb.getPrimary(), ct.gb.getSecondary()],
-          ),
-        ),
-        child: ct.gb.isLoading
-            ? LoadPadrao()
-            : ListView(
+                    if (ct.gb.lisComp.value
+                        .where((element) => element.idLista == comp.idLista && element.idUser == comp.idUser)
+                        .isEmpty) {
+                      ct.gb.lisComp.value.add(comp);
+                      await ct.banco.criaAlteraComp(user: ct.gb.usuario!, coisas: comp);
+                    } else {
+                      await Fluttertoast.showToast(
+                          msg: "A lista já foi salva!!",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 5,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 18.0);
+                    }
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ),
+            appBar: AppBar(
+              iconTheme: const IconThemeData(color: Colors.white),
+              centerTitle: true,
+              backgroundColor: ct.gb.getPrimary(),
+              title: const Text(
+                'Lista Compartilhada',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                ),
+              ),
+            ),
+            body: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [ct.gb.getPrimary(), ct.gb.getSecondary()],
+                ),
+              ),
+              child: ListView(
                 padding: const EdgeInsets.all(30),
                 children: [
                   Text(
@@ -111,7 +114,8 @@ class _CompartilhaPageState extends State<CompartilhaPage> {
                   )
                 ],
               ),
-      ),
-    );
+            ),
+          );
+        });
   }
 }
