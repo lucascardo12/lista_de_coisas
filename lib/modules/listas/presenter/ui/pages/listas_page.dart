@@ -42,70 +42,76 @@ class _ListasPageState extends State<ListasPage> {
           return Scaffold(
             body: WillPopScope(
               onWillPop: () => ct.bottonVoltar(context),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                      ct.gb.getPrimary(),
-                      ct.gb.getSecondary(),
-                    ],
+              child: RefreshIndicator(
+                color: ct.gb.getPrimary(),
+                backgroundColor: Colors.white,
+                strokeWidth: 4.0,
+                onRefresh: ct.atualizaCoisa,
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        ct.gb.getPrimary(),
+                        ct.gb.getSecondary(),
+                      ],
+                    ),
                   ),
-                ),
-                child: Form(
-                  key: ct.formKey,
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 60,
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          readOnly: ct.isComp ?? false,
-                          validator: (value) {
-                            if (value!.isEmpty) return "Titulo não pode ser vazio";
-                            return null;
-                          },
-                          onChanged: (value) => ct.coisas!.nome = value,
-                          style: const TextStyle(color: Colors.white, fontSize: 20),
-                          initialValue: ct.coisas?.nome,
-                          textAlign: TextAlign.center,
-                          cursorColor: Colors.white,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            labelText: ct.coisas!.nome!.isEmpty ? "    Digite um Titulo" : null,
-                            alignLabelWithHint: true,
-                            labelStyle: const TextStyle(
-                              color: Colors.white,
+                  child: Form(
+                    key: ct.formKey,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 60,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            readOnly: ct.isComp ?? false,
+                            validator: (value) {
+                              if (value!.isEmpty) return "Titulo não pode ser vazio";
+                              return null;
+                            },
+                            onChanged: (value) => ct.coisas!.nome = value,
+                            style: const TextStyle(color: Colors.white, fontSize: 20),
+                            initialValue: ct.coisas?.nome,
+                            textAlign: TextAlign.center,
+                            cursorColor: Colors.white,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              labelText: ct.coisas!.nome!.isEmpty ? "    Digite um Titulo" : null,
+                              alignLabelWithHint: true,
+                              labelStyle: const TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 8,
-                        child: AnimatedBuilder(
-                          animation: ct,
-                          builder: (context, child) => [
-                            ListaTexto(
-                              isComp: ct.isComp!,
-                              ct: ct,
-                              gb: ct.gb,
-                            ),
-                            ListaCheck(
-                              isComp: ct.isComp!,
-                              ct: ct,
-                              gb: ct.gb,
-                            ),
-                            ListaCompras(
-                              isComp: ct.isComp!,
-                              ct: ct,
-                              gb: ct.gb,
-                            ),
-                          ].elementAt(ct.coisas?.tipo ?? 0),
+                        Expanded(
+                          flex: 8,
+                          child: AnimatedBuilder(
+                            animation: ct,
+                            builder: (context, child) => [
+                              ListaTexto(
+                                isComp: ct.isComp!,
+                                ct: ct,
+                                gb: ct.gb,
+                              ),
+                              ListaCheck(
+                                isComp: ct.isComp!,
+                                ct: ct,
+                                gb: ct.gb,
+                              ),
+                              ListaCompras(
+                                isComp: ct.isComp!,
+                                ct: ct,
+                                gb: ct.gb,
+                              ),
+                            ].elementAt(ct.coisas?.tipo ?? 0),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

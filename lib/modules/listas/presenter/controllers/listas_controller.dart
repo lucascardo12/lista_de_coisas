@@ -55,6 +55,34 @@ class ListasController extends ChangeNotifier implements IController {
         fontSize: 18.0);
   }
 
+  Future<void> atualizaCoisa() async {
+    if (coisas?.idFire != null) {
+      statusPage.value = StatusPage.loading;
+      var auxi = gb.lisComp.value.indexWhere((element) => element.idLista == coisas!.idFire!);
+      if (auxi >= 0) {
+        var retCoisa = await banco.getCoisa(
+          idLista: coisas!.idFire!,
+          idUser: gb.lisComp.value.firstWhere((element) => element.idLista == coisas!.idFire).idUser,
+        );
+        coisas = Coisas.fromSnapshot(retCoisa);
+      } else {
+        var retCoisa = await banco.getCoisa(idLista: coisas!.idFire!, idUser: gb.usuario!.id!);
+        coisas = Coisas.fromSnapshot(retCoisa);
+      }
+
+      statusPage.value = StatusPage.done;
+      Fluttertoast.showToast(
+        msg: "Atualizado com Sucesso!!",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 5,
+        backgroundColor: gb.getPrimary(),
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
+    }
+  }
+
   Future<bool> bottonVoltar(BuildContext context) async {
     if (coisas!.idFire == null) {
       if (coisas!.checkCompras!.isNotEmpty ||
