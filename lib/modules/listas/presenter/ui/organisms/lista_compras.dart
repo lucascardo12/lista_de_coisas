@@ -22,24 +22,47 @@ class ListaCompras extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CircleAvatar(
-          backgroundColor: Colors.white,
-          child: IconButton(
-            icon: Icon(
-              Icons.add,
-              color: gb.getPrimary(),
+        Row(
+          children: [
+            const SizedBox(width: 8),
+            Checkbox(
+              fillColor: MaterialStateProperty.all(Colors.white),
+              checkColor: gb.getPrimary(),
+              onChanged: (bool? value) {
+                ct.marcaTodos = !ct.marcaTodos;
+                for (var element in ct.coisas!.checkCompras!) {
+                  if (element is CheckCompras) {
+                    element.feito = ct.marcaTodos;
+                  }
+                }
+                ct.coisas!.checklist!.removeWhere((element) => element.item == null);
+                ct.update();
+              },
+              value: ct.marcaTodos,
             ),
-            onPressed: () {
-              ct.coisas!.checkCompras!.add(
-                CheckCompras(
-                  feito: false,
-                  item: '',
-                  quant: 1,
+            const Spacer(),
+            CircleAvatar(
+              backgroundColor: Colors.white,
+              child: IconButton(
+                icon: Icon(
+                  Icons.add,
+                  color: gb.getPrimary(),
                 ),
-              );
-              ct.update();
-            },
-          ),
+                onPressed: () {
+                  ct.coisas!.checkCompras!.add(
+                    CheckCompras(
+                      feito: false,
+                      item: '',
+                      quant: 1,
+                    ),
+                  );
+                  ct.update();
+                },
+              ),
+            ),
+            const Spacer(),
+            const SizedBox(width: 50),
+          ],
         ),
         const Divider(
           color: Colors.white,

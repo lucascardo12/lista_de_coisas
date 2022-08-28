@@ -14,6 +14,7 @@ class ListasController extends ChangeNotifier implements IController {
   final Global gb;
   final BancoFire banco;
   final AdMob admob;
+  bool marcaTodos = false;
   bool? isComp;
   final formKey = GlobalKey<FormState>();
   Coisas? coisas;

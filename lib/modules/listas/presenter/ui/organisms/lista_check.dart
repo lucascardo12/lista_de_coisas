@@ -21,20 +21,43 @@ class ListaCheck extends StatelessWidget {
     return Column(
       children: [
         !isComp
-            ? CircleAvatar(
-                backgroundColor: Colors.white,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    color: gb.getPrimary(),
+            ? Row(
+                children: [
+                  const SizedBox(width: 8),
+                  Checkbox(
+                    fillColor: MaterialStateProperty.all(Colors.white),
+                    checkColor: gb.getPrimary(),
+                    onChanged: (bool? value) {
+                      ct.marcaTodos = !ct.marcaTodos;
+                      for (var element in ct.coisas!.checklist!) {
+                        if (element is Checklist) {
+                          element.feito = ct.marcaTodos;
+                        }
+                      }
+                      ct.coisas!.checklist!.removeWhere((element) => element.item == null);
+                      ct.update();
+                    },
+                    value: ct.marcaTodos,
                   ),
-                  onPressed: () {
-                    ct.coisas!.checklist!.add(
-                      Checklist(feito: false, item: ''),
-                    );
-                    ct.update();
-                  },
-                ),
+                  const Spacer(),
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.add,
+                        color: gb.getPrimary(),
+                      ),
+                      onPressed: () {
+                        ct.coisas!.checklist!.add(
+                          Checklist(feito: false, item: ''),
+                        );
+                        ct.update();
+                      },
+                    ),
+                  ),
+                  const Spacer(),
+                  const SizedBox(width: 50),
+                ],
               )
             : const SizedBox(),
         const SizedBox(height: 5),
