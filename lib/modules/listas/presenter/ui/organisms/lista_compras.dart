@@ -159,10 +159,6 @@ class ListaCompras extends StatelessWidget {
                                   readOnly: isComp,
                                   keyboardType: TextInputType.number,
                                   onEditingComplete: () => ct.node.nextFocus(),
-                                  validator: (value) {
-                                    if (value!.isEmpty) return "Conteudo não pode ser vazio";
-                                    return null;
-                                  },
                                   onChanged: (v) {
                                     ct.coisas!.checkCompras![i].valor =
                                         double.tryParse(v.replaceAll(',', '.')) ?? 0.0;
