@@ -10,7 +10,7 @@ class ServiceModule {
   void register() {
     di.registerLazySingleton(() => AdMob());
     di.registerLazySingleton(() => Global());
-    di.registerLazySingleton(() => BancoFire(di()));
+    di.registerLazySingleton(() => BancoFire());
   }
 
   Future<void> starting(BuildContext context, bool mounted) async {

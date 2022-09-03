@@ -3,20 +3,27 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
-import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
+import 'package:listadecoisa/core/interfaces/remote_database_inter.dart';
+import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/home_page.dart';
-import 'package:listadecoisa/core/services/banco.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:translator/translator.dart';
 
 class LoginController extends IController {
   final Global gb;
-  final BancoFire banco;
+  final IRemoteDataBase banco;
+  final AuthService authService;
+  final translator = GoogleTranslator();
   var loginControler = TextEditingController();
   var senhaControler = TextEditingController();
   bool isVali = false;
   var lObescure = ValueNotifier(true);
 
-  LoginController({required this.gb, required this.banco});
+  LoginController({
+    required this.gb,
+    required this.banco,
+    required this.authService,
+  });
 
   @override
   void dispose() {}
@@ -66,7 +73,7 @@ class LoginController extends IController {
             TextButton(
               child: const Text("Confirmar"),
               onPressed: () {
-                banco.resetarSenha(user: gb.usuario!);
+                authService.resetarSenha(user: gb.usuario!);
                 Navigator.pop(context);
               },
             ),
@@ -77,75 +84,102 @@ class LoginController extends IController {
   }
 
   Future<void> logar(bool mounted, BuildContext context) async {
-    gb.load(context);
-    var value = await banco.login(email: loginControler.text, password: senhaControler.text);
-    if (value != null) {
-      gb.usuario = value;
-      List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
-      for (var element in listCat) {
-        gb.lisCoisa.value.add(Coisas.fromSnapshot(element));
+    try {
+      gb.load(context);
+      var value = await authService.login(email: loginControler.text, password: senhaControler.text);
+      if (value != null) {
+        gb.usuario = value;
+        var userCo = jsonEncode(value);
+        gb.box.put('user', userCo);
+        gb.box.put("fezLogin", true);
+        gb.box.put('login', loginControler.text);
+        gb.box.put('senha', senhaControler.text);
+        gb.box.put('isAnonimo', false);
+        if (!mounted) return;
+        await Navigator.pushNamedAndRemoveUntil(
+          context,
+          HomePage.route,
+          (route) => false,
+        );
       }
-      var userCo = jsonEncode(value);
-      gb.box.put('user', userCo);
-      gb.box.put("fezLogin", true);
-      gb.box.put('login', loginControler.text);
-      gb.box.put('senha', senhaControler.text);
-      gb.box.put('isAnonimo', false);
       if (!mounted) return;
-      await Navigator.pushNamedAndRemoveUntil(
-        context,
-        HomePage.route,
-        (route) => false,
-      );
+      Navigator.pop(context, true);
+    } catch (e) {
+      dynamic error = e;
+      var auxi = await translator.translate(error.message ?? '', from: 'en', to: 'pt');
+      Fluttertoast.showToast(
+          msg: auxi.text,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 18.0);
     }
-    if (!mounted) return;
-    Navigator.pop(context, true);
   }
 
   Future<void> loginAnonimo(bool mounted, BuildContext context) async {
-    gb.load(context);
-    var value = await banco.criaUserAnonimo();
-    gb.usuario = value;
-    if (value != null) {
-      List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
-      for (var element in listCat) {
-        gb.lisCoisa.value.add(Coisas.fromSnapshot(element));
+    try {
+      gb.load(context);
+      var value = await authService.criaUserAnonimo();
+      gb.usuario = value;
+      if (value != null) {
+        var userCo = jsonEncode(value);
+        gb.box.put('user', userCo);
+        gb.box.put("fezLogin", true);
+        gb.box.put('isAnonimo', true);
+        if (!mounted) return;
+        await Navigator.of(context).pushNamedAndRemoveUntil(
+          HomePage.route,
+          (Route<dynamic> route) => false,
+        );
       }
-      var userCo = jsonEncode(value);
-      gb.box.put('user', userCo);
-      gb.box.put("fezLogin", true);
-      gb.box.put('isAnonimo', true);
       if (!mounted) return;
-      await Navigator.of(context).pushNamedAndRemoveUntil(
-        HomePage.route,
-        (Route<dynamic> route) => false,
-      );
+      Navigator.pop(context, true);
+    } catch (e) {
+      dynamic error = e;
+      var auxi = await translator.translate(error.message ?? '', from: 'en', to: 'pt');
+      Fluttertoast.showToast(
+          msg: auxi.text,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 18.0);
     }
-    if (!mounted) return;
-    Navigator.pop(context, true);
   }
 
   Future<void> loginGoogle(bool mounted, BuildContext context) async {
-    gb.load(context);
-    var value = await banco.criaUserGoogle();
-    gb.usuario = value;
-    if (value != null) {
-      List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
-      for (var element in listCat) {
-        gb.lisCoisa.value.add(Coisas.fromSnapshot(element));
+    try {
+      gb.load(context);
+      var value = await authService.criaUserGoogle();
+      gb.usuario = value;
+      if (value != null) {
+        var userCo = jsonEncode(value);
+        gb.box.put('user', userCo);
+        gb.box.put("fezLogin", true);
+        if (!mounted) return;
+        await Navigator.pushNamedAndRemoveUntil(
+          context,
+          HomePage.route,
+          (route) => false,
+        );
       }
-      var userCo = jsonEncode(value);
-      gb.box.put('user', userCo);
-      gb.box.put("fezLogin", true);
-      if (!mounted) return;
-      await Navigator.pushNamedAndRemoveUntil(
-        context,
-        HomePage.route,
-        (route) => false,
-      );
-    }
 
-    if (!mounted) return;
-    Navigator.pop(context, true);
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (e) {
+      dynamic error = e;
+      var auxi = await translator.translate(error.message ?? '', from: 'en', to: 'pt');
+      Fluttertoast.showToast(
+          msg: auxi.text,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 5,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 18.0);
+    }
   }
 }
