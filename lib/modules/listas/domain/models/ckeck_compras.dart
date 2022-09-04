@@ -12,10 +12,10 @@ class CheckCompras {
   });
 
   CheckCompras.fromJson(Map<String, dynamic> xjson)
-      : item = xjson['descri'],
-        feito = xjson['feito'],
-        quant = xjson['quant'],
-        valor = xjson['valor'];
+      : item = xjson['descri'] ?? '',
+        feito = xjson['feito'] ?? false,
+        quant = xjson['quant'] ?? 0,
+        valor = xjson['valor'] ?? 0.0;
 
   Map<String, dynamic> toJson() => {
         'descri': item,
