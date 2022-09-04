@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:listadecoisa/modules/home/presenter/controllers/home_controller.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
-import 'package:listadecoisa/core/services/global.dart';
 
 class ListCompartilhadaPage extends StatelessWidget {
-  final Global gb;
-
-  const ListCompartilhadaPage({super.key, required this.gb});
+  final HomeController ct;
+  const ListCompartilhadaPage({super.key, required this.ct});
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: gb.lisCoisaComp,
+      valueListenable: ct.lisCoisaComp,
       builder: (context, value, child) {
         return ListView.builder(
           padding: const EdgeInsets.only(
@@ -19,14 +18,14 @@ class ListCompartilhadaPage extends StatelessWidget {
             top: 10,
           ),
           shrinkWrap: true,
-          itemCount: gb.lisCoisaComp.value.length,
+          itemCount: ct.lisCoisaComp.value.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () => Navigator.pushNamed(
                 context,
                 ListasPage.route,
                 arguments: [
-                  gb.lisCoisaComp.value[index],
+                  ct.lisCoisaComp.value[index],
                   false,
                 ],
               ),
@@ -36,7 +35,7 @@ class ListCompartilhadaPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(gb.lisCoisaComp.value[index].nome ?? ''),
+                      Text(ct.lisCoisaComp.value[index].nome),
                     ],
                   ),
                 ),

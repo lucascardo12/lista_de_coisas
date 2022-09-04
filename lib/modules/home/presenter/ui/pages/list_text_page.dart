@@ -12,7 +12,7 @@ class ListTextoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: gb.lisCoisa,
+        valueListenable: ct.lisCoisa,
         builder: (context, value, child) {
           return ListView.builder(
             padding: const EdgeInsets.only(
@@ -21,14 +21,14 @@ class ListTextoPage extends StatelessWidget {
               top: 10,
             ),
             shrinkWrap: true,
-            itemCount: gb.lisCoisa.value.length,
+            itemCount: ct.lisCoisa.value.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () => Navigator.pushNamed(
                   context,
                   ListasPage.route,
                   arguments: [
-                    gb.lisCoisa.value[index],
+                    ct.lisCoisa.value[index],
                     false,
                   ],
                 ),
@@ -38,7 +38,7 @@ class ListTextoPage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(gb.lisCoisa.value[index].nome ?? ''),
+                        Text(ct.lisCoisa.value[index].nome),
                         PopupMenuButton(
                           icon: const Icon(Icons.more_vert),
                           itemBuilder: (BuildContext context) => <PopupMenuEntry>[
@@ -69,7 +69,7 @@ class ListTextoPage extends StatelessWidget {
                                 ct.showCompartilha(context: context, index: index);
                                 break;
                               case 1:
-                                await ct.showAlertDialog2(coisas: gb.lisCoisa.value[index], context: context);
+                                await ct.showAlertDialog2(coisas: ct.lisCoisa.value[index], context: context);
                                 break;
                               default:
                             }
