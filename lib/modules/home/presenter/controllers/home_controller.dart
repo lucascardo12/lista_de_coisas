@@ -63,7 +63,11 @@ class HomeController extends IController {
     List<Compartilha> listcomp = await compartilhaRepository.list(idUser: global.usuario!.id!);
     for (var element in listcomp) {
       var coisaComp = await coisasRepository.get(idUser: element.idUser, idDoc: element.idLista);
-      lisCoisaComp.value.add(coisaComp!);
+      if (coisaComp != null) {
+        lisCoisaComp.value.add(coisaComp);
+      } else {
+        await compartilhaRepository.remove(idUser: global.usuario!.id!, idDoc: element.idFire!);
+      }
     }
   }
 
