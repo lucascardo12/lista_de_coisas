@@ -7,8 +7,8 @@ class Checklist {
   });
 
   Checklist.fromJson(Map<String, dynamic> xjson)
-      : item = xjson['descri'],
-        feito = xjson['feito'];
+      : item = xjson['descri'] ?? '',
+        feito = xjson['feito'] ?? false;
 
   Map<String, dynamic> toJson() => {'descri': item, 'feito': feito};
 }
