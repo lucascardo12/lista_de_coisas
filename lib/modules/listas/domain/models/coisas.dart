@@ -32,14 +32,15 @@ class Coisas implements IModel {
   });
 
   Coisas.fromJson(Map<String, dynamic> xjson)
-      : nome = xjson['nome'],
-        descricao = xjson['descricao'],
+      : nome = xjson['nome'] ?? '',
+        descricao = xjson['descricao'] ?? '',
         idFire = xjson['idFire'],
-        checklist = xjson['checklist'].map<Checklist>((i) => Checklist.fromJson(i)).toList(),
-        checkCompras = xjson['checkCompras'].map<CheckCompras>((i) => CheckCompras.fromJson(i)).toList(),
+        checklist = (xjson['checklist'] ?? []).map<Checklist>((i) => Checklist.fromJson(i)).toList(),
+        checkCompras =
+            (xjson['checkCompras'] ?? []).map<CheckCompras>((i) => CheckCompras.fromJson(i)).toList(),
         creatAp = validationDate(xjson['creatAp']),
         updatAp = validationDate(xjson['updatAp']),
-        tipo = xjson['tipo'];
+        tipo = xjson['tipo'] ?? 0;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -60,6 +61,6 @@ class Coisas implements IModel {
     if (date is String) {
       return DateTime.parse(date);
     }
-    return date;
+    return date ?? DateTime.now();
   }
 }
