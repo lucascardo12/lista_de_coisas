@@ -28,9 +28,9 @@ class ListaTexto extends StatelessWidget {
             return null;
           },
           focusNode: ct.nodeText1,
-          autofocus: ct.coisas!.descricao!.isEmpty ? true : false,
+          autofocus: ct.coisas!.descricao.isEmpty ? true : false,
           maxLines: 300,
-          initialValue: ct.coisas!.descricao ?? '',
+          initialValue: ct.coisas!.descricao,
           onChanged: (value) => ct.coisas!.descricao = value,
           minLines: 20,
           cursorColor: Colors.white,

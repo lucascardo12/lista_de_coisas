@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
+import 'package:listadecoisa/modules/home/domain/repositories/compartilha_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
-import 'package:listadecoisa/modules/auth/domain/models/user.dart';
 import 'package:listadecoisa/core/services/admob.dart';
-import 'package:listadecoisa/core/services/banco.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
 
 const umaHora = 2880000;
 
 class ListasController extends ChangeNotifier implements IController {
   final Global gb;
-  final BancoFire banco;
   final AdMob admob;
+  final ICompartilhaRepository compartilhaRepository;
+  final ICoisasRepository coisasRepository;
   bool marcaTodos = false;
   bool? isComp;
   final formKey = GlobalKey<FormState>();
@@ -21,11 +22,13 @@ class ListasController extends ChangeNotifier implements IController {
   late FocusScopeNode node;
   final FocusNode nodeText1 = FocusNode();
   var statusPage = ValueNotifier(StatusPage.loading);
+  final TextEditingController quant = TextEditingController();
 
   ListasController({
     required this.gb,
-    required this.banco,
+    required this.coisasRepository,
     required this.admob,
+    required this.compartilhaRepository,
   });
 
   @override
@@ -38,13 +41,12 @@ class ListasController extends ChangeNotifier implements IController {
   }
 
   Future<void> criaCoisa({required Coisas coisa}) async {
-    var auxi = gb.lisComp.value.indexWhere((element) => element.idLista == coisa.idFire);
-    if (auxi >= 0) {
-      await banco.criaAlteraCoisas(
-          coisas: coisa,
-          user: UserP(id: gb.lisComp.value.firstWhere((element) => element.idLista == coisa.idFire).idUser));
+    var auxi = await compartilhaRepository.list(idUser: gb.usuario!.id!);
+    var indexAuxi = auxi.indexWhere((element) => element.idLista == coisa.idFire);
+    if (indexAuxi >= 0) {
+      await coisasRepository.createUpdate(idUser: auxi[indexAuxi].idUser, object: coisa);
     } else {
-      await banco.criaAlteraCoisas(coisas: coisa, user: gb.usuario!);
+      await coisasRepository.createUpdate(idUser: gb.usuario!.id!, object: coisa);
     }
     Fluttertoast.showToast(
         msg: coisa.idFire != null ? "Alterado com Sucesso!!" : "Criado com Sucesso!!",
@@ -57,18 +59,17 @@ class ListasController extends ChangeNotifier implements IController {
   }
 
   Future<void> atualizaCoisa() async {
-    if (coisas?.idFire != null) {
+    if (coisas?.idFire != null && isComp == true) {
       statusPage.value = StatusPage.loading;
-      var auxi = gb.lisComp.value.indexWhere((element) => element.idLista == coisas!.idFire!);
-      if (auxi >= 0) {
-        var retCoisa = await banco.getCoisa(
-          idLista: coisas!.idFire!,
-          idUser: gb.lisComp.value.firstWhere((element) => element.idLista == coisas!.idFire).idUser,
+      var auxi = await compartilhaRepository.list(idUser: gb.usuario!.id!);
+      var indexAuxi = auxi.indexWhere((element) => element.idLista == coisas!.idFire);
+      if (indexAuxi >= 0) {
+        coisas = await coisasRepository.get(
+          idDoc: coisas!.idFire!,
+          idUser: auxi[indexAuxi].idUser,
         );
-        coisas = Coisas.fromSnapshot(retCoisa);
       } else {
-        var retCoisa = await banco.getCoisa(idLista: coisas!.idFire!, idUser: gb.usuario!.id!);
-        coisas = Coisas.fromSnapshot(retCoisa);
+        coisas = await coisasRepository.get(idDoc: coisas!.idFire!, idUser: gb.usuario!.id!);
       }
 
       statusPage.value = StatusPage.done;
@@ -86,9 +87,7 @@ class ListasController extends ChangeNotifier implements IController {
 
   Future<bool> bottonVoltar(BuildContext context) async {
     if (coisas!.idFire == null) {
-      if (coisas!.checkCompras!.isNotEmpty ||
-          coisas!.checklist!.isNotEmpty ||
-          coisas!.descricao!.isNotEmpty) {
+      if (coisas!.checkCompras.isNotEmpty || coisas!.checklist.isNotEmpty || coisas!.descricao.isNotEmpty) {
         await showDialog(
           context: context,
           builder: (BuildContext context) {

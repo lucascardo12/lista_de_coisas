@@ -1,28 +1,21 @@
 class CheckCompras {
-  String? item;
-  bool? feito;
-  int? quant;
-  double? valor;
+  String item;
+  bool feito;
+  int quant;
+  double valor;
+
   CheckCompras({
-    this.item,
-    this.feito,
-    this.quant,
-    this.valor,
+    required this.item,
+    required this.feito,
+    required this.quant,
+    required this.valor,
   });
 
-  CheckCompras.fromJson(Map<String, dynamic> xjson) {
-    item = xjson['descri'];
-    feito = xjson['feito'];
-    quant = xjson['quant'];
-    valor = xjson['valor'];
-  }
-
-  CheckCompras.toMap(Map<String, dynamic> map) {
-    map["descri"] = item;
-    map["feito"] = feito;
-    map['quant'] = quant;
-    map['valor'] = valor;
-  }
+  CheckCompras.fromJson(Map<String, dynamic> xjson)
+      : item = xjson['descri'],
+        feito = xjson['feito'],
+        quant = xjson['quant'],
+        valor = xjson['valor'];
 
   Map<String, dynamic> toJson() => {
         'descri': item,

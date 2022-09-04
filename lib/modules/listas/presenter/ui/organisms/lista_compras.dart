@@ -30,12 +30,10 @@ class ListaCompras extends StatelessWidget {
               checkColor: gb.getPrimary(),
               onChanged: (bool? value) {
                 ct.marcaTodos = !ct.marcaTodos;
-                for (var element in ct.coisas!.checkCompras!) {
-                  if (element is CheckCompras) {
-                    element.feito = ct.marcaTodos;
-                  }
+                for (var element in ct.coisas!.checkCompras) {
+                  element.feito = ct.marcaTodos;
                 }
-                ct.coisas!.checklist!.removeWhere((element) => element.item == null);
+                ct.coisas!.checklist.removeWhere((element) => element.item.isEmpty);
                 ct.update();
               },
               value: ct.marcaTodos,
@@ -49,10 +47,11 @@ class ListaCompras extends StatelessWidget {
                   color: gb.getPrimary(),
                 ),
                 onPressed: () {
-                  ct.coisas!.checkCompras!.add(
+                  ct.coisas!.checkCompras.add(
                     CheckCompras(
                       feito: false,
                       item: '',
+                      valor: 0.0,
                       quant: 1,
                     ),
                   );
@@ -78,35 +77,37 @@ class ListaCompras extends StatelessWidget {
               child: ListView.builder(
                 padding: const EdgeInsets.only(top: 15),
                 shrinkWrap: true,
-                itemCount: ct.coisas!.checkCompras!.length,
+                itemCount: ct.coisas!.checkCompras.length,
                 itemBuilder: (BuildContext context, int i) {
-                  CheckCompras item = ct.coisas!.checkCompras![i];
-                  return item.feito != null
-                      ? Row(
+                  CheckCompras item = ct.coisas!.checkCompras[i];
+                  if (item.feito) {
+                    return Column(
+                      children: [
+                        Row(
                           children: [
                             Checkbox(
                               fillColor: MaterialStateProperty.all(Colors.white),
                               checkColor: gb.getPrimary(),
                               onChanged: (bool? value) {
-                                ct.coisas!.checkCompras![i].feito = value;
+                                ct.coisas!.checkCompras[i].feito = value!;
                                 ct.update();
                               },
-                              value: ct.coisas!.checkCompras![i].feito ?? false,
+                              value: ct.coisas!.checkCompras[i].feito,
                             ),
                             Expanded(
-                                flex: 7,
+                                flex: 5,
                                 child: TextFormField(
                                   readOnly: isComp,
                                   onEditingComplete: () => ct.node.nextFocus(),
                                   validator: (value) {
-                                    ct.coisas!.checkCompras![i].item = value;
-                                    if (value!.isEmpty) return "Conteudo não pode ser vazio";
+                                    ct.coisas!.checkCompras[i].item = value!;
+                                    if (value.isEmpty) return "Conteudo não pode ser vazio";
                                     return null;
                                   },
-                                  autofocus: ct.coisas!.checkCompras![i].item.isEmpty ? true : false,
-                                  initialValue: ct.coisas!.checkCompras![i].item,
+                                  autofocus: ct.coisas!.checkCompras[i].item.isEmpty ? true : false,
+                                  initialValue: ct.coisas!.checkCompras[i].item,
                                   cursorColor: Colors.white,
-                                  onChanged: (v) => ct.coisas!.checkCompras![i].item = v,
+                                  onChanged: (v) => ct.coisas!.checkCompras[i].item = v,
                                   style: const TextStyle(color: Colors.white),
                                   textAlign: TextAlign.center,
                                   minLines: 1,
@@ -127,47 +128,17 @@ class ListaCompras extends StatelessWidget {
                                 flex: 2,
                                 child: TextFormField(
                                   readOnly: isComp,
-                                  onEditingComplete: () => ct.node.nextFocus(),
-                                  validator: (value) {
-                                    if (value!.isEmpty) return "Conteudo não pode ser vazio";
-                                    return null;
-                                  },
-                                  onChanged: (v) {
-                                    ct.coisas!.checkCompras![i].quant = int.tryParse(v) ?? 0;
-                                    ct.update();
-                                  },
-                                  autofocus: ct.coisas!.checkCompras![i].quant == null ? true : false,
-                                  initialValue: ct.coisas!.checkCompras![i].quant.toString(),
-                                  cursorColor: Colors.white,
-                                  keyboardType: TextInputType.number,
-                                  style: const TextStyle(color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.zero,
-                                    hintText: "Qts",
-                                    border: BordaPadrao.check(),
-                                    enabledBorder: BordaPadrao.check(),
-                                    focusedBorder: BordaPadrao.check(),
-                                    hintStyle: const TextStyle(color: Colors.white),
-                                    alignLabelWithHint: true,
-                                    labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
-                                  ),
-                                )),
-                            Expanded(
-                                flex: 2,
-                                child: TextFormField(
-                                  readOnly: isComp,
                                   keyboardType: TextInputType.number,
                                   onEditingComplete: () => ct.node.nextFocus(),
                                   onChanged: (v) {
-                                    ct.coisas!.checkCompras![i].valor =
-                                        double.tryParse(v.replaceAll(',', '.')) ?? 0.0;
+                                    var valor = v.replaceAll('.', '').replaceFirst(',', '.');
+                                    ct.coisas!.checkCompras[i].valor = double.tryParse(valor) ?? 0.0;
                                     ct.update();
                                   },
-                                  autofocus: ct.coisas!.checkCompras![i].valor == null ? true : false,
-                                  initialValue: ct.coisas!.checkCompras![i].valor == null
+                                  autofocus: ct.coisas!.checkCompras[i].valor == 0.0 ? true : false,
+                                  initialValue: ct.coisas!.checkCompras[i].valor == 0.0
                                       ? ''
-                                      : ct.coisas!.checkCompras![i].valor.toString(),
+                                      : ct.coisas!.checkCompras[i].valor.toString(),
                                   cursorColor: Colors.white,
                                   style: const TextStyle(color: Colors.white),
                                   inputFormatters: [
@@ -175,8 +146,8 @@ class ListaCompras extends StatelessWidget {
                                   ],
                                   textAlign: TextAlign.center,
                                   decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.zero,
                                     hintText: "R\u0024",
+                                    contentPadding: EdgeInsets.zero,
                                     border: BordaPadrao.check(),
                                     enabledBorder: BordaPadrao.check(),
                                     focusedBorder: BordaPadrao.check(),
@@ -192,13 +163,90 @@ class ListaCompras extends StatelessWidget {
                                 color: Colors.white,
                               ),
                               onPressed: () {
-                                ct.coisas!.checkCompras![i] = CheckCompras(feito: null);
+                                ct.coisas!.checkCompras[i] = CheckCompras(
+                                  feito: false,
+                                  item: '',
+                                  quant: 0,
+                                  valor: 0.0,
+                                );
                                 ct.update();
                               },
                             )
                           ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12, top: 12, right: 32),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  ct.coisas!.checkCompras[i].quant++;
+                                  ct.quant.text = ct.coisas!.checkCompras[i].quant.toString();
+                                  ct.update();
+                                },
+                                icon: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: Icon(
+                                    Icons.add,
+                                    color: gb.getPrimary(),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: SizedBox(
+                                  width: 50,
+                                  child: TextFormField(
+                                    readOnly: isComp,
+                                    keyboardType: TextInputType.number,
+                                    onEditingComplete: () => ct.node.nextFocus(),
+                                    controller: ct.quant,
+                                    onChanged: (v) {
+                                      ct.coisas!.checkCompras[i].quant = int.tryParse(v) ?? 0;
+                                      ct.update();
+                                    },
+                                    autofocus: ct.coisas!.checkCompras[i].quant == 0.0 ? true : false,
+                                    cursorColor: Colors.white,
+                                    style: const TextStyle(color: Colors.white),
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.zero,
+                                      border: BordaPadrao.check(),
+                                      enabledBorder: BordaPadrao.check(),
+                                      focusedBorder: BordaPadrao.check(),
+                                      hintStyle: const TextStyle(color: Colors.white),
+                                      alignLabelWithHint: true,
+                                      labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  ct.coisas!.checkCompras[i].quant;
+                                  if (ct.coisas!.checkCompras[i].quant > 0) {
+                                    ct.coisas!.checkCompras[i].quant--;
+                                    ct.quant.text = ct.coisas!.checkCompras[i].quant.toString();
+                                    ct.update();
+                                  }
+                                },
+                                icon: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: Icon(
+                                    Icons.remove,
+                                    color: gb.getPrimary(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         )
-                      : Container();
+                      ],
+                    );
+                  } else {
+                    return Container();
+                  }
                 },
               ),
             ),
@@ -210,7 +258,7 @@ class ListaCompras extends StatelessWidget {
         SizedBox(
           height: 40,
           child: Text(
-            "Valor total da compra R\u0024: ${ct.retornaTotal(ct.coisas!.checkCompras!)}",
+            "Valor total da compra R\u0024: ${ct.retornaTotal(ct.coisas!.checkCompras)}",
             style: Theme.of(context).textTheme.headline6!.copyWith(
                   color: Colors.white,
                 ),

@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:listadecoisa/core/interfaces/model_inter.dart';
 import 'package:listadecoisa/modules/listas/domain/models/check_list.dart';
 import 'package:listadecoisa/modules/listas/domain/models/ckeck_compras.dart';
 
 class Coisas implements IModel {
+  static String idCollection = 'coisas';
   String nome;
   String descricao;
   int tipo;
@@ -33,10 +35,10 @@ class Coisas implements IModel {
       : nome = xjson['nome'],
         descricao = xjson['descricao'],
         idFire = xjson['idFire'],
-        checklist = xjson['checklist'].map((i) => Checklist.fromJson(i)).toList(),
-        checkCompras = xjson['checkCompras'].map((i) => CheckCompras.fromJson(i)).toList(),
-        creatAp = xjson['creatAp'],
-        updatAp = xjson['updatAp'],
+        checklist = xjson['checklist'].map<Checklist>((i) => Checklist.fromJson(i)).toList(),
+        checkCompras = xjson['checkCompras'].map<CheckCompras>((i) => CheckCompras.fromJson(i)).toList(),
+        creatAp = validationDate(xjson['creatAp']),
+        updatAp = validationDate(xjson['updatAp']),
         tipo = xjson['tipo'];
 
   @override
@@ -50,4 +52,14 @@ class Coisas implements IModel {
         'creatAp': creatAp,
         'updatAp': updatAp,
       };
+
+  static DateTime validationDate(date) {
+    if (date is Timestamp) {
+      return date.toDate();
+    }
+    if (date is String) {
+      return DateTime.parse(date);
+    }
+    return date;
+  }
 }
