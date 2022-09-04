@@ -32,7 +32,6 @@ class ListaCheck extends StatelessWidget {
                       for (var element in ct.coisas!.checklist) {
                         element.feito = ct.marcaTodos;
                       }
-                      ct.coisas!.checklist.removeWhere((element) => element.item.isEmpty);
                       ct.update();
                     },
                     value: ct.marcaTodos,
@@ -75,76 +74,71 @@ class ListaCheck extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: ct.coisas!.checklist.length,
                 itemBuilder: (BuildContext context, int i) {
-                  Checklist item = ct.coisas!.checklist[i];
-                  if (item.feito) {
-                    return Row(
-                      children: [
-                        !isComp
-                            ? Checkbox(
-                                fillColor: MaterialStateProperty.all(Colors.white),
-                                checkColor: gb.getPrimary(),
-                                onChanged: (bool? value) {
-                                  ct.coisas!.checklist[i].feito = value!;
-                                  ct.update();
-                                },
-                                value: ct.coisas!.checklist[i].feito,
-                              )
-                            : const SizedBox(
-                                width: 20,
+                  return Row(
+                    children: [
+                      !isComp
+                          ? Checkbox(
+                              fillColor: MaterialStateProperty.all(Colors.white),
+                              checkColor: gb.getPrimary(),
+                              onChanged: (bool? value) {
+                                ct.coisas!.checklist[i].feito = value!;
+                                ct.update();
+                              },
+                              value: ct.coisas!.checklist[i].feito,
+                            )
+                          : const SizedBox(
+                              width: 20,
+                            ),
+                      Expanded(
+                          child: TextFormField(
+                        readOnly: isComp,
+                        onEditingComplete: () => ct.node.nextFocus(),
+                        validator: (value) {
+                          ct.coisas!.checklist[i].item = value!;
+                          if (value.isEmpty) return "Conteudo não pode ser vazio";
+                          return null;
+                        },
+                        onChanged: (v) => ct.coisas!.checklist[i].item = v,
+                        autofocus: ct.coisas!.checklist[i].item.isEmpty ? true : false,
+                        initialValue: ct.coisas!.checklist[i].item,
+                        cursorColor: Colors.white,
+                        minLines: 1,
+                        maxLines: 2,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          decoration: ct.coisas!.checklist[i].feito ? TextDecoration.lineThrough : null,
+                          decorationThickness: 2.85,
+                          decorationColor: Colors.red,
+                        ),
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.zero,
+                          border: BordaPadrao.check(),
+                          enabledBorder: BordaPadrao.check(),
+                          focusedBorder: BordaPadrao.check(),
+                          hintStyle: const TextStyle(color: Colors.white),
+                          alignLabelWithHint: true,
+                          hintText: "",
+                          labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      )),
+                      !isComp
+                          ? IconButton(
+                              icon: const Icon(
+                                Icons.clear,
+                                color: Colors.red,
                               ),
-                        Expanded(
-                            child: TextFormField(
-                          readOnly: isComp,
-                          onEditingComplete: () => ct.node.nextFocus(),
-                          validator: (value) {
-                            ct.coisas!.checklist[i].item = value!;
-                            if (value.isEmpty) return "Conteudo não pode ser vazio";
-                            return null;
-                          },
-                          onChanged: (v) => ct.coisas!.checklist[i].item = v,
-                          autofocus: ct.coisas!.checklist[i].item.isEmpty ? true : false,
-                          initialValue: ct.coisas!.checklist[i].item,
-                          cursorColor: Colors.white,
-                          minLines: 1,
-                          maxLines: 2,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            decoration: ct.coisas!.checklist[i].feito ? TextDecoration.lineThrough : null,
-                            decorationThickness: 2.85,
-                            decorationColor: Colors.red,
-                          ),
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.zero,
-                            border: BordaPadrao.check(),
-                            enabledBorder: BordaPadrao.check(),
-                            focusedBorder: BordaPadrao.check(),
-                            hintStyle: const TextStyle(color: Colors.white),
-                            alignLabelWithHint: true,
-                            hintText: "",
-                            labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        )),
-                        !isComp
-                            ? IconButton(
-                                icon: const Icon(
-                                  Icons.clear,
-                                  color: Colors.red,
-                                ),
-                                onPressed: () {
-                                  ct.coisas!.checklist[i] = Checklist(feito: false, item: '');
-                                  ct.update();
-                                },
-                              )
-                            : const SizedBox(
-                                width: 20,
-                              )
-                      ],
-                    );
-                  } else {
-                    return Container();
-                  }
+                              onPressed: () {
+                                ct.coisas!.checklist[i] = Checklist(feito: false, item: '');
+                                ct.update();
+                              },
+                            )
+                          : const SizedBox(
+                              width: 20,
+                            )
+                    ],
+                  );
                 },
               ),
             ),

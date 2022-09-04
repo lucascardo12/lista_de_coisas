@@ -79,74 +79,135 @@ class ListaCompras extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: ct.coisas!.checkCompras.length,
                 itemBuilder: (BuildContext context, int i) {
-                  CheckCompras item = ct.coisas!.checkCompras[i];
-                  if (item.feito) {
-                    return Column(
-                      children: [
-                        Row(
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          Checkbox(
+                            fillColor: MaterialStateProperty.all(Colors.white),
+                            checkColor: gb.getPrimary(),
+                            onChanged: (bool? value) {
+                              ct.coisas!.checkCompras[i].feito = value!;
+                              ct.update();
+                            },
+                            value: ct.coisas!.checkCompras[i].feito,
+                          ),
+                          Expanded(
+                              flex: 5,
+                              child: TextFormField(
+                                readOnly: isComp,
+                                onEditingComplete: () => ct.node.nextFocus(),
+                                validator: (value) {
+                                  ct.coisas!.checkCompras[i].item = value!;
+                                  if (value.isEmpty) return "Conteudo não pode ser vazio";
+                                  return null;
+                                },
+                                autofocus: ct.coisas!.checkCompras[i].item.isEmpty ? true : false,
+                                initialValue: ct.coisas!.checkCompras[i].item,
+                                cursorColor: Colors.white,
+                                onChanged: (v) => ct.coisas!.checkCompras[i].item = v,
+                                style: const TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                                minLines: 1,
+                                maxLines: 2,
+                                maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.zero,
+                                  border: BordaPadrao.check(),
+                                  enabledBorder: BordaPadrao.check(),
+                                  focusedBorder: BordaPadrao.check(),
+                                  hintStyle: const TextStyle(color: Colors.white),
+                                  alignLabelWithHint: true,
+                                  hintText: "",
+                                  labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
+                                ),
+                              )),
+                          Expanded(
+                              flex: 2,
+                              child: TextFormField(
+                                readOnly: isComp,
+                                keyboardType: TextInputType.number,
+                                onEditingComplete: () => ct.node.nextFocus(),
+                                onChanged: (v) {
+                                  var valor = v.replaceAll('.', '').replaceFirst(',', '.');
+                                  ct.coisas!.checkCompras[i].valor = double.tryParse(valor) ?? 0.0;
+                                  ct.update();
+                                },
+                                autofocus: ct.coisas!.checkCompras[i].valor == 0.0 ? true : false,
+                                initialValue: ct.coisas!.checkCompras[i].valor == 0.0
+                                    ? ''
+                                    : ct.coisas!.checkCompras[i].valor.toString(),
+                                cursorColor: Colors.white,
+                                style: const TextStyle(color: Colors.white),
+                                inputFormatters: [
+                                  CurrencyTextInputFormatter(decimalDigits: 2, symbol: '', locale: 'pt-br'),
+                                ],
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  hintText: "R\u0024",
+                                  contentPadding: EdgeInsets.zero,
+                                  border: BordaPadrao.check(),
+                                  enabledBorder: BordaPadrao.check(),
+                                  focusedBorder: BordaPadrao.check(),
+                                  hintStyle: const TextStyle(color: Colors.white),
+                                  alignLabelWithHint: true,
+                                  labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
+                                ),
+                              )),
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: const Icon(
+                              Icons.clear,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              ct.coisas!.checkCompras[i] = CheckCompras(
+                                feito: false,
+                                item: '',
+                                quant: 0,
+                                valor: 0.0,
+                              );
+                              ct.update();
+                            },
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12, top: 12, right: 32),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Checkbox(
-                              fillColor: MaterialStateProperty.all(Colors.white),
-                              checkColor: gb.getPrimary(),
-                              onChanged: (bool? value) {
-                                ct.coisas!.checkCompras[i].feito = value!;
+                            IconButton(
+                              onPressed: () {
+                                ct.coisas!.checkCompras[i].quant++;
+                                ct.quant.text = ct.coisas!.checkCompras[i].quant.toString();
                                 ct.update();
                               },
-                              value: ct.coisas!.checkCompras[i].feito,
+                              icon: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.add,
+                                  color: gb.getPrimary(),
+                                ),
+                              ),
                             ),
-                            Expanded(
-                                flex: 5,
-                                child: TextFormField(
-                                  readOnly: isComp,
-                                  onEditingComplete: () => ct.node.nextFocus(),
-                                  validator: (value) {
-                                    ct.coisas!.checkCompras[i].item = value!;
-                                    if (value.isEmpty) return "Conteudo não pode ser vazio";
-                                    return null;
-                                  },
-                                  autofocus: ct.coisas!.checkCompras[i].item.isEmpty ? true : false,
-                                  initialValue: ct.coisas!.checkCompras[i].item,
-                                  cursorColor: Colors.white,
-                                  onChanged: (v) => ct.coisas!.checkCompras[i].item = v,
-                                  style: const TextStyle(color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                  minLines: 1,
-                                  maxLines: 2,
-                                  maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.zero,
-                                    border: BordaPadrao.check(),
-                                    enabledBorder: BordaPadrao.check(),
-                                    focusedBorder: BordaPadrao.check(),
-                                    hintStyle: const TextStyle(color: Colors.white),
-                                    alignLabelWithHint: true,
-                                    hintText: "",
-                                    labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
-                                  ),
-                                )),
-                            Expanded(
-                                flex: 2,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              child: SizedBox(
+                                width: 50,
                                 child: TextFormField(
                                   readOnly: isComp,
                                   keyboardType: TextInputType.number,
                                   onEditingComplete: () => ct.node.nextFocus(),
+                                  controller: ct.quant,
                                   onChanged: (v) {
-                                    var valor = v.replaceAll('.', '').replaceFirst(',', '.');
-                                    ct.coisas!.checkCompras[i].valor = double.tryParse(valor) ?? 0.0;
+                                    ct.coisas!.checkCompras[i].quant = int.tryParse(v) ?? 0;
                                     ct.update();
                                   },
-                                  autofocus: ct.coisas!.checkCompras[i].valor == 0.0 ? true : false,
-                                  initialValue: ct.coisas!.checkCompras[i].valor == 0.0
-                                      ? ''
-                                      : ct.coisas!.checkCompras[i].valor.toString(),
+                                  autofocus: ct.coisas!.checkCompras[i].quant == 0.0 ? true : false,
                                   cursorColor: Colors.white,
                                   style: const TextStyle(color: Colors.white),
-                                  inputFormatters: [
-                                    CurrencyTextInputFormatter(decimalDigits: 2, symbol: '', locale: 'pt-br'),
-                                  ],
-                                  textAlign: TextAlign.center,
                                   decoration: InputDecoration(
-                                    hintText: "R\u0024",
                                     contentPadding: EdgeInsets.zero,
                                     border: BordaPadrao.check(),
                                     enabledBorder: BordaPadrao.check(),
@@ -155,98 +216,32 @@ class ListaCompras extends StatelessWidget {
                                     alignLabelWithHint: true,
                                     labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
                                   ),
-                                )),
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: const Icon(
-                                Icons.clear,
-                                color: Colors.white,
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
+                            ),
+                            IconButton(
                               onPressed: () {
-                                ct.coisas!.checkCompras[i] = CheckCompras(
-                                  feito: false,
-                                  item: '',
-                                  quant: 0,
-                                  valor: 0.0,
-                                );
-                                ct.update();
-                              },
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 12, top: 12, right: 32),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  ct.coisas!.checkCompras[i].quant++;
+                                ct.coisas!.checkCompras[i].quant;
+                                if (ct.coisas!.checkCompras[i].quant > 0) {
+                                  ct.coisas!.checkCompras[i].quant--;
                                   ct.quant.text = ct.coisas!.checkCompras[i].quant.toString();
                                   ct.update();
-                                },
-                                icon: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  child: Icon(
-                                    Icons.add,
-                                    color: gb.getPrimary(),
-                                  ),
+                                }
+                              },
+                              icon: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: Icon(
+                                  Icons.remove,
+                                  color: gb.getPrimary(),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                child: SizedBox(
-                                  width: 50,
-                                  child: TextFormField(
-                                    readOnly: isComp,
-                                    keyboardType: TextInputType.number,
-                                    onEditingComplete: () => ct.node.nextFocus(),
-                                    controller: ct.quant,
-                                    onChanged: (v) {
-                                      ct.coisas!.checkCompras[i].quant = int.tryParse(v) ?? 0;
-                                      ct.update();
-                                    },
-                                    autofocus: ct.coisas!.checkCompras[i].quant == 0.0 ? true : false,
-                                    cursorColor: Colors.white,
-                                    style: const TextStyle(color: Colors.white),
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.zero,
-                                      border: BordaPadrao.check(),
-                                      enabledBorder: BordaPadrao.check(),
-                                      focusedBorder: BordaPadrao.check(),
-                                      hintStyle: const TextStyle(color: Colors.white),
-                                      alignLabelWithHint: true,
-                                      labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  ct.coisas!.checkCompras[i].quant;
-                                  if (ct.coisas!.checkCompras[i].quant > 0) {
-                                    ct.coisas!.checkCompras[i].quant--;
-                                    ct.quant.text = ct.coisas!.checkCompras[i].quant.toString();
-                                    ct.update();
-                                  }
-                                },
-                                icon: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  child: Icon(
-                                    Icons.remove,
-                                    color: gb.getPrimary(),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    );
-                  } else {
-                    return Container();
-                  }
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  );
                 },
               ),
             ),
