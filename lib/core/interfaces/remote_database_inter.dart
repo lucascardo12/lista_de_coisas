@@ -21,7 +21,7 @@ abstract class IRemoteDataBase {
     required String collection,
   });
 
-  Future<Map<String, dynamic>> get({
+  Future<Map<String, dynamic>?> get({
     required String idUser,
     required String collection,
     required String idDoc,
