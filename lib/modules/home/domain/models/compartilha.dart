@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:listadecoisa/core/interfaces/model_inter.dart';
 
 class Compartilha implements IModel {
@@ -27,8 +28,8 @@ class Compartilha implements IModel {
       : idUser = xjson['idUser'],
         idLista = xjson['idLista'],
         isRead = xjson['isRead'],
-        creatAp = xjson['creatAp'],
-        updatAp = xjson['updatAp'],
+        creatAp = validationDate(xjson['creatAp']),
+        updatAp = validationDate(xjson['updatAp']),
         idFire = xjson['idFire'];
 
   @override
@@ -40,4 +41,13 @@ class Compartilha implements IModel {
         'updatAp': updatAp,
         'creatAp': creatAp,
       };
+  static DateTime validationDate(date) {
+    if (date is Timestamp) {
+      return date.toDate();
+    }
+    if (date is String) {
+      return DateTime.parse(date);
+    }
+    return date ?? DateTime.now();
+  }
 }
