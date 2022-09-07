@@ -1,20 +1,19 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
 import 'package:listadecoisa/modules/listas/domain/models/ckeck_compras.dart';
 import 'package:listadecoisa/core/services/global.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/atoms/borda_padrao.dart';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:listadecoisa/modules/listas/presenter/ui/atoms/field_list.dart';
+import 'package:listadecoisa/modules/listas/presenter/ui/organisms/field_quantidade.dart';
 
 class ListaCompras extends StatelessWidget {
   final Global gb;
   final ListasController ct;
-  final bool isComp;
 
   const ListaCompras({
     super.key,
     required this.ct,
-    required this.isComp,
     required this.gb,
   });
 
@@ -93,67 +92,43 @@ class ListaCompras extends StatelessWidget {
                             value: ct.coisas!.checkCompras[i].feito,
                           ),
                           Expanded(
-                              flex: 5,
-                              child: TextFormField(
-                                readOnly: isComp,
-                                onEditingComplete: () => ct.node.nextFocus(),
-                                validator: (value) {
-                                  ct.coisas!.checkCompras[i].item = value!;
-                                  if (value.isEmpty) return "Conteudo não pode ser vazio";
-                                  return null;
-                                },
-                                autofocus: ct.coisas!.checkCompras[i].item.isEmpty ? true : false,
-                                initialValue: ct.coisas!.checkCompras[i].item,
-                                cursorColor: Colors.white,
-                                onChanged: (v) => ct.coisas!.checkCompras[i].item = v,
-                                style: const TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                                minLines: 1,
-                                maxLines: 2,
-                                maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.zero,
-                                  border: BordaPadrao.check(),
-                                  enabledBorder: BordaPadrao.check(),
-                                  focusedBorder: BordaPadrao.check(),
-                                  hintStyle: const TextStyle(color: Colors.white),
-                                  alignLabelWithHint: true,
-                                  hintText: "",
-                                  labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
-                                ),
-                              )),
+                            flex: 5,
+                            child: FieldList(
+                              readOnly: ct.isComp!,
+                              onEditingComplete: () => ct.node.nextFocus(),
+                              validator: (value) {
+                                ct.coisas!.checkCompras[i].item = value!;
+                                if (value.isEmpty) return "Conteudo não pode ser vazio";
+                                return null;
+                              },
+                              autofocus: ct.coisas!.checkCompras[i].item.isEmpty ? true : false,
+                              initialValue: ct.coisas!.checkCompras[i].item,
+                              onChanged: (v) => ct.coisas!.checkCompras[i].item = v,
+                              minLines: 1,
+                              maxLines: 2,
+                              maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
+                            ),
+                          ),
                           Expanded(
-                              flex: 2,
-                              child: TextFormField(
-                                readOnly: isComp,
-                                keyboardType: TextInputType.number,
-                                onEditingComplete: () => ct.node.nextFocus(),
-                                onChanged: (v) {
-                                  var valor = v.replaceAll('.', '').replaceFirst(',', '.');
-                                  ct.coisas!.checkCompras[i].valor = double.tryParse(valor) ?? 0.0;
-                                  ct.update();
-                                },
-                                autofocus: ct.coisas!.checkCompras[i].valor == 0.0 ? true : false,
-                                initialValue: ct.coisas!.checkCompras[i].valor == 0.0
-                                    ? ''
-                                    : ct.coisas!.checkCompras[i].valor.toString(),
-                                cursorColor: Colors.white,
-                                style: const TextStyle(color: Colors.white),
-                                inputFormatters: [
-                                  CurrencyTextInputFormatter(decimalDigits: 2, symbol: '', locale: 'pt-br'),
-                                ],
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  hintText: "R\u0024",
-                                  contentPadding: EdgeInsets.zero,
-                                  border: BordaPadrao.check(),
-                                  enabledBorder: BordaPadrao.check(),
-                                  focusedBorder: BordaPadrao.check(),
-                                  hintStyle: const TextStyle(color: Colors.white),
-                                  alignLabelWithHint: true,
-                                  labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
-                                ),
-                              )),
+                            flex: 2,
+                            child: FieldList(
+                              readOnly: ct.isComp!,
+                              keyboardType: TextInputType.number,
+                              onEditingComplete: () => ct.node.nextFocus(),
+                              inputFormatters: [
+                                CurrencyTextInputFormatter(decimalDigits: 2, symbol: '', locale: 'pt-br'),
+                              ],
+                              onChanged: (v) {
+                                var valor = v.replaceAll('.', '').replaceFirst(',', '.');
+                                ct.coisas!.checkCompras[i].valor = double.tryParse(valor) ?? 0.0;
+                                ct.update();
+                              },
+                              autofocus: ct.coisas!.checkCompras[i].valor == 0.0 ? true : false,
+                              initialValue: ct.coisas!.checkCompras[i].valor == 0.0
+                                  ? ''
+                                  : ct.coisas!.checkCompras[i].valor.toString(),
+                            ),
+                          ),
                           IconButton(
                             padding: EdgeInsets.zero,
                             icon: const Icon(
@@ -161,84 +136,17 @@ class ListaCompras extends StatelessWidget {
                               color: Colors.white,
                             ),
                             onPressed: () {
-                              ct.coisas!.checkCompras[i] = CheckCompras(
-                                feito: false,
-                                item: '',
-                                quant: 0,
-                                valor: 0.0,
-                              );
+                              ct.coisas!.checkCompras.removeAt(i);
+                              ct.coisas!.checkCompras = ct.coisas!.checkCompras.toList();
                               ct.update();
                             },
                           )
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12, top: 12, right: 32),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                ct.coisas!.checkCompras[i].quant++;
-                                ct.quant.text = ct.coisas!.checkCompras[i].quant.toString();
-                                ct.update();
-                              },
-                              icon: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: Icon(
-                                  Icons.add,
-                                  color: gb.getPrimary(),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: SizedBox(
-                                width: 50,
-                                child: TextFormField(
-                                  readOnly: isComp,
-                                  keyboardType: TextInputType.number,
-                                  onEditingComplete: () => ct.node.nextFocus(),
-                                  controller: ct.quant,
-                                  onChanged: (v) {
-                                    ct.coisas!.checkCompras[i].quant = int.tryParse(v) ?? 0;
-                                    ct.update();
-                                  },
-                                  autofocus: ct.coisas!.checkCompras[i].quant == 0.0 ? true : false,
-                                  cursorColor: Colors.white,
-                                  style: const TextStyle(color: Colors.white),
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.zero,
-                                    border: BordaPadrao.check(),
-                                    enabledBorder: BordaPadrao.check(),
-                                    focusedBorder: BordaPadrao.check(),
-                                    hintStyle: const TextStyle(color: Colors.white),
-                                    alignLabelWithHint: true,
-                                    labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                ct.coisas!.checkCompras[i].quant;
-                                if (ct.coisas!.checkCompras[i].quant > 0) {
-                                  ct.coisas!.checkCompras[i].quant--;
-                                  ct.quant.text = ct.coisas!.checkCompras[i].quant.toString();
-                                  ct.update();
-                                }
-                              },
-                              icon: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: Icon(
-                                  Icons.remove,
-                                  color: gb.getPrimary(),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      FieldAmount(
+                        global: gb,
+                        ct: ct,
+                        check: ct.coisas!.checkCompras[i],
                       )
                     ],
                   );
@@ -250,13 +158,16 @@ class ListaCompras extends StatelessWidget {
         const Divider(
           color: Colors.white,
         ),
-        SizedBox(
-          height: 40,
-          child: Text(
-            "Valor total da compra R\u0024: ${ct.retornaTotal(ct.coisas!.checkCompras)}",
-            style: Theme.of(context).textTheme.headline6!.copyWith(
-                  color: Colors.white,
-                ),
+        ValueListenableBuilder(
+          valueListenable: ct.totalGeral,
+          builder: (context, value, child) => SizedBox(
+            height: 40,
+            child: Text(
+              "Valor total da compra: \$${value.toStringAsFixed(2)}",
+              style: Theme.of(context).textTheme.headline6!.copyWith(
+                    color: Colors.white,
+                  ),
+            ),
           ),
         )
       ],
