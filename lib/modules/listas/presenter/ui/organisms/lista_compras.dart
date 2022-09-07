@@ -121,7 +121,7 @@ class ListaCompras extends StatelessWidget {
                               onChanged: (v) {
                                 var valor = v.replaceAll('.', '').replaceFirst(',', '.');
                                 ct.coisas!.checkCompras[i].valor = double.tryParse(valor) ?? 0.0;
-                                ct.update();
+                                ct.calculaValorTotal();
                               },
                               autofocus: ct.coisas!.checkCompras[i].valor == 0.0 ? true : false,
                               initialValue: ct.coisas!.checkCompras[i].valor == 0.0
