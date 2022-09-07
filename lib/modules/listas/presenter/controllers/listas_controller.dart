@@ -23,6 +23,7 @@ class ListasController extends ChangeNotifier implements IController {
   final FocusNode nodeText1 = FocusNode();
   var statusPage = ValueNotifier(StatusPage.loading);
   final TextEditingController quant = TextEditingController();
+  var totalGeral = ValueNotifier(0.0);
 
   ListasController({
     required this.gb,
@@ -59,30 +60,53 @@ class ListasController extends ChangeNotifier implements IController {
   }
 
   Future<void> atualizaCoisa() async {
-    if (coisas?.idFire != null && isComp == true) {
-      statusPage.value = StatusPage.loading;
-      var auxi = await compartilhaRepository.list(idUser: gb.usuario!.id!);
-      var indexAuxi = auxi.indexWhere((element) => element.idLista == coisas!.idFire);
-      if (indexAuxi >= 0) {
-        coisas = await coisasRepository.get(
-          idDoc: coisas!.idFire!,
-          idUser: auxi[indexAuxi].idUser,
-        );
-      } else {
-        coisas = await coisasRepository.get(idDoc: coisas!.idFire!, idUser: gb.usuario!.id!);
-      }
-
-      statusPage.value = StatusPage.done;
-      Fluttertoast.showToast(
-        msg: "Atualizado com Sucesso!!",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 5,
-        backgroundColor: gb.getPrimary(),
-        textColor: Colors.white,
-        fontSize: 18.0,
+    statusPage.value = StatusPage.loading;
+    var auxi = await compartilhaRepository.list(idUser: gb.usuario!.id!);
+    var indexAuxi = auxi.indexWhere((element) => element.idLista == coisas!.idFire);
+    if (indexAuxi >= 0) {
+      coisas = await coisasRepository.get(
+        idDoc: coisas!.idFire!,
+        idUser: auxi[indexAuxi].idUser,
       );
+    } else {
+      coisas = await coisasRepository.get(idDoc: coisas!.idFire!, idUser: gb.usuario!.id!);
     }
+
+    statusPage.value = StatusPage.done;
+    Fluttertoast.showToast(
+      msg: "Atualizado com Sucesso!!",
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 5,
+      backgroundColor: gb.getPrimary(),
+      textColor: Colors.white,
+      fontSize: 18.0,
+    );
+  }
+
+  Future<void> refreshCoisa(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Atualizar"),
+          content: const Text("Deseja atualizar essa lista ?"),
+          actions: [
+            TextButton(
+              child: const Text("Sim"),
+              onPressed: () {
+                atualizaCoisa();
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: const Text("Não"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<bool> bottonVoltar(BuildContext context) async {
@@ -118,12 +142,12 @@ class ListasController extends ChangeNotifier implements IController {
     }
   }
 
-  String retornaTotal(List<dynamic> lista) {
+  void calculaValorTotal() {
     double total = 0;
-    for (var element in lista) {
-      if (element.feito != null) total += element.quant * (element.valor ?? 0.0);
+    for (var element in coisas!.checkCompras) {
+      total += element.quant * element.valor;
     }
-    return total.toStringAsFixed(2);
+    totalGeral.value = total;
   }
 
   void update() => notifyListeners();

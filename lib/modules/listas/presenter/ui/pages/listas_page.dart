@@ -46,7 +46,7 @@ class _ListasPageState extends State<ListasPage> {
               color: ct.gb.getPrimary(),
               backgroundColor: Colors.white,
               strokeWidth: 4.0,
-              onRefresh: ct.atualizaCoisa,
+              onRefresh: () => ct.refreshCoisa(context),
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -91,23 +91,30 @@ class _ListasPageState extends State<ListasPage> {
                         flex: 8,
                         child: AnimatedBuilder(
                           animation: ct,
-                          builder: (context, child) => [
-                            ListaTexto(
-                              isComp: ct.isComp!,
-                              ct: ct,
-                              gb: ct.gb,
-                            ),
-                            ListaCheck(
-                              isComp: ct.isComp!,
-                              ct: ct,
-                              gb: ct.gb,
-                            ),
-                            ListaCompras(
-                              isComp: ct.isComp!,
-                              ct: ct,
-                              gb: ct.gb,
-                            ),
-                          ].elementAt(ct.coisas?.tipo ?? 0),
+                          builder: (context, child) {
+                            for (var element in ct.coisas!.checkCompras) {
+                              print(element.toJson());
+                            }
+                            switch (ct.coisas?.tipo ?? 0) {
+                              case 0:
+                                return ListaTexto(
+                                  ct: ct,
+                                  gb: ct.gb,
+                                );
+                              case 1:
+                                return ListaCheck(
+                                  ct: ct,
+                                  gb: ct.gb,
+                                );
+                              case 2:
+                                return ListaCompras(
+                                  ct: ct,
+                                  gb: ct.gb,
+                                );
+                              default:
+                                return const Text('Erro');
+                            }
+                          },
                         ),
                       ),
                     ],
