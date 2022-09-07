@@ -6,12 +6,10 @@ import 'package:listadecoisa/modules/home/presenter/ui/atoms/borda_padrao.dart';
 
 class ListaCheck extends StatelessWidget {
   final Global gb;
-  final bool isComp;
   final ListasController ct;
 
   const ListaCheck({
     super.key,
-    required this.isComp,
     required this.ct,
     required this.gb,
   });
@@ -20,7 +18,7 @@ class ListaCheck extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        !isComp
+        !ct.isComp!
             ? Row(
                 children: [
                   const SizedBox(width: 8),
@@ -76,7 +74,7 @@ class ListaCheck extends StatelessWidget {
                 itemBuilder: (BuildContext context, int i) {
                   return Row(
                     children: [
-                      !isComp
+                      !ct.isComp!
                           ? Checkbox(
                               fillColor: MaterialStateProperty.all(Colors.white),
                               checkColor: gb.getPrimary(),
@@ -91,7 +89,7 @@ class ListaCheck extends StatelessWidget {
                             ),
                       Expanded(
                           child: TextFormField(
-                        readOnly: isComp,
+                        readOnly: ct.isComp!,
                         onEditingComplete: () => ct.node.nextFocus(),
                         validator: (value) {
                           ct.coisas!.checklist[i].item = value!;
@@ -123,14 +121,15 @@ class ListaCheck extends StatelessWidget {
                           labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       )),
-                      !isComp
+                      !ct.isComp!
                           ? IconButton(
                               icon: const Icon(
                                 Icons.clear,
                                 color: Colors.red,
                               ),
                               onPressed: () {
-                                ct.coisas!.checklist[i] = Checklist(feito: false, item: '');
+                                ct.coisas!.checklist.removeAt(i);
+                                ct.coisas!.checklist = ct.coisas!.checklist.toList();
                                 ct.update();
                               },
                             )

@@ -6,12 +6,10 @@ import 'package:listadecoisa/modules/home/presenter/ui/atoms/borda_padrao.dart';
 class ListaTexto extends StatelessWidget {
   final Global gb;
   final ListasController ct;
-  final bool isComp;
 
   const ListaTexto({
     super.key,
     required this.ct,
-    required this.isComp,
     required this.gb,
   });
 
@@ -22,7 +20,7 @@ class ListaTexto extends StatelessWidget {
       shrinkWrap: true,
       children: [
         TextFormField(
-          readOnly: isComp,
+          readOnly: ct.isComp!,
           validator: (value) {
             if (value!.isEmpty) return "Conteudo não pode ser vazio";
             return null;
