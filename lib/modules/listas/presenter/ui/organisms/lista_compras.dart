@@ -5,7 +5,7 @@ import 'package:listadecoisa/modules/listas/presenter/controllers/listas_control
 import 'package:listadecoisa/modules/listas/domain/models/ckeck_compras.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/atoms/field_list.dart';
-import 'package:listadecoisa/modules/listas/presenter/ui/organisms/field_quantidade.dart';
+import 'package:listadecoisa/modules/listas/presenter/ui/organisms/field_amount.dart';
 
 class ListaCompras extends StatelessWidget {
   final Global gb;
