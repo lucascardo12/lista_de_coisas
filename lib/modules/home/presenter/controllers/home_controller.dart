@@ -2,22 +2,31 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
+import 'package:listadecoisa/core/interfaces/local_database_inter.dart';
+import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
+import 'package:listadecoisa/modules/home/domain/models/compartilha_params.dart';
+import 'package:listadecoisa/modules/home/domain/repositories/compartilha_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 import 'package:listadecoisa/modules/home/domain/models/compartilha.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/compartilha_page.dart';
+import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
 import 'package:listadecoisa/core/services/admob.dart';
-import 'package:listadecoisa/core/services/banco.dart';
-import 'package:listadecoisa/core/services/global.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:scan/scan.dart';
 import 'package:share/share.dart';
 import 'package:uni_links/uni_links.dart';
 
 class HomeController extends IController {
-  final Global gb;
-  final BancoFire banco;
+  final ILocalDatabase localDatabase;
+  final ICoisasRepository coisasRepository;
+  final ICompartilhaRepository compartilhaRepository;
+  final AuthService authService;
+  final Global global;
   final AdMob admob;
+  var lisCoisa = ValueNotifier(<Coisas>[]);
+  var lisCoisaComp = ValueNotifier(<Coisas>[]);
   var scaffoldKe = GlobalKey<ScaffoldState>();
   var isAnonimo = false;
   var isread = false;
@@ -30,9 +39,12 @@ class HomeController extends IController {
   ];
 
   HomeController({
-    required this.gb,
-    required this.banco,
+    required this.coisasRepository,
     required this.admob,
+    required this.localDatabase,
+    required this.global,
+    required this.compartilhaRepository,
+    required this.authService,
   });
 
   @override
@@ -40,43 +52,34 @@ class HomeController extends IController {
 
   @override
   void init(BuildContext context) {
-    isAnonimo = gb.box.get('isAnonimo', defaultValue: false);
+    localDatabase.get(id: 'isAnonimo').then((value) => isAnonimo = value ?? false);
     atualizaLista();
   }
 
   Future<void> atualizaLista() async {
-    gb.lisCoisaComp.value.clear();
-    List<dynamic> listCat = await banco.getCoisas(user: gb.usuario!);
-    if (listCat.isNotEmpty) {
-      gb.lisCoisa.value = listCat.map((e) => Coisas.fromSnapshot(e)).toList();
-    }
+    lisCoisaComp.value.clear();
+    lisCoisa.value = await coisasRepository.list(idUser: global.usuario!.id!);
 
-    List<dynamic> listcomp = await banco.getComps(user: gb.usuario!);
-    if (listcomp.isNotEmpty) {
-      gb.lisComp.value = listcomp.map((e) => Compartilha.fromSnapshot(e)).toList();
-    }
-    if (gb.lisComp.value.isNotEmpty) {
-      for (var i = 0; i < gb.lisComp.value.length; i++) {
-        var auxi = await banco.getCoisa(
-          idUser: gb.lisComp.value[i].idUser ?? '',
-          idLista: gb.lisComp.value[i].idLista ?? '',
-        );
-        if (auxi.exists) {
-          gb.lisCoisaComp.value.add(Coisas.fromSnapshot(auxi));
-        }
+    List<Compartilha> listcomp = await compartilhaRepository.list(idUser: global.usuario!.id!);
+    for (var element in listcomp) {
+      var coisaComp = await coisasRepository.get(idUser: element.idUser, idDoc: element.idLista);
+      if (coisaComp != null) {
+        lisCoisaComp.value.add(coisaComp);
+      } else {
+        await compartilhaRepository.remove(idUser: global.usuario!.id!, idDoc: element.idFire!);
       }
     }
   }
 
-  void logoff() {
-    gb.box.put('user', '');
-    gb.box.put("fezLogin", false);
-    gb.usuario = null;
+  void logoff() async {
+    await localDatabase.update(id: 'user', objeto: '');
+    await localDatabase.update(id: "fezLogin", objeto: false);
+    global.usuario = null;
   }
 
   Future<void> deleteList({required Coisas coisa}) async {
-    await banco.removeCoisas(user: gb.usuario!, cat: coisa);
-    gb.lisCoisa.value.remove(coisa);
+    await coisasRepository.remove(idUser: global.usuario!.id!, idDoc: coisa.idFire!);
+    await atualizaLista();
   }
 
   Future showAlertDialog2({required BuildContext context, required Coisas coisas}) {
@@ -110,12 +113,18 @@ class HomeController extends IController {
     try {
       initialLink = (await getInitialLink());
       if (initialLink != null) {
-        print(initialLink);
-        gb.codigoList = initialLink.substring(33, initialLink.indexOf('@'));
-        gb.codigoUser = initialLink.substring(initialLink.indexOf('@') + 1, initialLink.indexOf('*'));
-        gb.codigRead = initialLink.substring(initialLink.indexOf('*') + 1, initialLink.length);
-        var rota = initialLink.substring(28, 33);
-        return Navigator.pushNamed(context, CompartilhaPage.route);
+        var codigoList = initialLink.substring(33, initialLink.indexOf('@'));
+        var codigoUser = initialLink.substring(initialLink.indexOf('@') + 1, initialLink.indexOf('*'));
+        var codigRead = initialLink.substring(initialLink.indexOf('*') + 1, initialLink.length);
+        Navigator.pushNamed(
+          context,
+          CompartilhaPage.route,
+          arguments: CompartilharParams(
+            codigoList: codigoList,
+            codigoUser: codigoUser,
+            codigRead: codigRead,
+          ),
+        );
       }
     } on PlatformException {
       initialLink = 'Failed to get initial link.';
@@ -171,11 +180,11 @@ class HomeController extends IController {
               children: [
                 Text(
                   'Somente visualização?',
-                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: gb.primary),
+                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: global.primary),
                 ),
                 Switch(
                   value: isread,
-                  activeColor: gb.getPrimary(),
+                  activeColor: global.getPrimary(),
                   onChanged: (bool value) {
                     isread = value;
                     Navigator.pop(context);
@@ -187,7 +196,7 @@ class HomeController extends IController {
             Center(
                 child: QrImage(
               data:
-                  'http://lcm.listadecoisas.com/comp${gb.lisCoisa.value[index].idFire}@${gb.usuario!.id}*$isread',
+                  'http://lcm.listadecoisas.com/comp${lisCoisa.value[index].idFire}@${global.usuario!.id}*$isread',
               version: QrVersions.auto,
               size: 200.0,
             )),
@@ -199,14 +208,14 @@ class HomeController extends IController {
               child: TextButton(
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.only(top: 15, bottom: 15),
-                  onSurface: gb.getSecondary(),
+                  disabledForegroundColor: global.getSecondary().withOpacity(0.38),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  backgroundColor: gb.getPrimary(),
+                  backgroundColor: global.getPrimary(),
                 ),
                 onPressed: () => Share.share(
-                    'http://lcm.listadecoisas.com/comp${gb.lisCoisa.value[index].idFire}@${gb.usuario!.id}*$isread'),
+                    'http://lcm.listadecoisas.com/comp${lisCoisa.value[index].idFire}@${global.usuario!.id}*$isread'),
                 child: const Text(
                   "Compartilhar link",
                   style: TextStyle(color: Colors.white),
@@ -231,9 +240,9 @@ class HomeController extends IController {
             ListTile(
               title: Text(
                 'Escolha o tipo de Lista',
-                style: theme.textTheme.subtitle1!.copyWith(color: gb.getWhiteOrBlack()),
+                style: theme.textTheme.subtitle1!.copyWith(color: global.getWhiteOrBlack()),
               ),
-              tileColor: gb.getPrimary(),
+              tileColor: global.getPrimary(),
             ),
             for (int i = 0; i < listaTipo.length; i++)
               ListTile(
@@ -243,7 +252,7 @@ class HomeController extends IController {
                 ),
                 leading: Radio(
                   value: i,
-                  activeColor: gb.getPrimary(),
+                  activeColor: global.getPrimary(),
                   onChanged: (int? value) {
                     tipo = value ?? 1;
                     Navigator.pop(context);
@@ -278,6 +287,8 @@ class HomeController extends IController {
                           ListasPage.route,
                           arguments: [
                             Coisas(
+                              creatAp: DateTime.now(),
+                              updatAp: DateTime.now(),
                               tipo: tipo,
                               checkCompras: [],
                               checklist: [],
@@ -286,12 +297,12 @@ class HomeController extends IController {
                             ),
                             false
                           ],
-                        );
+                        ).then((value) => atualizaLista());
                       },
                       style: TextButton.styleFrom(backgroundColor: Colors.green),
                       child: Text(
                         "Continuar",
-                        style: theme.textTheme.subtitle1!.copyWith(color: gb.getWhiteOrBlack()),
+                        style: theme.textTheme.subtitle1!.copyWith(color: global.getWhiteOrBlack()),
                       ),
                     ),
                   )
@@ -320,7 +331,7 @@ class HomeController extends IController {
             TextButton(
               child: const Text("Confirmar"),
               onPressed: () {
-                banco.resetarSenha(user: gb.usuario!);
+                authService.resetarSenha(user: global.usuario!);
                 Navigator.pop(context);
               },
             ),

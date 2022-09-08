@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
               child: TabBarView(
                 children: [
                   ListTextoPage(ct: ct, gb: gb),
-                  ListCompartilhadaPage(gb: gb),
+                  ListCompartilhadaPage(ct: ct),
                 ],
               )),
           drawer: Drawer(

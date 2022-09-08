@@ -21,10 +21,10 @@ class ButtonTextPadrao extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: TextButton(
         style: TextButton.styleFrom(
-          onSurface: gb.getSecondary(),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
           ),
+          disabledForegroundColor: gb.getSecondary().withOpacity(0.38),
           backgroundColor: color ?? gb.getPrimary(),
         ),
         onPressed: onPressed,

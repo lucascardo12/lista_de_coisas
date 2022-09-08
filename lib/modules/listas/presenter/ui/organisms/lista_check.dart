@@ -6,12 +6,10 @@ import 'package:listadecoisa/modules/home/presenter/ui/atoms/borda_padrao.dart';
 
 class ListaCheck extends StatelessWidget {
   final Global gb;
-  final bool isComp;
   final ListasController ct;
 
   const ListaCheck({
     super.key,
-    required this.isComp,
     required this.ct,
     required this.gb,
   });
@@ -20,21 +18,41 @@ class ListaCheck extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        !isComp
-            ? CircleAvatar(
-                backgroundColor: Colors.white,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    color: gb.getPrimary(),
+        !ct.isComp!
+            ? Row(
+                children: [
+                  const SizedBox(width: 8),
+                  Checkbox(
+                    fillColor: MaterialStateProperty.all(Colors.white),
+                    checkColor: gb.getPrimary(),
+                    onChanged: (bool? value) {
+                      ct.marcaTodos = !ct.marcaTodos;
+                      for (var element in ct.coisas!.checklist) {
+                        element.feito = ct.marcaTodos;
+                      }
+                      ct.update();
+                    },
+                    value: ct.marcaTodos,
                   ),
-                  onPressed: () {
-                    ct.coisas!.checklist!.add(
-                      Checklist(feito: false, item: ''),
-                    );
-                    ct.update();
-                  },
-                ),
+                  const Spacer(),
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.add,
+                        color: gb.getPrimary(),
+                      ),
+                      onPressed: () {
+                        ct.coisas!.checklist.add(
+                          Checklist(feito: false, item: ''),
+                        );
+                        ct.update();
+                      },
+                    ),
+                  ),
+                  const Spacer(),
+                  const SizedBox(width: 50),
+                ],
               )
             : const SizedBox(),
         const SizedBox(height: 5),
@@ -52,77 +70,74 @@ class ListaCheck extends StatelessWidget {
               child: ListView.builder(
                 padding: const EdgeInsets.all(4),
                 shrinkWrap: true,
-                itemCount: ct.coisas!.checklist!.length,
+                itemCount: ct.coisas!.checklist.length,
                 itemBuilder: (BuildContext context, int i) {
-                  Checklist item = ct.coisas!.checklist![i];
-                  return item.feito != null
-                      ? Row(
-                          children: [
-                            !isComp
-                                ? Checkbox(
-                                    fillColor: MaterialStateProperty.all(Colors.white),
-                                    checkColor: gb.getPrimary(),
-                                    onChanged: (bool? value) {
-                                      ct.coisas!.checklist![i].feito = value;
-                                      ct.update();
-                                    },
-                                    value: ct.coisas!.checklist![i].feito ?? false,
-                                  )
-                                : const SizedBox(
-                                    width: 20,
-                                  ),
-                            Expanded(
-                                child: TextFormField(
-                              readOnly: isComp,
-                              onEditingComplete: () => ct.node.nextFocus(),
-                              validator: (value) {
-                                ct.coisas!.checklist![i].item = value;
-                                if (value!.isEmpty) return "Conteudo não pode ser vazio";
-                                return null;
+                  return Row(
+                    children: [
+                      !ct.isComp!
+                          ? Checkbox(
+                              fillColor: MaterialStateProperty.all(Colors.white),
+                              checkColor: gb.getPrimary(),
+                              onChanged: (bool? value) {
+                                ct.coisas!.checklist[i].feito = value!;
+                                ct.update();
                               },
-                              onChanged: (v) => ct.coisas!.checklist![i].item = v,
-                              autofocus: ct.coisas!.checklist![i].item.isEmpty ? true : false,
-                              initialValue: ct.coisas!.checklist![i].item,
-                              cursorColor: Colors.white,
-                              minLines: 1,
-                              maxLines: 2,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                decoration:
-                                    ct.coisas!.checklist![i].feito ? TextDecoration.lineThrough : null,
-                                decorationThickness: 2.85,
-                                decorationColor: Colors.red,
+                              value: ct.coisas!.checklist[i].feito,
+                            )
+                          : const SizedBox(
+                              width: 20,
+                            ),
+                      Expanded(
+                          child: TextFormField(
+                        readOnly: ct.isComp!,
+                        onEditingComplete: () => ct.node.nextFocus(),
+                        validator: (value) {
+                          ct.coisas!.checklist[i].item = value!;
+                          if (value.isEmpty) return "Conteudo não pode ser vazio";
+                          return null;
+                        },
+                        onChanged: (v) => ct.coisas!.checklist[i].item = v,
+                        autofocus: ct.coisas!.checklist[i].item.isEmpty ? true : false,
+                        initialValue: ct.coisas!.checklist[i].item,
+                        cursorColor: Colors.white,
+                        minLines: 1,
+                        maxLines: 2,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          decoration: ct.coisas!.checklist[i].feito ? TextDecoration.lineThrough : null,
+                          decorationThickness: 2.85,
+                          decorationColor: Colors.red,
+                        ),
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.zero,
+                          border: BordaPadrao.check(),
+                          enabledBorder: BordaPadrao.check(),
+                          focusedBorder: BordaPadrao.check(),
+                          hintStyle: const TextStyle(color: Colors.white),
+                          alignLabelWithHint: true,
+                          hintText: "",
+                          labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      )),
+                      !ct.isComp!
+                          ? IconButton(
+                              icon: const Icon(
+                                Icons.clear,
+                                color: Colors.red,
                               ),
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.zero,
-                                border: BordaPadrao.check(),
-                                enabledBorder: BordaPadrao.check(),
-                                focusedBorder: BordaPadrao.check(),
-                                hintStyle: const TextStyle(color: Colors.white),
-                                alignLabelWithHint: true,
-                                hintText: "",
-                                labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
-                              ),
-                            )),
-                            !isComp
-                                ? IconButton(
-                                    icon: const Icon(
-                                      Icons.clear,
-                                      color: Colors.red,
-                                    ),
-                                    onPressed: () {
-                                      ct.coisas!.checklist![i] = Checklist(feito: null);
-                                      ct.update();
-                                    },
-                                  )
-                                : const SizedBox(
-                                    width: 20,
-                                  )
-                          ],
-                        )
-                      : Container();
+                              onPressed: () {
+                                ct.coisas!.checklist.removeAt(i);
+                                ct.coisas!.checklist = ct.coisas!.checklist.toList();
+                                ct.update();
+                              },
+                            )
+                          : const SizedBox(
+                              width: 20,
+                            )
+                    ],
+                  );
                 },
               ),
             ),

@@ -1,62 +1,66 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:listadecoisa/core/interfaces/model_inter.dart';
 import 'package:listadecoisa/modules/listas/domain/models/check_list.dart';
 import 'package:listadecoisa/modules/listas/domain/models/ckeck_compras.dart';
 
-class Coisas {
-  String? nome;
-  String? descricao;
+class Coisas implements IModel {
+  static String idCollection = 'coisas';
+  String nome;
+  String descricao;
+  int tipo;
+  List<Checklist> checklist;
+  List<CheckCompras> checkCompras;
+
+  @override
+  DateTime creatAp;
+
+  @override
+  DateTime updatAp;
+
+  @override
   String? idFire;
-  int? tipo;
-  List<dynamic>? checklist;
-  List<dynamic>? checkCompras;
 
   Coisas({
-    this.nome,
-    this.descricao,
     this.idFire,
-    this.checkCompras,
-    this.checklist,
-    this.tipo,
+    required this.nome,
+    required this.descricao,
+    required this.checkCompras,
+    required this.checklist,
+    required this.tipo,
+    required this.creatAp,
+    required this.updatAp,
   });
 
-  Coisas.fromJson(Map<String, dynamic> xjson) {
-    nome = xjson['nome'];
-    descricao = xjson['descricao'];
-    idFire = xjson['idFire'];
-    checklist = xjson['checklist'];
-    checkCompras = xjson['checkCompras'];
-    tipo = xjson['tipo'];
-  }
+  Coisas.fromJson(Map<String, dynamic> xjson)
+      : nome = xjson['nome'] ?? '',
+        descricao = xjson['descricao'] ?? '',
+        idFire = xjson['idFire'],
+        checklist = (xjson['checklist'] ?? []).map<Checklist>((i) => Checklist.fromJson(i)).toList(),
+        checkCompras =
+            (xjson['checkCompras'] ?? []).map<CheckCompras>((i) => CheckCompras.fromJson(i)).toList(),
+        creatAp = validationDate(xjson['creatAp']),
+        updatAp = validationDate(xjson['updatAp']),
+        tipo = xjson['tipo'] ?? 0;
 
-  Coisas.toMap(Map<String, dynamic> map) {
-    map["nome"] = nome;
-    map["descricao"] = descricao;
-    map['idFire'] = idFire;
-    map['checklist'] = checklist;
-    map['tipo'] = tipo;
-    map['checkCompras'] = checkCompras;
-  }
-
+  @override
   Map<String, dynamic> toJson() => {
         'nome': nome,
         'descricao': descricao,
         'idFire': idFire,
-        if (checklist != null) 'checklist': checklist!.map((i) => i.toJson()).toList(),
-        if (checkCompras != null) 'checkCompras': checkCompras!.map((e) => e.toJson()).toList(),
+        'checklist': checklist.map((i) => i.toJson()).toList(),
+        'checkCompras': checkCompras.map((e) => e.toJson()).toList(),
         'tipo': tipo,
+        'creatAp': creatAp,
+        'updatAp': updatAp,
       };
 
-  Coisas.fromSnapshot(DocumentSnapshot snapshot) {
-    Map data = snapshot.exists ? snapshot.data() as Map : {};
-    idFire = snapshot.id;
-    nome = data['nome'];
-    descricao = data["descricao"];
-    if (data.containsKey('checklist')) {
-      checklist = data['checklist'].map((i) => Checklist.fromJson(i)).toList();
+  static DateTime validationDate(date) {
+    if (date is Timestamp) {
+      return date.toDate();
     }
-    if (data.containsKey('checkCompras')) {
-      checkCompras = data['checkCompras'].map((i) => CheckCompras.fromJson(i)).toList();
+    if (date is String) {
+      return DateTime.parse(date);
     }
-    tipo = data['tipo'];
+    return date ?? DateTime.now();
   }
 }

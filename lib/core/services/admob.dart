@@ -38,7 +38,9 @@ class AdMob extends IService {
   Future<void> mostraTelaCheia() async {
     try {
       if (_adCheia != null) await _adCheia!.show();
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   void loadInterstitialAd() async {
@@ -53,6 +55,8 @@ class AdMob extends IService {
           onAdFailedToLoad: (LoadAdError error) {},
         ),
       );
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 }

@@ -1,41 +1,53 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:listadecoisa/core/interfaces/model_inter.dart';
 
-class Compartilha {
+class Compartilha implements IModel {
+  String idUser;
+  String idLista;
+  bool isRead;
+
+  @override
   String? idFire;
-  String? idUser;
-  String? idLista;
-  bool? isRead;
+
+  @override
+  DateTime creatAp;
+
+  @override
+  DateTime updatAp;
+
   Compartilha({
-    this.idUser,
-    this.idLista,
-    this.isRead,
     this.idFire,
+    required this.idUser,
+    required this.idLista,
+    required this.isRead,
+    required this.creatAp,
+    required this.updatAp,
   });
 
-  Compartilha.fromJson(Map<String, dynamic> xjson) {
-    idUser = xjson['idUser'];
-    idLista = xjson['idLista'];
-    isRead = xjson['isRead'];
-    idFire = xjson['idFire'];
-  }
+  Compartilha.fromJson(Map<String, dynamic> xjson)
+      : idUser = xjson['idUser'],
+        idLista = xjson['idLista'],
+        isRead = xjson['isRead'],
+        creatAp = validationDate(xjson['creatAp']),
+        updatAp = validationDate(xjson['updatAp']),
+        idFire = xjson['idFire'];
 
-  Compartilha.toMap(Map<String, dynamic> map) {
-    map['idUser'] = idUser;
-    map['idLista'] = idLista;
-    map['isRead'] = isRead;
-    map['idFire'] = idFire;
-  }
-  Compartilha.fromSnapshot(DocumentSnapshot snapshot) {
-    idUser = snapshot.get('idUser');
-    idLista = snapshot.get('idLista');
-    isRead = snapshot.get('isRead');
-    idFire = snapshot.id;
-  }
-
+  @override
   Map<String, dynamic> toJson() => {
         'idUser': idUser,
         'idLista': idLista,
         'isRead': isRead,
         'idFire': idFire,
+        'updatAp': updatAp,
+        'creatAp': creatAp,
       };
+  static DateTime validationDate(date) {
+    if (date is Timestamp) {
+      return date.toDate();
+    }
+    if (date is String) {
+      return DateTime.parse(date);
+    }
+    return date ?? DateTime.now();
+  }
 }
