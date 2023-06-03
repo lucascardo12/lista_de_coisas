@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:listadecoisa/core/interfaces/service_interface.dart';
 
@@ -15,7 +17,7 @@ class AdMob extends IService {
   InterstitialAd? _adCheia;
 
   Future<BannerAd> loadBanner({required String adUnitId}) async {
-    var banner = BannerAd(
+    final banner = BannerAd(
       adUnitId: adUnitId,
       size: AdSize.banner,
       request: const AdRequest(),
@@ -38,8 +40,12 @@ class AdMob extends IService {
   Future<void> mostraTelaCheia() async {
     try {
       if (_adCheia != null) await _adCheia!.show();
-    } catch (e) {
-      print(e);
+    } on Exception catch (e, s) {
+      log(
+        r'Erro inesperado no $mostraTelaCheia',
+        error: e,
+        stackTrace: s,
+      );
     }
   }
 
@@ -55,8 +61,12 @@ class AdMob extends IService {
           onAdFailedToLoad: (LoadAdError error) {},
         ),
       );
-    } catch (e) {
-      print(e);
+    } on Exception catch (e, s) {
+      log(
+        r'Erro inesperado no $loadInterstitialAd',
+        error: e,
+        stackTrace: s,
+      );
     }
   }
 }

@@ -51,27 +51,29 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Tab(
-                    icon: Icon(
-                  Icons.share_outlined,
-                  color: Colors.white,
-                )),
+                  icon: Icon(
+                    Icons.share_outlined,
+                    color: Colors.white,
+                  ),
+                ),
               ],
             ),
             iconTheme: const IconThemeData(color: Colors.white),
             actions: [
               Padding(
-                  padding: const EdgeInsets.only(
-                    left: 10,
-                    right: 10,
+                padding: const EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                ),
+                child: IconButton(
+                  color: Colors.white,
+                  icon: const Icon(
+                    Icons.add_circle,
+                    size: 32,
                   ),
-                  child: IconButton(
-                    color: Colors.white,
-                    icon: const Icon(
-                      Icons.add_circle,
-                      size: 32,
-                    ),
-                    onPressed: () => ct.showCria(context: context),
-                  ))
+                  onPressed: () => ct.showCria(context: context),
+                ),
+              )
             ],
             centerTitle: true,
             backgroundColor: gb.getPrimary(),
@@ -84,22 +86,23 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           body: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    gb.getPrimary(),
-                    gb.getSecondary(),
-                  ],
-                ),
-              ),
-              child: TabBarView(
-                children: [
-                  ListTextoPage(ct: ct, gb: gb),
-                  ListCompartilhadaPage(ct: ct),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  gb.getPrimary(),
+                  gb.getSecondary(),
                 ],
-              )),
+              ),
+            ),
+            child: TabBarView(
+              children: [
+                ListTextoPage(ct: ct, gb: gb),
+                ListCompartilhadaPage(ct: ct),
+              ],
+            ),
+          ),
           drawer: Drawer(
             elevation: 8,
             child: ListView(
@@ -125,13 +128,17 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Text(
                           gb.usuario!.nome ?? '',
-                          style: const TextStyle(color: Colors.white, fontSize: 22),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                          ),
                         ),
                         Text(
                           gb.packageInfo.version,
-                          style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                color: Colors.white,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    color: Colors.white,
+                                  ),
                         )
                       ],
                     ),
@@ -143,14 +150,15 @@ class _HomePageState extends State<HomePage> {
                     LoginPage.route,
                     (route) => false,
                   ),
-                  label: "Voltar",
+                  label: 'Voltar',
                 ),
                 Visibility(
-                    visible: !ct.isAnonimo,
-                    child: ButtonTextPadrao(
-                      label: "Redefina Senha",
-                      onPressed: () => ct.showAlertRedefinir(context: context),
-                    )),
+                  visible: !ct.isAnonimo,
+                  child: ButtonTextPadrao(
+                    label: 'Redefina Senha',
+                    onPressed: () => ct.showAlertRedefinir(context: context),
+                  ),
+                ),
                 ButtonTema(),
               ],
             ),

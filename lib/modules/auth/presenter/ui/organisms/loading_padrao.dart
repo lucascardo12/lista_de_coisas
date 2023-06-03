@@ -19,7 +19,7 @@ class LoadPadrao extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             'carregando as coisas ⏳',
-            style: Theme.of(context).textTheme.headline5!.copyWith(
+            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: gb.getSecondary(),
                 ),
           )

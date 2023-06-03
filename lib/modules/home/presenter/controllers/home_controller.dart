@@ -8,7 +8,6 @@ import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
 import 'package:listadecoisa/modules/home/domain/models/compartilha_params.dart';
 import 'package:listadecoisa/modules/home/domain/repositories/compartilha_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
-import 'package:listadecoisa/modules/home/domain/models/compartilha.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/compartilha_page.dart';
 import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
@@ -33,9 +32,9 @@ class HomeController extends IController {
   var tipo = 1;
   var controller = ScanController();
   var listaTipo = [
-    "Texto Simples",
-    "Check-List",
-    "Lista de Compras",
+    'Texto Simples',
+    'Check-List',
+    'Lista de Compras',
   ];
 
   HomeController({
@@ -52,7 +51,9 @@ class HomeController extends IController {
 
   @override
   void init(BuildContext context) {
-    localDatabase.get(id: 'isAnonimo').then((value) => isAnonimo = value ?? false);
+    localDatabase
+        .get(id: 'isAnonimo')
+        .then((value) => isAnonimo = value ?? false);
     atualizaLista();
   }
 
@@ -60,42 +61,55 @@ class HomeController extends IController {
     lisCoisaComp.value.clear();
     lisCoisa.value = await coisasRepository.list(idUser: global.usuario!.id!);
 
-    List<Compartilha> listcomp = await compartilhaRepository.list(idUser: global.usuario!.id!);
+    final listcomp =
+        await compartilhaRepository.list(idUser: global.usuario!.id!);
     for (var element in listcomp) {
-      var coisaComp = await coisasRepository.get(idUser: element.idUser, idDoc: element.idLista);
+      final coisaComp = await coisasRepository.get(
+        idUser: element.idUser,
+        idDoc: element.idLista,
+      );
       if (coisaComp != null) {
         lisCoisaComp.value.add(coisaComp);
       } else {
-        await compartilhaRepository.remove(idUser: global.usuario!.id!, idDoc: element.idFire!);
+        await compartilhaRepository.remove(
+          idUser: global.usuario!.id!,
+          idDoc: element.idFire!,
+        );
       }
     }
   }
 
   void logoff() async {
     await localDatabase.update(id: 'user', objeto: '');
-    await localDatabase.update(id: "fezLogin", objeto: false);
+    await localDatabase.update(id: 'fezLogin', objeto: false);
     global.usuario = null;
   }
 
   Future<void> deleteList({required Coisas coisa}) async {
-    await coisasRepository.remove(idUser: global.usuario!.id!, idDoc: coisa.idFire!);
+    await coisasRepository.remove(
+      idUser: global.usuario!.id!,
+      idDoc: coisa.idFire!,
+    );
     await atualizaLista();
   }
 
-  Future showAlertDialog2({required BuildContext context, required Coisas coisas}) {
+  Future showAlertDialog2({
+    required BuildContext context,
+    required Coisas coisas,
+  }) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Atenção !!!"),
-          content: const Text("Deseja deletar a lista ?"),
+          title: const Text('Atenção !!!'),
+          content: const Text('Deseja deletar a lista ?'),
           actions: [
             TextButton(
-              child: const Text("Cancelar"),
+              child: const Text('Cancelar'),
               onPressed: () => Navigator.pop(context),
             ),
             TextButton(
-              child: const Text("Continar"),
+              child: const Text('Continar'),
               onPressed: () async {
                 await deleteList(coisa: coisas);
                 Navigator.pop(context);
@@ -107,15 +121,23 @@ class HomeController extends IController {
     );
   }
 
-  Future initPlatformStateForStringUniLinks({required BuildContext context}) async {
+  Future initPlatformStateForStringUniLinks({
+    required BuildContext context,
+  }) async {
     String? initialLink;
 
     try {
       initialLink = (await getInitialLink());
       if (initialLink != null) {
-        var codigoList = initialLink.substring(33, initialLink.indexOf('@'));
-        var codigoUser = initialLink.substring(initialLink.indexOf('@') + 1, initialLink.indexOf('*'));
-        var codigRead = initialLink.substring(initialLink.indexOf('*') + 1, initialLink.length);
+        final codigoList = initialLink.substring(33, initialLink.indexOf('@'));
+        final codigoUser = initialLink.substring(
+          initialLink.indexOf('@') + 1,
+          initialLink.indexOf('*'),
+        );
+        final codigRead = initialLink.substring(
+          initialLink.indexOf('*') + 1,
+          initialLink.length,
+        );
         Navigator.pushNamed(
           context,
           CompartilhaPage.route,
@@ -140,17 +162,17 @@ class HomeController extends IController {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text("Atenção !!!"),
-              content: const Text("Deseja sair do app ?"),
+              title: const Text('Atenção !!!'),
+              content: const Text('Deseja sair do app ?'),
               actions: [
                 TextButton(
-                  child: const Text("Sim"),
+                  child: const Text('Sim'),
                   onPressed: () {
                     SystemNavigator.pop();
                   },
                 ),
                 TextButton(
-                  child: const Text("Não"),
+                  child: const Text('Não'),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -169,18 +191,21 @@ class HomeController extends IController {
           children: [
             Text(
               'Mostre o QR code ou compartilhe o link',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
             Text(
               'Quem for receber a lista precisa abri com o app o link ou escanear o QRcode',
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Somente visualização?',
-                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: global.primary),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(color: global.primary),
                 ),
                 Switch(
                   value: isread,
@@ -194,12 +219,13 @@ class HomeController extends IController {
               ],
             ),
             Center(
-                child: QrImage(
-              data:
-                  'http://lcm.listadecoisas.com/comp${lisCoisa.value[index].idFire}@${global.usuario!.id}*$isread',
-              version: QrVersions.auto,
-              size: 200.0,
-            )),
+              child: QrImage(
+                data:
+                    'http://lcm.listadecoisas.com/comp${lisCoisa.value[index].idFire}@${global.usuario!.id}*$isread',
+                version: QrVersions.auto,
+                size: 200.0,
+              ),
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -208,16 +234,18 @@ class HomeController extends IController {
               child: TextButton(
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.only(top: 15, bottom: 15),
-                  disabledForegroundColor: global.getSecondary().withOpacity(0.38),
+                  disabledForegroundColor:
+                      global.getSecondary().withOpacity(0.38),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
                   backgroundColor: global.getPrimary(),
                 ),
                 onPressed: () => Share.share(
-                    'http://lcm.listadecoisas.com/comp${lisCoisa.value[index].idFire}@${global.usuario!.id}*$isread'),
+                  'http://lcm.listadecoisas.com/comp${lisCoisa.value[index].idFire}@${global.usuario!.id}*$isread',
+                ),
                 child: const Text(
-                  "Compartilhar link",
+                  'Compartilhar link',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -240,7 +268,8 @@ class HomeController extends IController {
             ListTile(
               title: Text(
                 'Escolha o tipo de Lista',
-                style: theme.textTheme.subtitle1!.copyWith(color: global.getWhiteOrBlack()),
+                style: theme.textTheme.titleMedium!
+                    .copyWith(color: global.getWhiteOrBlack()),
               ),
               tileColor: global.getPrimary(),
             ),
@@ -248,7 +277,10 @@ class HomeController extends IController {
               ListTile(
                 title: Text(
                   listaTipo[i],
-                  style: Theme.of(context).textTheme.subtitle1!.copyWith(color: Colors.black),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(color: Colors.black),
                 ),
                 leading: Radio(
                   value: i,
@@ -267,14 +299,17 @@ class HomeController extends IController {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Expanded(
-                      child: TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: TextButton.styleFrom(backgroundColor: Colors.white),
-                    child: Text(
-                      "Cancelar",
-                      style: theme.textTheme.subtitle1!.copyWith(color: Colors.black),
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      style:
+                          TextButton.styleFrom(backgroundColor: Colors.white),
+                      child: Text(
+                        'Cancelar',
+                        style: theme.textTheme.titleMedium!
+                            .copyWith(color: Colors.black),
+                      ),
                     ),
-                  )),
+                  ),
                   const SizedBox(
                     width: 20,
                   ),
@@ -299,10 +334,12 @@ class HomeController extends IController {
                           ],
                         ).then((value) => atualizaLista());
                       },
-                      style: TextButton.styleFrom(backgroundColor: Colors.green),
+                      style:
+                          TextButton.styleFrom(backgroundColor: Colors.green),
                       child: Text(
-                        "Continuar",
-                        style: theme.textTheme.subtitle1!.copyWith(color: global.getWhiteOrBlack()),
+                        'Continuar',
+                        style: theme.textTheme.titleMedium!
+                            .copyWith(color: global.getWhiteOrBlack()),
                       ),
                     ),
                   )
@@ -320,16 +357,17 @@ class HomeController extends IController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Confirma redefinição de senha!!"),
+          title: const Text('Confirma redefinição de senha!!'),
           content: const Text(
-              'Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam.'),
+            'Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam.',
+          ),
           actions: [
             TextButton(
-              child: const Text("Cancelar"),
+              child: const Text('Cancelar'),
               onPressed: () => Navigator.pop(context),
             ),
             TextButton(
-              child: const Text("Confirmar"),
+              child: const Text('Confirmar'),
               onPressed: () {
                 authService.resetarSenha(user: global.usuario!);
                 Navigator.pop(context);

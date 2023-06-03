@@ -69,17 +69,24 @@ class _ListasPageState extends State<ListasPage> {
                         child: TextFormField(
                           readOnly: ct.isComp ?? false,
                           validator: (value) {
-                            if (value!.isEmpty) return "Titulo não pode ser vazio";
+                            if (value!.isEmpty) {
+                              return 'Titulo não pode ser vazio';
+                            }
                             return null;
                           },
                           onChanged: (value) => ct.coisas!.nome = value,
-                          style: const TextStyle(color: Colors.white, fontSize: 20),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
                           initialValue: ct.coisas?.nome,
                           textAlign: TextAlign.center,
                           cursorColor: Colors.white,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            labelText: ct.coisas!.nome.isEmpty ? "    Digite um Titulo" : null,
+                            labelText: ct.coisas!.nome.isEmpty
+                                ? '    Digite um Titulo'
+                                : null,
                             alignLabelWithHint: true,
                             labelStyle: const TextStyle(
                               color: Colors.white,
@@ -92,9 +99,6 @@ class _ListasPageState extends State<ListasPage> {
                         child: AnimatedBuilder(
                           animation: ct,
                           builder: (context, child) {
-                            for (var element in ct.coisas!.checkCompras) {
-                              print(element.toJson());
-                            }
                             switch (ct.coisas?.tipo ?? 0) {
                               case 0:
                                 return ListaTexto(
@@ -166,7 +170,10 @@ class _ListasPageState extends State<ListasPage> {
                               if (ct.formKey.currentState!.validate()) {
                                 if (ct.verificaUltimaAds()) {
                                   await ct.admob.mostraTelaCheia();
-                                  ct.gb.box.put('day', DateTime.now().millisecondsSinceEpoch);
+                                  ct.gb.box.put(
+                                    'day',
+                                    DateTime.now().millisecondsSinceEpoch,
+                                  );
                                 }
                                 await ct.criaCoisa(coisa: ct.coisas!);
                                 Navigator.pop(context);

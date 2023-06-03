@@ -19,13 +19,20 @@ class BancoFire implements IRemoteDataBase {
     required IModel object,
     required String collection,
   }) async {
-    object.idFire ??= db.collection('user').doc(idUser).collection(collection).doc().id;
-    db.collection('user').doc(idUser).collection(collection).doc(object.idFire).set(object.toJson());
+    object.idFire ??=
+        db.collection('user').doc(idUser).collection(collection).doc().id;
+    db
+        .collection('user')
+        .doc(idUser)
+        .collection(collection)
+        .doc(object.idFire)
+        .set(object.toJson());
   }
 
   @override
   Future<String> createUser(UserP user) async {
-    DocumentSnapshot result = await db.collection('user').doc(user.id).get();
+    final DocumentSnapshot result =
+        await db.collection('user').doc(user.id).get();
     return result.id;
   }
 
@@ -35,14 +42,22 @@ class BancoFire implements IRemoteDataBase {
     required String collection,
     required String idDoc,
   }) async {
-    DocumentSnapshot<Map<String, dynamic>> result =
-        await db.collection('user').doc(idUser).collection(collection).doc(idDoc).get();
+    final result = await db
+        .collection('user')
+        .doc(idUser)
+        .collection(collection)
+        .doc(idDoc)
+        .get();
     return result.data();
   }
 
   @override
-  Future<List<Map<String, dynamic>>> list({required String idUser, required String collection}) async {
-    var result = await db.collection('user').doc(idUser).collection(collection).get();
+  Future<List<Map<String, dynamic>>> list({
+    required String idUser,
+    required String collection,
+  }) async {
+    final result =
+        await db.collection('user').doc(idUser).collection(collection).get();
     return result.docs.map((e) => Map<String, dynamic>.from(e.data())).toList();
   }
 
@@ -52,12 +67,17 @@ class BancoFire implements IRemoteDataBase {
     required String idDoc,
     required String collection,
   }) async {
-    await db.collection('user').doc(idUser).collection(collection).doc(idDoc).delete();
+    await db
+        .collection('user')
+        .doc(idUser)
+        .collection(collection)
+        .doc(idDoc)
+        .delete();
   }
 
   @override
   Future<UserP?> getUser(String uid) async {
-    DocumentSnapshot result = await db.collection('user').doc(uid).get();
+    final DocumentSnapshot result = await db.collection('user').doc(uid).get();
     if (result.exists) {
       return UserP.fromJson(result.data());
     }

@@ -12,12 +12,13 @@ class ButtonTema extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () => AppHelps.defaultDialog(
-          context: context,
-          child: SelectTheme(
-            gb: gb,
-            items: const ['Original', 'Dark', 'Azul', 'Roxo'],
-          ),
-          barrierColor: Colors.transparent),
+        context: context,
+        child: SelectTheme(
+          gb: gb,
+          items: const ['Original', 'Dark', 'Azul', 'Roxo'],
+        ),
+        barrierColor: Colors.transparent,
+      ),
       style: TextButton.styleFrom(
         padding: const EdgeInsets.only(left: 20, right: 20),
       ),
@@ -33,7 +34,7 @@ class ButtonTema extends StatelessWidget {
           ),
           Text(
             'Temas',
-            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   color: gb.getPrimary(),
                 ),
           ),

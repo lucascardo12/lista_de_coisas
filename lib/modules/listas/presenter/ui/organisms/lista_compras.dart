@@ -32,7 +32,8 @@ class ListaCompras extends StatelessWidget {
                 for (var element in ct.coisas!.checkCompras) {
                   element.feito = ct.marcaTodos;
                 }
-                ct.coisas!.checklist.removeWhere((element) => element.item.isEmpty);
+                ct.coisas!.checklist
+                    .removeWhere((element) => element.item.isEmpty);
                 ct.update();
               },
               value: ct.marcaTodos,
@@ -98,15 +99,21 @@ class ListaCompras extends StatelessWidget {
                               onEditingComplete: () => ct.node.nextFocus(),
                               validator: (value) {
                                 ct.coisas!.checkCompras[i].item = value!;
-                                if (value.isEmpty) return "Conteudo não pode ser vazio";
+                                if (value.isEmpty) {
+                                  return 'Conteudo não pode ser vazio';
+                                }
                                 return null;
                               },
-                              autofocus: ct.coisas!.checkCompras[i].item.isEmpty ? true : false,
+                              autofocus: ct.coisas!.checkCompras[i].item.isEmpty
+                                  ? true
+                                  : false,
                               initialValue: ct.coisas!.checkCompras[i].item,
-                              onChanged: (v) => ct.coisas!.checkCompras[i].item = v,
+                              onChanged: (v) =>
+                                  ct.coisas!.checkCompras[i].item = v,
                               minLines: 1,
                               maxLines: 2,
-                              maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
+                              maxLengthEnforcement: MaxLengthEnforcement
+                                  .truncateAfterCompositionEnds,
                             ),
                           ),
                           Expanded(
@@ -116,15 +123,25 @@ class ListaCompras extends StatelessWidget {
                               keyboardType: TextInputType.number,
                               onEditingComplete: () => ct.node.nextFocus(),
                               inputFormatters: [
-                                CurrencyTextInputFormatter(decimalDigits: 2, symbol: '', locale: 'pt-br'),
+                                CurrencyTextInputFormatter(
+                                  decimalDigits: 2,
+                                  symbol: '',
+                                  locale: 'pt-br',
+                                ),
                               ],
                               onChanged: (v) {
-                                var valor = v.replaceAll('.', '').replaceFirst(',', '.');
-                                ct.coisas!.checkCompras[i].valor = double.tryParse(valor) ?? 0.0;
+                                final valor = v
+                                    .replaceAll('.', '')
+                                    .replaceFirst(',', '.');
+                                ct.coisas!.checkCompras[i].valor =
+                                    double.tryParse(valor) ?? 0.0;
                                 ct.calculaValorTotal();
                               },
-                              autofocus: ct.coisas!.checkCompras[i].valor == 0.0 ? true : false,
-                              initialValue: ct.coisas!.checkCompras[i].valor == 0.0
+                              autofocus: ct.coisas!.checkCompras[i].valor == 0.0
+                                  ? true
+                                  : false,
+                              initialValue: ct.coisas!.checkCompras[i].valor ==
+                                      0.0
                                   ? ''
                                   : ct.coisas!.checkCompras[i].valor.toString(),
                             ),
@@ -137,7 +154,8 @@ class ListaCompras extends StatelessWidget {
                             ),
                             onPressed: () {
                               ct.coisas!.checkCompras.removeAt(i);
-                              ct.coisas!.checkCompras = ct.coisas!.checkCompras.toList();
+                              ct.coisas!.checkCompras =
+                                  ct.coisas!.checkCompras.toList();
                               ct.update();
                             },
                           )
@@ -163,8 +181,8 @@ class ListaCompras extends StatelessWidget {
           builder: (context, value, child) => SizedBox(
             height: 40,
             child: Text(
-              "Valor total da compra: \$${value.toStringAsFixed(2)}",
-              style: Theme.of(context).textTheme.headline6!.copyWith(
+              'Valor total da compra: \$${value.toStringAsFixed(2)}',
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     color: Colors.white,
                   ),
             ),

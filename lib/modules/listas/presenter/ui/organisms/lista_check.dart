@@ -76,7 +76,8 @@ class ListaCheck extends StatelessWidget {
                     children: [
                       !ct.isComp!
                           ? Checkbox(
-                              fillColor: MaterialStateProperty.all(Colors.white),
+                              fillColor:
+                                  MaterialStateProperty.all(Colors.white),
                               checkColor: gb.getPrimary(),
                               onChanged: (bool? value) {
                                 ct.coisas!.checklist[i].feito = value!;
@@ -88,39 +89,49 @@ class ListaCheck extends StatelessWidget {
                               width: 20,
                             ),
                       Expanded(
-                          child: TextFormField(
-                        readOnly: ct.isComp!,
-                        onEditingComplete: () => ct.node.nextFocus(),
-                        validator: (value) {
-                          ct.coisas!.checklist[i].item = value!;
-                          if (value.isEmpty) return "Conteudo não pode ser vazio";
-                          return null;
-                        },
-                        onChanged: (v) => ct.coisas!.checklist[i].item = v,
-                        autofocus: ct.coisas!.checklist[i].item.isEmpty ? true : false,
-                        initialValue: ct.coisas!.checklist[i].item,
-                        cursorColor: Colors.white,
-                        minLines: 1,
-                        maxLines: 2,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          decoration: ct.coisas!.checklist[i].feito ? TextDecoration.lineThrough : null,
-                          decorationThickness: 2.85,
-                          decorationColor: Colors.red,
+                        child: TextFormField(
+                          readOnly: ct.isComp!,
+                          onEditingComplete: () => ct.node.nextFocus(),
+                          validator: (value) {
+                            ct.coisas!.checklist[i].item = value!;
+                            if (value.isEmpty) {
+                              return 'Conteudo não pode ser vazio';
+                            }
+                            return null;
+                          },
+                          onChanged: (v) => ct.coisas!.checklist[i].item = v,
+                          autofocus: ct.coisas!.checklist[i].item.isEmpty
+                              ? true
+                              : false,
+                          initialValue: ct.coisas!.checklist[i].item,
+                          cursorColor: Colors.white,
+                          minLines: 1,
+                          maxLines: 2,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            decoration: ct.coisas!.checklist[i].feito
+                                ? TextDecoration.lineThrough
+                                : null,
+                            decorationThickness: 2.85,
+                            decorationColor: Colors.red,
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.zero,
+                            border: BordaPadrao.check(),
+                            enabledBorder: BordaPadrao.check(),
+                            focusedBorder: BordaPadrao.check(),
+                            hintStyle: const TextStyle(color: Colors.white),
+                            alignLabelWithHint: true,
+                            hintText: '',
+                            labelStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.zero,
-                          border: BordaPadrao.check(),
-                          enabledBorder: BordaPadrao.check(),
-                          focusedBorder: BordaPadrao.check(),
-                          hintStyle: const TextStyle(color: Colors.white),
-                          alignLabelWithHint: true,
-                          hintText: "",
-                          labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                      )),
+                      ),
                       !ct.isComp!
                           ? IconButton(
                               icon: const Icon(
@@ -129,7 +140,8 @@ class ListaCheck extends StatelessWidget {
                               ),
                               onPressed: () {
                                 ct.coisas!.checklist.removeAt(i);
-                                ct.coisas!.checklist = ct.coisas!.checklist.toList();
+                                ct.coisas!.checklist =
+                                    ct.coisas!.checklist.toList();
                                 ct.update();
                               },
                             )

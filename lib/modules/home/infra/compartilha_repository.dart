@@ -8,14 +8,28 @@ class CompartilhaRepository extends ICompartilhaRepository {
   String get idCollection => 'compartilha';
 
   @override
-  Future<void> createUpdate({required String idUser, required Compartilha object}) async {
+  Future<void> createUpdate({
+    required String idUser,
+    required Compartilha object,
+  }) async {
     object.updatAp = DateTime.now();
-    await remoteDataBase.createUpdate(idUser: idUser, object: object, collection: idCollection);
+    await remoteDataBase.createUpdate(
+      idUser: idUser,
+      object: object,
+      collection: idCollection,
+    );
   }
 
   @override
-  Future<Compartilha?> get({required String idUser, required String idDoc}) async {
-    var ret = await remoteDataBase.get(idUser: idUser, collection: idCollection, idDoc: idDoc);
+  Future<Compartilha?> get({
+    required String idUser,
+    required String idDoc,
+  }) async {
+    final ret = await remoteDataBase.get(
+      idUser: idUser,
+      collection: idCollection,
+      idDoc: idDoc,
+    );
     if (ret == null) {
       return null;
     }
@@ -24,12 +38,17 @@ class CompartilhaRepository extends ICompartilhaRepository {
 
   @override
   Future<List<Compartilha>> list({required String idUser}) async {
-    var ret = await remoteDataBase.list(idUser: idUser, collection: idCollection);
+    final ret =
+        await remoteDataBase.list(idUser: idUser, collection: idCollection);
     return ret.map((e) => Compartilha.fromJson(e)).toList();
   }
 
   @override
   Future<void> remove({required String idUser, required String idDoc}) async {
-    await remoteDataBase.remove(idUser: idUser, idDoc: idDoc, collection: idCollection);
+    await remoteDataBase.remove(
+      idUser: idUser,
+      idDoc: idDoc,
+      collection: idCollection,
+    );
   }
 }

@@ -74,7 +74,10 @@ class _CompartilhaPageState extends State<CompartilhaPage> {
               children: [
                 Text(
                   'Desejar anexar a seguinte lista?',
-                  style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.white),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall!
+                      .copyWith(color: Colors.white),
                 ),
                 const SizedBox(
                   height: 10,

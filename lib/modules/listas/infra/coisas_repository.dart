@@ -8,14 +8,25 @@ class CoisasRepository extends ICoisasRepository {
   String get idCollection => 'coisas';
 
   @override
-  Future<void> createUpdate({required String idUser, required Coisas object}) async {
+  Future<void> createUpdate({
+    required String idUser,
+    required Coisas object,
+  }) async {
     object.updatAp = DateTime.now();
-    await remoteDataBase.createUpdate(idUser: idUser, object: object, collection: idCollection);
+    await remoteDataBase.createUpdate(
+      idUser: idUser,
+      object: object,
+      collection: idCollection,
+    );
   }
 
   @override
   Future<Coisas?> get({required String idUser, required String idDoc}) async {
-    var ret = await remoteDataBase.get(idUser: idUser, collection: idCollection, idDoc: idDoc);
+    final ret = await remoteDataBase.get(
+      idUser: idUser,
+      collection: idCollection,
+      idDoc: idDoc,
+    );
     if (ret == null) {
       return null;
     }
@@ -24,12 +35,17 @@ class CoisasRepository extends ICoisasRepository {
 
   @override
   Future<List<Coisas>> list({required String idUser}) async {
-    var ret = await remoteDataBase.list(idUser: idUser, collection: idCollection);
+    final ret =
+        await remoteDataBase.list(idUser: idUser, collection: idCollection);
     return ret.map((e) => Coisas.fromJson(e)).toList();
   }
 
   @override
   Future<void> remove({required String idUser, required String idDoc}) async {
-    await remoteDataBase.remove(idUser: idUser, idDoc: idDoc, collection: idCollection);
+    await remoteDataBase.remove(
+      idUser: idUser,
+      idDoc: idDoc,
+      collection: idCollection,
+    );
   }
 }

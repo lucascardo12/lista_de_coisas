@@ -47,20 +47,21 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.all(20),
           children: [
             const Padding(
-                padding: EdgeInsets.only(top: 50, bottom: 50),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                    'Lista de coisas',
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      letterSpacing: 1,
-                      fontStyle: FontStyle.normal,
-                    ),
+              padding: EdgeInsets.only(top: 50, bottom: 50),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  'Lista de coisas',
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 1,
+                    fontStyle: FontStyle.normal,
                   ),
-                )),
+                ),
+              ),
+            ),
             CampoPadrao(
               hintText: 'E-mail',
               controller: ct.loginControler,
@@ -75,7 +76,11 @@ class _LoginPageState extends State<LoginPage> {
                   lObescure: ct.lObescure.value,
                   suffixIcon: IconButton(
                     color: Colors.white,
-                    icon: Icon(ct.lObescure.value ? Icons.visibility : Icons.visibility_off),
+                    icon: Icon(
+                      ct.lObescure.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
                     onPressed: () => ct.lObescure.value = !ct.lObescure.value,
                   ),
                   hintText: 'Senha',

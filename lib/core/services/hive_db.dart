@@ -10,7 +10,7 @@ class LocalDatabaseHive implements ILocalDatabase<String> {
 
   @override
   void starts() async {
-    var appDir = await getApplicationDocumentsDirectory();
+    final appDir = await getApplicationDocumentsDirectory();
     Hive.init(p.join(appDir.path));
     await carregaBoxs();
     complete.complete(true);
