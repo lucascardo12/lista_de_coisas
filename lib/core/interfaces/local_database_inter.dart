@@ -1,5 +1,5 @@
 abstract class ILocalDatabase<T> {
-  void starts();
+  Future<void> starts();
 
   Future<List> list({T? where});
 

@@ -5,15 +5,13 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 class LocalDatabaseHive implements ILocalDatabase<String> {
-  final complete = Completer();
   late Box box;
 
   @override
-  void starts() async {
+  Future<void> starts() async {
     final appDir = await getApplicationDocumentsDirectory();
     Hive.init(p.join(appDir.path));
     await carregaBoxs();
-    complete.complete(true);
   }
 
   Future<void> carregaBoxs() async {
@@ -25,31 +23,26 @@ class LocalDatabaseHive implements ILocalDatabase<String> {
     required dynamic objeto,
     String? id,
   }) async {
-    await complete.future;
     await box.put(id, objeto);
   }
 
   @override
   Future<void> delete({required String id}) async {
-    await complete.future;
     box.delete(id);
   }
 
   @override
   Future<void> deleteAll() async {
-    await complete.future;
     box.clear();
   }
 
   @override
   Future<dynamic> get({required String id}) async {
-    await complete.future;
     return box.get(id);
   }
 
   @override
   Future<List<Map<String, dynamic>>> list({String? where}) async {
-    await complete.future;
     return box.values.map((e) => Map<String, dynamic>.from(e)).toList();
   }
 
@@ -58,7 +51,6 @@ class LocalDatabaseHive implements ILocalDatabase<String> {
     required dynamic objeto,
     required String id,
   }) async {
-    await complete.future;
     await box.put(id, objeto);
   }
 }
