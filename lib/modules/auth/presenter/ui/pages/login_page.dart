@@ -101,12 +101,6 @@ class _LoginPageState extends State<LoginPage> {
             ),
             ButtonTextPadrao(
               color: gb.getWhiteOrBlack(),
-              label: 'Modo anônimo',
-              textColor: gb.getPrimary(),
-              onPressed: () => ct.loginAnonimo(mounted, context),
-            ),
-            ButtonTextPadrao(
-              color: gb.getWhiteOrBlack(),
               label: 'Google',
               textColor: gb.getPrimary(),
               onPressed: () => ct.loginGoogle(mounted, context),
