@@ -184,7 +184,7 @@ class _ListasPageState extends State<ListasPage> {
                       )
                     : const SizedBox(
                         width: 15,
-                      )
+                      ),
               ],
             ),
           ),

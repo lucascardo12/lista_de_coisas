@@ -46,7 +46,7 @@ class _CompartilhaPageState extends State<CompartilhaPage> {
               ButtonTextPadrao(
                 label: '  Confirmar  ',
                 onPressed: () async {},
-              )
+              ),
             ],
           ),
           appBar: AppBar(
@@ -89,7 +89,7 @@ class _CompartilhaPageState extends State<CompartilhaPage> {
                     ListasPage.route,
                     arguments: [ct.lista, true],
                   ),
-                )
+                ),
               ],
             ),
           ),

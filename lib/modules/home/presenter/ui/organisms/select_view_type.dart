@@ -31,7 +31,7 @@ class SelectViewType extends StatelessWidget {
                       Navigator.pop(context);
                     },
                   ),
-                  Text(e.title)
+                  Text(e.title),
                 ],
               );
             },

@@ -43,7 +43,7 @@ class ListaTexto extends StatelessWidget {
             labelText: 'Conteudo da lista',
             labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
           ),
-        )
+        ),
       ],
     );
   }

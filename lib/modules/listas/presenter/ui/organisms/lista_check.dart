@@ -147,7 +147,7 @@ class ListaCheck extends StatelessWidget {
                             )
                           : const SizedBox(
                               width: 20,
-                            )
+                            ),
                     ],
                   );
                 },
@@ -155,7 +155,7 @@ class ListaCheck extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 10)
+        const SizedBox(height: 10),
       ],
     );
   }

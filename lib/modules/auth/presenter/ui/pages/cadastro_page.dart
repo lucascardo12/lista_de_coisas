@@ -105,7 +105,7 @@ class _CadastroPageState extends State<CadastroPage> {
               textColor: Colors.white,
               color: Colors.transparent,
               onPressed: () => Navigator.pop(context),
-            )
+            ),
           ],
         ),
       ),

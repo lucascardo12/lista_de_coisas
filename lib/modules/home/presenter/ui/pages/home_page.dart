@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onPressed: () => ct.showCria(context: context),
                 ),
-              )
+              ),
             ],
             centerTitle: true,
             backgroundColor: gb.getPrimary(),
@@ -147,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                               Theme.of(context).textTheme.titleMedium!.copyWith(
                                     color: Colors.white,
                                   ),
-                        )
+                        ),
                       ],
                     ),
                   ),

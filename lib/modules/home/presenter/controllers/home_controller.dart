@@ -14,7 +14,7 @@ import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart'
 import 'package:listadecoisa/core/services/admob.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:scan/scan.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:uni_links/uni_links.dart';
 
 class HomeController extends IController {
@@ -249,7 +249,7 @@ class HomeController extends IController {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-            )
+            ),
           ],
         );
       },
@@ -330,7 +330,7 @@ class HomeController extends IController {
                               descricao: '',
                               nome: '',
                             ),
-                            false
+                            false,
                           ],
                         ).then((value) => atualizaLista());
                       },
@@ -342,7 +342,7 @@ class HomeController extends IController {
                             .copyWith(color: global.getWhiteOrBlack()),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

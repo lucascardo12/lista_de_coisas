@@ -158,14 +158,14 @@ class ListaCompras extends StatelessWidget {
                                   ct.coisas!.checkCompras.toList();
                               ct.update();
                             },
-                          )
+                          ),
                         ],
                       ),
                       FieldAmount(
                         global: gb,
                         ct: ct,
                         check: ct.coisas!.checkCompras[i],
-                      )
+                      ),
                     ],
                   );
                 },
@@ -187,7 +187,7 @@ class ListaCompras extends StatelessWidget {
                   ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

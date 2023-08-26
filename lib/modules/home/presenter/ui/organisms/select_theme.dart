@@ -31,7 +31,7 @@ class SelectTheme extends StatelessWidget {
                       Navigator.pop(context);
                     },
                   ),
-                  Text(e)
+                  Text(e),
                 ],
               );
             },

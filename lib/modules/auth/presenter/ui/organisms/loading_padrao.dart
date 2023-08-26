@@ -22,7 +22,7 @@ class LoadPadrao extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: gb.getSecondary(),
                 ),
-          )
+          ),
         ],
       ),
     );
