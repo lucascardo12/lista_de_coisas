@@ -11,26 +11,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore: ^4.8.0
+  cloud_firestore: ^4.9.0
   fluttertoast: ^8.2.2
-  firebase_auth: ^4.6.2
+  firebase_auth: ^4.8.0
   translator: ^0.1.7
-  google_mobile_ads: ^3.0.0
-  flutter_launcher_icons: ^0.13.1
-  google_sign_in: ^6.1.3
+  google_sign_in: ^6.1.4
   uni_links: ^0.5.1
   scan: ^1.6.0
   qr_flutter: ^4.1.0
-  share: ^2.0.4
-  hive: 2.0.6
+  share_plus: ^7.1.0
+  hive: ^2.0.6
   hive_flutter: ^1.1.0
-  package_info_plus: ^4.0.2
-  firebase_core: ^2.13.1
+  package_info_plus: ^4.1.0
+  firebase_core: ^2.15.1
   get_it: ^7.6.0
   path: ^1.8.3
-  path_provider: ^2.0.15
+  path_provider: ^2.1.0
   currency_text_input_formatter: ^2.1.10
- 
+  google_mobile_ads: ^3.0.0
 
 dev_dependencies:
   flutter_test:
