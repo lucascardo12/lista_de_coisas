@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/modules/home/domain/models/list_view_type_enum.dart';
 
-class SelectTheme extends StatelessWidget {
-  final List<String> items;
+class SelectViewType extends StatelessWidget {
+  final List<ListViewType> items;
   final Global gb;
 
-  const SelectTheme({super.key, required this.items, required this.gb});
+  const SelectViewType({super.key, required this.items, required this.gb});
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +21,17 @@ class SelectTheme extends StatelessWidget {
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Radio<dynamic>(
+                  Radio<ListViewType>(
                     value: e,
                     activeColor: gb.getPrimary(),
-                    groupValue: gb.box.get('tema', defaultValue: ''),
-                    onChanged: (dynamic valor) async {
-                      if (valor is int || valor == null) valor = '';
-                      gb.tema.value = valor;
-                      await gb.box.put('tema', valor);
+                    groupValue: gb.listViewType,
+                    onChanged: (ListViewType? valor) {
+                      gb.listViewType = valor ?? ListViewType.list;
+                      gb.box.put('listViewType', gb.listViewType.name);
                       Navigator.pop(context);
                     },
                   ),
-                  Text(e)
+                  Text(e.title)
                 ],
               );
             },

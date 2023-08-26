@@ -5,6 +5,7 @@ import 'package:listadecoisa/core/configs/app_helps.dart';
 import 'package:listadecoisa/core/interfaces/service_interface.dart';
 import 'package:listadecoisa/modules/auth/domain/models/user.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.dart';
+import 'package:listadecoisa/modules/home/domain/models/list_view_type_enum.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class Global extends IService {
@@ -14,6 +15,7 @@ class Global extends IService {
   int hora = 12;
   int dia = 12;
   var tema = ValueNotifier('');
+  ListViewType listViewType = ListViewType.list;
   Color primary = const Color(0xFF212121);
   Color primaryLight = const Color(0xFF484848);
   Color primaryDark = const Color(0xFF000000);
@@ -27,6 +29,7 @@ class Global extends IService {
     await Hive.initFlutter();
     box = await Hive.openBox('global');
     tema.value = box.get('tema', defaultValue: 'Original');
+    listViewType = ListViewType.fromString(box.get('listViewType'));
     final auxi = box.get('user', defaultValue: '');
     if (box.get('fezLogin', defaultValue: false)) {
       usuario = UserP.fromJson(json.decode(auxi));

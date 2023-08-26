@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:listadecoisa/core/configs/app_helps.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/pages/login_page.dart';
+import 'package:listadecoisa/modules/home/domain/models/list_view_type_enum.dart';
 import 'package:listadecoisa/modules/home/presenter/controllers/home_controller.dart';
 import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.dart';
+import 'package:listadecoisa/modules/home/presenter/ui/atoms/drawer_button.dart';
+import 'package:listadecoisa/modules/home/presenter/ui/organisms/select_theme.dart';
+import 'package:listadecoisa/modules/home/presenter/ui/organisms/select_view_type.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/list_compartilhada_page.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/list_text_page.dart';
 import 'package:listadecoisa/core/services/global.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/organisms/button_theme.dart';
 
 class HomePage extends StatefulWidget {
   static const route = '/Home';
@@ -107,7 +111,7 @@ class _HomePageState extends State<HomePage> {
             elevation: 8,
             child: ListView(
               children: [
-                DrawerHeader(
+                Container(
                   margin: const EdgeInsets.all(0),
                   padding: const EdgeInsets.all(0),
                   decoration: BoxDecoration(
@@ -123,16 +127,20 @@ class _HomePageState extends State<HomePage> {
                   child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          gb.usuario!.nome ?? '',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                          ),
-                        ),
+                        gb.usuario?.login != null
+                            ? Text(
+                                gb.usuario!.login!,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                        const SizedBox(height: 8),
                         Text(
                           gb.packageInfo.version,
                           style:
@@ -159,7 +167,37 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () => ct.showAlertRedefinir(context: context),
                   ),
                 ),
-                ButtonTema(),
+                DrawerButtonItem(
+                  prefixo: CircleAvatar(
+                    backgroundColor: gb.getPrimary(),
+                    radius: 12,
+                  ),
+                  title: 'Temas',
+                  onPressed: () => AppHelps.defaultDialog(
+                    context: context,
+                    child: SelectTheme(
+                      gb: gb,
+                      items: const ['Original', 'Dark', 'Azul', 'Roxo'],
+                    ),
+                    barrierColor: Colors.transparent,
+                  ),
+                  valueCurrent: gb.tema.value,
+                ),
+                DrawerButtonItem(
+                  prefixo: Icon(getIconViewType(gb.listViewType)),
+                  title: 'Visualização',
+                  onPressed: () => AppHelps.defaultDialog(
+                    context: context,
+                    child: SelectViewType(
+                      gb: gb,
+                      items: ListViewType.values,
+                    ),
+                    barrierColor: Colors.transparent,
+                  ).then((value) {
+                    setState(() {});
+                  }),
+                  valueCurrent: gb.listViewType.title,
+                ),
               ],
             ),
           ),
@@ -185,5 +223,14 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  IconData getIconViewType(ListViewType type) {
+    switch (type) {
+      case ListViewType.grid:
+        return Icons.grid_on;
+      case ListViewType.list:
+        return Icons.list_alt;
+    }
   }
 }

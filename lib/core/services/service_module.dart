@@ -18,5 +18,6 @@ class ServiceModule {
     await di.get<Global>().start();
     await di.get<AdMob>().start();
     await di.get<IRemoteDataBase>().start();
+    await di.get<ILocalDatabase>().starts();
   }
 }

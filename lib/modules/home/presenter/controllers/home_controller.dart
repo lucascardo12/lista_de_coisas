@@ -219,7 +219,7 @@ class HomeController extends IController {
               ],
             ),
             Center(
-              child: QrImage(
+              child: QrImageView(
                 data:
                     'http://lcm.listadecoisas.com/comp${lisCoisa.value[index].idFire}@${global.usuario!.id}*$isread',
                 version: QrVersions.auto,

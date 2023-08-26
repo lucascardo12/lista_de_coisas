@@ -1,48 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:listadecoisa/core/configs/app_helps.dart';
 import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/core/services/global.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/organisms/select_theme.dart';
 
-class ButtonTema extends StatelessWidget {
+class DrawerButtonItem extends StatelessWidget {
   final gb = di.get<Global>();
+  final void Function()? onPressed;
+  final Widget? prefixo;
+  final Widget? sufixo;
+  final String valueCurrent;
+  final String title;
 
-  ButtonTema({super.key});
+  DrawerButtonItem({
+    super.key,
+    this.onPressed,
+    this.prefixo,
+    this.sufixo,
+    required this.valueCurrent,
+    required this.title,
+  });
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => AppHelps.defaultDialog(
-        context: context,
-        child: SelectTheme(
-          gb: gb,
-          items: const ['Original', 'Dark', 'Azul', 'Roxo'],
-        ),
-        barrierColor: Colors.transparent,
-      ),
+      onPressed: onPressed,
       style: TextButton.styleFrom(
         padding: const EdgeInsets.only(left: 20, right: 20),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CircleAvatar(
-            backgroundColor: gb.getPrimary(),
-            radius: 17,
-          ),
+          prefixo ?? const SizedBox.shrink(),
           const SizedBox(
             width: 10,
           ),
           Text(
-            'Temas',
+            title,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   color: gb.getPrimary(),
                 ),
           ),
           const Spacer(),
           TextButton.icon(
-            onPressed: null,
+            onPressed: onPressed,
             icon: Text(
-              gb.tema.value,
+              valueCurrent,
               style: const TextStyle(color: Colors.black38, fontSize: 12),
             ),
             label: const Icon(
@@ -50,7 +50,7 @@ class ButtonTema extends StatelessWidget {
               size: 16,
               color: Colors.black38,
             ),
-          )
+          ),
         ],
       ),
     );
