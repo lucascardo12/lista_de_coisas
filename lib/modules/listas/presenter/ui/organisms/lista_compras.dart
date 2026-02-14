@@ -1,6 +1,7 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
 import 'package:listadecoisa/modules/listas/domain/models/ckeck_compras.dart';
 import 'package:listadecoisa/core/services/global.dart';
@@ -25,7 +26,7 @@ class ListaCompras extends StatelessWidget {
           children: [
             const SizedBox(width: 8),
             Checkbox(
-              fillColor: MaterialStateProperty.all(Colors.white),
+              fillColor: WidgetStateProperty.all(Colors.white),
               checkColor: gb.getPrimary(),
               onChanged: (bool? value) {
                 ct.marcaTodos = !ct.marcaTodos;
@@ -84,7 +85,7 @@ class ListaCompras extends StatelessWidget {
                       Row(
                         children: [
                           Checkbox(
-                            fillColor: MaterialStateProperty.all(Colors.white),
+                            fillColor: WidgetStateProperty.all(Colors.white),
                             checkColor: gb.getPrimary(),
                             onChanged: (bool? value) {
                               ct.coisas!.checkCompras[i].feito = value!;
@@ -124,9 +125,11 @@ class ListaCompras extends StatelessWidget {
                               onEditingComplete: () => ct.node.nextFocus(),
                               inputFormatters: [
                                 CurrencyTextInputFormatter(
-                                  decimalDigits: 2,
-                                  symbol: '',
-                                  locale: 'pt-br',
+                                  NumberFormat.currency(
+                                    locale: 'pt_BR',
+                                    symbol: '',
+                                    decimalDigits: 2,
+                                  ),
                                 ),
                               ],
                               onChanged: (v) {

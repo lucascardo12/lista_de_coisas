@@ -23,7 +23,7 @@ class ListaCheck extends StatelessWidget {
                 children: [
                   const SizedBox(width: 8),
                   Checkbox(
-                    fillColor: MaterialStateProperty.all(Colors.white),
+                    fillColor: WidgetStateProperty.all(Colors.white),
                     checkColor: gb.getPrimary(),
                     onChanged: (bool? value) {
                       ct.marcaTodos = !ct.marcaTodos;
@@ -76,8 +76,7 @@ class ListaCheck extends StatelessWidget {
                     children: [
                       !ct.isComp!
                           ? Checkbox(
-                              fillColor:
-                                  MaterialStateProperty.all(Colors.white),
+                              fillColor: WidgetStateProperty.all(Colors.white),
                               checkColor: gb.getPrimary(),
                               onChanged: (bool? value) {
                                 ct.coisas!.checklist[i].feito = value!;

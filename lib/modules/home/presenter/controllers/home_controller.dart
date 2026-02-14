@@ -209,7 +209,7 @@ class HomeController extends IController {
                 ),
                 Switch(
                   value: isread,
-                  activeColor: global.getPrimary(),
+                  activeThumbColor: global.getPrimary(),
                   onChanged: (bool value) {
                     isread = value;
                     Navigator.pop(context);
