@@ -49,3 +49,4 @@ pubspec.lock
 /android/app/build
 .metadata
 /.vscode
+android/app/google-services.json
