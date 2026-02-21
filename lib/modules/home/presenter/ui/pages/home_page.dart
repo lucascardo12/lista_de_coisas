@@ -15,7 +15,7 @@ import 'package:listadecoisa/core/services/global.dart';
 
 class HomePage extends StatefulWidget {
   static const route = '/Home';
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    ct.initPlatformStateForStringUniLinks(context: context);
     return DefaultTabController(
       length: 2,
       child: WillPopScope(
@@ -48,33 +47,17 @@ class _HomePageState extends State<HomePage> {
             bottom: TabBar(
               indicatorColor: gb.getWhiteOrBlack(),
               tabs: const [
-                Tab(
-                  icon: Icon(
-                    Icons.list_alt,
-                    color: Colors.white,
-                  ),
-                ),
-                Tab(
-                  icon: Icon(
-                    Icons.share_outlined,
-                    color: Colors.white,
-                  ),
-                ),
+                Tab(icon: Icon(Icons.list_alt, color: Colors.white)),
+                Tab(icon: Icon(Icons.share_outlined, color: Colors.white)),
               ],
             ),
             iconTheme: const IconThemeData(color: Colors.white),
             actions: [
               Padding(
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 10,
-                ),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 child: IconButton(
                   color: Colors.white,
-                  icon: const Icon(
-                    Icons.add_circle,
-                    size: 32,
-                  ),
+                  icon: const Icon(Icons.add_circle, size: 32),
                   onPressed: () => ct.showCria(context: context),
                 ),
               ),
@@ -83,10 +66,7 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: gb.getPrimary(),
             title: const Text(
               'Listas',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
+              style: TextStyle(color: Colors.white, fontSize: 25),
             ),
           ),
           body: Container(
@@ -94,10 +74,7 @@ class _HomePageState extends State<HomePage> {
               gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
-                colors: [
-                  gb.getPrimary(),
-                  gb.getSecondary(),
-                ],
+                colors: [gb.getPrimary(), gb.getSecondary()],
               ),
             ),
             child: TabBarView(
@@ -118,10 +95,7 @@ class _HomePageState extends State<HomePage> {
                     gradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
-                      colors: [
-                        gb.getPrimary(),
-                        gb.getSecondary(),
-                      ],
+                      colors: [gb.getPrimary(), gb.getSecondary()],
                     ),
                   ),
                   child: Padding(
@@ -143,10 +117,8 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 8),
                         Text(
                           gb.packageInfo.version,
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: Colors.white,
-                                  ),
+                          style: Theme.of(context).textTheme.titleMedium!
+                              .copyWith(color: Colors.white),
                         ),
                       ],
                     ),
@@ -186,16 +158,17 @@ class _HomePageState extends State<HomePage> {
                 DrawerButtonItem(
                   prefixo: Icon(getIconViewType(gb.listViewType)),
                   title: 'Visualização',
-                  onPressed: () => AppHelps.defaultDialog(
-                    context: context,
-                    child: SelectViewType(
-                      gb: gb,
-                      items: ListViewType.values,
-                    ),
-                    barrierColor: Colors.transparent,
-                  ).then((value) {
-                    setState(() {});
-                  }),
+                  onPressed: () =>
+                      AppHelps.defaultDialog(
+                        context: context,
+                        child: SelectViewType(
+                          gb: gb,
+                          items: ListViewType.values,
+                        ),
+                        barrierColor: Colors.transparent,
+                      ).then((value) {
+                        setState(() {});
+                      }),
                   valueCurrent: gb.listViewType.title,
                 ),
               ],
@@ -207,14 +180,10 @@ class _HomePageState extends State<HomePage> {
               future: ct.admob.loadBanner(adUnitId: ct.admob.bannerAdUnitId),
               builder: (context, value) {
                 if (value.hasError) {
-                  return const Center(
-                    child: Text('Erro na propaganda'),
-                  );
+                  return const Center(child: Text('Erro na propaganda'));
                 }
                 if (value.hasData) {
-                  return AdWidget(
-                    ad: value.data!,
-                  );
+                  return AdWidget(ad: value.data!);
                 }
                 return const CircularProgressIndicator();
               },

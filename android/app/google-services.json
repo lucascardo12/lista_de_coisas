@@ -3,7 +3,7 @@
     "project_number": "337919947963",
     "firebase_url": "https://listadecoisas-f6c9f.firebaseio.com",
     "project_id": "listadecoisas-f6c9f",
-    "storage_bucket": "listadecoisas-f6c9f.appspot.com"
+    "storage_bucket": "listadecoisas-f6c9f.firebasestorage.app"
   },
   "client": [
     {
@@ -20,14 +20,6 @@
           "android_info": {
             "package_name": "com.lcm.listadecoisa",
             "certificate_hash": "ab019f6cf909384d682901064a7c2d55c51229c5"
-          }
-        },
-        {
-          "client_id": "337919947963-os8oiupk8ofe1oplqa84pejlgs7i34b0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.lcm.listadecoisa",
-            "certificate_hash": "11f170b5896a0a5f06d07b5891b0a0102f0926b4"
           }
         },
         {

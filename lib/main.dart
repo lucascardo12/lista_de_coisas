@@ -16,6 +16,7 @@ import 'package:listadecoisa/core/services/service_module.dart';
 GetIt di = GetIt.instance;
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   ServiceModule().register();
   AuthModule().register();
   HomeModule().register();
@@ -42,8 +43,7 @@ class MyApp extends StatelessWidget {
             textSelectionTheme: const TextSelectionThemeData(
               cursorColor: Colors.white,
             ),
-            colorScheme: ThemeData.light()
-                .colorScheme
+            colorScheme: ThemeData.light().colorScheme
                 .copyWith(
                   primary: gb.getPrimary(),
                   secondary: gb.getSecondary(),

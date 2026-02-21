@@ -5,17 +5,11 @@ import 'package:listadecoisa/core/interfaces/controller_interface.dart';
 import 'package:listadecoisa/core/interfaces/local_database_inter.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
-import 'package:listadecoisa/modules/home/domain/models/compartilha_params.dart';
 import 'package:listadecoisa/modules/home/domain/repositories/compartilha_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/pages/compartilha_page.dart';
 import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
 import 'package:listadecoisa/core/services/admob.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:scan/scan.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:uni_links/uni_links.dart';
 
 class HomeController extends IController {
   final ILocalDatabase localDatabase;
@@ -30,12 +24,7 @@ class HomeController extends IController {
   var isAnonimo = false;
   var isread = false;
   var tipo = 1;
-  var controller = ScanController();
-  var listaTipo = [
-    'Texto Simples',
-    'Check-List',
-    'Lista de Compras',
-  ];
+  var listaTipo = ['Texto Simples', 'Check-List', 'Lista de Compras'];
 
   HomeController({
     required this.coisasRepository,
@@ -61,8 +50,9 @@ class HomeController extends IController {
     lisCoisaComp.value.clear();
     lisCoisa.value = await coisasRepository.list(idUser: global.usuario!.id!);
 
-    final listcomp =
-        await compartilhaRepository.list(idUser: global.usuario!.id!);
+    final listcomp = await compartilhaRepository.list(
+      idUser: global.usuario!.id!,
+    );
     for (var element in listcomp) {
       final coisaComp = await coisasRepository.get(
         idUser: element.idUser,
@@ -121,43 +111,7 @@ class HomeController extends IController {
     );
   }
 
-  Future initPlatformStateForStringUniLinks({
-    required BuildContext context,
-  }) async {
-    String? initialLink;
-
-    try {
-      initialLink = (await getInitialLink());
-      if (initialLink != null) {
-        final codigoList = initialLink.substring(33, initialLink.indexOf('@'));
-        final codigoUser = initialLink.substring(
-          initialLink.indexOf('@') + 1,
-          initialLink.indexOf('*'),
-        );
-        final codigRead = initialLink.substring(
-          initialLink.indexOf('*') + 1,
-          initialLink.length,
-        );
-        Navigator.pushNamed(
-          context,
-          CompartilhaPage.route,
-          arguments: CompartilharParams(
-            codigoList: codigoList,
-            codigoUser: codigoUser,
-            codigRead: codigRead,
-          ),
-        );
-      }
-    } on PlatformException {
-      initialLink = 'Failed to get initial link.';
-    } on FormatException {
-      initialLink = 'Failed to parse the initial link as Uri.';
-    }
-  }
-
-  Future<bool> showExit({
-    required BuildContext context,
-  }) async {
+  Future<bool> showExit({required BuildContext context}) async {
     return await showDialog<bool>(
           context: context,
           builder: (BuildContext context) {
@@ -182,83 +136,7 @@ class HomeController extends IController {
         false;
   }
 
-  void showCompartilha({required BuildContext context, required int index}) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          children: [
-            Text(
-              'Mostre o QR code ou compartilhe o link',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            Text(
-              'Quem for receber a lista precisa abri com o app o link ou escanear o QRcode',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Somente visualização?',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(color: global.primary),
-                ),
-                Switch(
-                  value: isread,
-                  activeThumbColor: global.getPrimary(),
-                  onChanged: (bool value) {
-                    isread = value;
-                    Navigator.pop(context);
-                    showCompartilha(context: context, index: index);
-                  },
-                ),
-              ],
-            ),
-            Center(
-              child: QrImageView(
-                data:
-                    'http://lcm.listadecoisas.com/comp${lisCoisa.value[index].idFire}@${global.usuario!.id}*$isread',
-                version: QrVersions.auto,
-                size: 200.0,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 60, right: 60),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.only(top: 15, bottom: 15),
-                  disabledForegroundColor:
-                      global.getSecondary().withOpacity(0.38),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  backgroundColor: global.getPrimary(),
-                ),
-                onPressed: () => Share.share(
-                  'http://lcm.listadecoisas.com/comp${lisCoisa.value[index].idFire}@${global.usuario!.id}*$isread',
-                ),
-                child: const Text(
-                  'Compartilhar link',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void showCria({
-    required BuildContext context,
-  }) {
+  void showCria({required BuildContext context}) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -268,8 +146,9 @@ class HomeController extends IController {
             ListTile(
               title: Text(
                 'Escolha o tipo de Lista',
-                style: theme.textTheme.titleMedium!
-                    .copyWith(color: global.getWhiteOrBlack()),
+                style: theme.textTheme.titleMedium!.copyWith(
+                  color: global.getWhiteOrBlack(),
+                ),
               ),
               tileColor: global.getPrimary(),
             ),
@@ -277,10 +156,9 @@ class HomeController extends IController {
               ListTile(
                 title: Text(
                   listaTipo[i],
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(color: Colors.black),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium!.copyWith(color: Colors.black),
                 ),
                 leading: Radio(
                   value: i,
@@ -301,18 +179,18 @@ class HomeController extends IController {
                   Expanded(
                     child: TextButton(
                       onPressed: () => Navigator.pop(context),
-                      style:
-                          TextButton.styleFrom(backgroundColor: Colors.white),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.white,
+                      ),
                       child: Text(
                         'Cancelar',
-                        style: theme.textTheme.titleMedium!
-                            .copyWith(color: Colors.black),
+                        style: theme.textTheme.titleMedium!.copyWith(
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 20,
-                  ),
+                  const SizedBox(width: 20),
                   Expanded(
                     child: TextButton(
                       onPressed: () {
@@ -334,12 +212,14 @@ class HomeController extends IController {
                           ],
                         ).then((value) => atualizaLista());
                       },
-                      style:
-                          TextButton.styleFrom(backgroundColor: Colors.green),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
                       child: Text(
                         'Continuar',
-                        style: theme.textTheme.titleMedium!
-                            .copyWith(color: global.getWhiteOrBlack()),
+                        style: theme.textTheme.titleMedium!.copyWith(
+                          color: global.getWhiteOrBlack(),
+                        ),
                       ),
                     ),
                   ),

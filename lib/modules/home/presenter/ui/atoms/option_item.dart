@@ -21,34 +21,15 @@ class OptionItem extends StatelessWidget {
       icon: const Icon(Icons.more_vert),
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
         PopupMenuItem(
-          value: 0,
-          child: ListTile(
-            leading: Icon(
-              Icons.qr_code_scanner_rounded,
-              color: gb.getPrimary(),
-            ),
-            title: const Text('Compartilhar'),
-          ),
-        ),
-        PopupMenuItem(
           value: 1,
           child: ListTile(
-            leading: Icon(
-              Icons.delete,
-              color: gb.getPrimary(),
-            ),
+            leading: Icon(Icons.delete, color: gb.getPrimary()),
             title: const Text('Excluir'),
           ),
         ),
       ],
       onSelected: (value) async {
         switch (value) {
-          case 0:
-            ct.showCompartilha(
-              context: context,
-              index: index,
-            );
-            break;
           case 1:
             await ct.showAlertDialog2(
               coisas: ct.lisCoisa.value[index],
