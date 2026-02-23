@@ -16,29 +16,15 @@ class OptionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      padding: EdgeInsets.zero,
-      icon: const Icon(Icons.more_vert),
-      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-        PopupMenuItem(
-          value: 1,
-          child: ListTile(
-            leading: Icon(Icons.delete, color: gb.getPrimary()),
-            title: const Text('Excluir'),
-          ),
-        ),
-      ],
-      onSelected: (value) async {
-        switch (value) {
-          case 1:
-            await ct.showAlertDialog2(
-              coisas: ct.lisCoisa.value[index],
-              context: context,
-            );
-            break;
-          default:
-        }
+    return IconButton(
+      icon: Icon(Icons.delete_outline, color: gb.getErrorColor(), size: 20),
+      onPressed: () async {
+        await ct.showAlertDialog2(
+          coisas: ct.lisCoisa.value[index],
+          context: context,
+        );
       },
+      tooltip: 'Excluir lista',
     );
   }
 }

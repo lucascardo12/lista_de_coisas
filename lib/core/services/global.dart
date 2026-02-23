@@ -96,4 +96,56 @@ class Global extends IService {
         return Colors.white;
     }
   }
+
+  Color getSuccessColor() {
+    return Colors.green;
+  }
+
+  Color getErrorColor() {
+    return Colors.red;
+  }
+
+  Color getWarningColor() {
+    return Colors.orange;
+  }
+
+  Color getInfoColor() {
+    return Colors.blue;
+  }
+
+  Color getTextColor() {
+    switch (tema.value) {
+      case 'Dark':
+        return Colors.white;
+      default:
+        return const Color(0xFF2C3E50);
+    }
+  }
+
+  Color getSecondaryTextColor() {
+    switch (tema.value) {
+      case 'Dark':
+        return Colors.white70;
+      default:
+        return Colors.grey[600]!;
+    }
+  }
+
+  Color getBackgroundColor() {
+    switch (tema.value) {
+      case 'Dark':
+        return const Color(0xFF121212);
+      default:
+        return Colors.grey[50]!;
+    }
+  }
+
+  Color getSurfaceColor() {
+    switch (tema.value) {
+      case 'Dark':
+        return const Color(0xFF1E1E1E);
+      default:
+        return Colors.white;
+    }
+  }
 }
