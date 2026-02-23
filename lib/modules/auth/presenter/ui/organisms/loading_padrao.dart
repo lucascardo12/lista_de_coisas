@@ -9,21 +9,23 @@ class LoadPadrao extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        runAlignment: WrapAlignment.center,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        direction: Axis.vertical,
-        children: [
-          const CircularProgressIndicator.adaptive(),
-          const SizedBox(height: 20),
-          Text(
-            'carregando as coisas ⏳',
-            style: Theme.of(context).textTheme.headline5!.copyWith(
-                  color: gb.getSecondary(),
-                ),
-          )
-        ],
+      child: SafeArea(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          runAlignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          direction: Axis.vertical,
+          children: [
+            const CircularProgressIndicator.adaptive(),
+            const SizedBox(height: 20),
+            Text(
+              'carregando as coisas ⏳',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall!.copyWith(color: gb.getSecondary()),
+            ),
+          ],
+        ),
       ),
     );
   }

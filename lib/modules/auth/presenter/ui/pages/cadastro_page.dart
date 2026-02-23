@@ -31,78 +31,83 @@ class _CadastroPageState extends State<CadastroPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            gb.getPrimary(),
-            gb.getSecondary(),
-          ],
-        ),
-      ),
-      child: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          const Padding(
-              padding: EdgeInsets.only(top: 50, bottom: 50),
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Cadastro',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: 1,
-                    fontStyle: FontStyle.normal,
+      body: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [gb.getPrimary(), gb.getSecondary()],
+            ),
+          ),
+          child: ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 50, bottom: 50),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Cadastro',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 1,
+                      fontStyle: FontStyle.normal,
+                    ),
                   ),
                 ),
-              )),
-          CampoPadrao(
-            gb: gb,
-            hintText: 'E-mail',
-            controller: ct.loginControler,
-          ),
-          const SizedBox(height: 10),
-          ValueListenableBuilder(
-            valueListenable: ct.lObescure,
-            builder: (context, value, child) {
-              return CampoPadrao(
-                hintText: 'Senha',
+              ),
+              CampoPadrao(
                 gb: gb,
-                lObescure: ct.lObescure.value,
-                suffixIcon: IconButton(
-                  color: Colors.white,
-                  icon: Icon(ct.lObescure.value ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () => ct.lObescure.value = !ct.lObescure.value,
-                ),
-                controller: ct.senhaControler,
-              );
-            },
+                hintText: 'E-mail',
+                controller: ct.loginControler,
+              ),
+              const SizedBox(height: 10),
+              ValueListenableBuilder(
+                valueListenable: ct.lObescure,
+                builder: (context, value, child) {
+                  return CampoPadrao(
+                    hintText: 'Senha',
+                    gb: gb,
+                    lObescure: ct.lObescure.value,
+                    suffixIcon: IconButton(
+                      color: Colors.white,
+                      icon: Icon(
+                        ct.lObescure.value
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                      onPressed: () => ct.lObescure.value = !ct.lObescure.value,
+                    ),
+                    controller: ct.senhaControler,
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+              CampoPadrao(
+                hintText: 'Nome',
+                gb: gb,
+                controller: ct.nomeControler,
+              ),
+              const SizedBox(height: 20),
+              ButtonTextPadrao(
+                label: 'Cadastro',
+                color: gb.getWhiteOrBlack(),
+                textColor: gb.getPrimary(),
+                onPressed: () => ct.valida(mounted, context),
+              ),
+              ButtonTextPadrao(
+                label: 'Voltar',
+                textColor: Colors.white,
+                color: Colors.transparent,
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
           ),
-          const SizedBox(height: 10),
-          CampoPadrao(
-            hintText: 'Nome',
-            gb: gb,
-            controller: ct.nomeControler,
-          ),
-          const SizedBox(height: 20),
-          ButtonTextPadrao(
-            label: 'Cadastro',
-            color: gb.getWhiteOrBlack(),
-            textColor: gb.getPrimary(),
-            onPressed: () => ct.valida(mounted, context),
-          ),
-          ButtonTextPadrao(
-            label: 'Voltar',
-            textColor: Colors.white,
-            color: Colors.transparent,
-            onPressed: () => Navigator.pop(context),
-          )
-        ],
+        ),
       ),
-    ));
+    );
   }
 }

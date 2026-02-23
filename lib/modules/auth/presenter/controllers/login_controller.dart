@@ -30,8 +30,8 @@ class LoginController extends IController {
 
   @override
   void init(BuildContext context) {
-    loginControler.text = gb.box.get('login', defaultValue: "");
-    senhaControler.text = gb.box.get('senha', defaultValue: "");
+    loginControler.text = gb.box.get('login', defaultValue: '');
+    senhaControler.text = gb.box.get('senha', defaultValue: '');
   }
 
   Future<bool> verificarConexao() async {
@@ -44,13 +44,14 @@ class LoginController extends IController {
       }
     } on SocketException catch (_) {
       Fluttertoast.showToast(
-          msg: 'Sem Conexão',
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 5,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 18.0);
+        msg: 'Sem Conexão',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
       return false;
     }
   }
@@ -61,17 +62,18 @@ class LoginController extends IController {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(
-              "Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam."),
+            'Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam.',
+          ),
           content: TextField(
             controller: loginControler,
           ),
           actions: [
             TextButton(
-              child: const Text("Cancelar"),
+              child: const Text('Cancelar'),
               onPressed: () => Navigator.pop(context),
             ),
             TextButton(
-              child: const Text("Confirmar"),
+              child: const Text('Confirmar'),
               onPressed: () {
                 authService.resetarSenha(user: gb.usuario!);
                 Navigator.pop(context);
@@ -86,12 +88,15 @@ class LoginController extends IController {
   Future<void> logar(bool mounted, BuildContext context) async {
     try {
       gb.load(context);
-      var value = await authService.login(email: loginControler.text, password: senhaControler.text);
+      final value = await authService.login(
+        email: loginControler.text,
+        password: senhaControler.text,
+      );
       if (value != null) {
         gb.usuario = value;
-        var userCo = jsonEncode(value);
+        final userCo = jsonEncode(value);
         gb.box.put('user', userCo);
-        gb.box.put("fezLogin", true);
+        gb.box.put('fezLogin', true);
         gb.box.put('login', loginControler.text);
         gb.box.put('senha', senhaControler.text);
         gb.box.put('isAnonimo', false);
@@ -105,28 +110,30 @@ class LoginController extends IController {
       if (!mounted) return;
       Navigator.pop(context, true);
     } catch (e) {
-      dynamic error = e;
-      var auxi = await translator.translate(error.message ?? '', from: 'en', to: 'pt');
+      final dynamic error = e;
+      final auxi =
+          await translator.translate(error.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
-          msg: auxi.text,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 5,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 18.0);
+        msg: auxi.text,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
     }
   }
 
   Future<void> loginAnonimo(bool mounted, BuildContext context) async {
     try {
       gb.load(context);
-      var value = await authService.criaUserAnonimo();
+      final value = await authService.criaUserAnonimo();
       gb.usuario = value;
       if (value != null) {
-        var userCo = jsonEncode(value);
+        final userCo = jsonEncode(value);
         gb.box.put('user', userCo);
-        gb.box.put("fezLogin", true);
+        gb.box.put('fezLogin', true);
         gb.box.put('isAnonimo', true);
         if (!mounted) return;
         await Navigator.of(context).pushNamedAndRemoveUntil(
@@ -137,28 +144,30 @@ class LoginController extends IController {
       if (!mounted) return;
       Navigator.pop(context, true);
     } catch (e) {
-      dynamic error = e;
-      var auxi = await translator.translate(error.message ?? '', from: 'en', to: 'pt');
+      final dynamic error = e;
+      final auxi =
+          await translator.translate(error.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
-          msg: auxi.text,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 5,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 18.0);
+        msg: auxi.text,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
     }
   }
 
   Future<void> loginGoogle(bool mounted, BuildContext context) async {
     try {
       gb.load(context);
-      var value = await authService.criaUserGoogle();
+      final value = await authService.criaUserGoogle();
       gb.usuario = value;
       if (value != null) {
-        var userCo = jsonEncode(value);
+        final userCo = jsonEncode(value);
         gb.box.put('user', userCo);
-        gb.box.put("fezLogin", true);
+        gb.box.put('fezLogin', true);
         if (!mounted) return;
         await Navigator.pushNamedAndRemoveUntil(
           context,
@@ -170,16 +179,18 @@ class LoginController extends IController {
       if (!mounted) return;
       Navigator.pop(context, true);
     } catch (e) {
-      dynamic error = e;
-      var auxi = await translator.translate(error.message ?? '', from: 'en', to: 'pt');
+      final dynamic error = e;
+      final auxi =
+          await translator.translate(error.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
-          msg: auxi.text,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 5,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 18.0);
+        msg: auxi.text,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
     }
   }
 }

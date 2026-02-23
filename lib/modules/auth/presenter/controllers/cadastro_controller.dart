@@ -20,7 +20,11 @@ class CadastroController extends IController {
   var isVali = false;
   var lObescure = ValueNotifier(true);
 
-  CadastroController({required this.gb, required this.banco, required this.authService});
+  CadastroController({
+    required this.gb,
+    required this.banco,
+    required this.authService,
+  });
 
   @override
   void dispose() {
@@ -33,13 +37,13 @@ class CadastroController extends IController {
   Future<void> valida(bool mounted, BuildContext context) async {
     try {
       gb.load(context);
-      UserP us = UserP(
+      final UserP us = UserP(
         id: null,
         login: loginControler.text.trim(),
         senha: senhaControler.text.trim(),
       );
       if (!mounted) return;
-      var value = await authService.criaUser(us);
+      final value = await authService.criaUser(us);
 
       if (value.isNotEmpty) {
         await submit();
@@ -53,30 +57,32 @@ class CadastroController extends IController {
       if (!mounted) return;
       Navigator.pop(context, true);
     } catch (e) {
-      dynamic error = e;
-      var auxi = await translator.translate(error.message ?? '', from: 'en', to: 'pt');
+      final dynamic error = e;
+      final auxi =
+          await translator.translate(error.message ?? '', from: 'en', to: 'pt');
       Fluttertoast.showToast(
-          msg: auxi.text,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 5,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 18.0);
+        msg: auxi.text,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
     }
   }
 
   Future<void> submit() async {
-    var value = await authService.login(
+    final value = await authService.login(
       email: loginControler.text.trim(),
       password: senhaControler.text.trim(),
     );
 
     gb.usuario = value;
     if (value != null) {
-      var userCo = jsonEncode(value);
+      final userCo = jsonEncode(value);
       gb.box.put('user', userCo);
-      gb.box.put("fezLogin", true);
+      gb.box.put('fezLogin', true);
     }
   }
 }

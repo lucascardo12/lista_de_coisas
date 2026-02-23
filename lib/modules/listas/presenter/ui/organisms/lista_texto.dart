@@ -22,7 +22,7 @@ class ListaTexto extends StatelessWidget {
         TextFormField(
           readOnly: ct.isComp!,
           validator: (value) {
-            if (value!.isEmpty) return "Conteudo não pode ser vazio";
+            if (value!.isEmpty) return 'Conteudo não pode ser vazio';
             return null;
           },
           focusNode: ct.nodeText1,
@@ -43,7 +43,7 @@ class ListaTexto extends StatelessWidget {
             labelText: 'Conteudo da lista',
             labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
           ),
-        )
+        ),
       ],
     );
   }

@@ -9,7 +9,9 @@ class HomeModule extends IModuleFactory {
   @override
   void register() {
     //register repository
-    di.registerFactory<ICompartilhaRepository>(() => CompartilhaRepository(di()));
+    di.registerFactory<ICompartilhaRepository>(
+      () => CompartilhaRepository(di()),
+    );
     //register controllers
     di.registerFactory(
       () => CompartilhaController(
@@ -21,7 +23,6 @@ class HomeModule extends IModuleFactory {
     );
     di.registerFactory(
       () => HomeController(
-        admob: di(),
         authService: di(),
         coisasRepository: di(),
         compartilhaRepository: di(),

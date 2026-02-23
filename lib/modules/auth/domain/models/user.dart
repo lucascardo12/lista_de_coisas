@@ -19,14 +19,14 @@ class UserP {
         'login': login,
       };
   UserP.toMap(Map<String, dynamic> map) {
-    map["nome"] = nome;
-    map["id"] = id;
+    map['nome'] = nome;
+    map['id'] = id;
     map['login'] = login;
   }
 
   UserP.fromSnapshot(DocumentSnapshot snapshot) {
     nome = snapshot.get('nome');
-    login = snapshot.get("login");
+    login = snapshot.get('login');
     id = snapshot.id;
   }
 }

@@ -41,37 +41,46 @@ class CompartilhaController extends IController {
 
   void getLista() async {
     if (argumts != null) {
-      var valuelist = await coisasRepository.get(
+      final valuelist = await coisasRepository.get(
         idDoc: argumts!.codigoList,
         idUser: argumts!.codigoUser,
       );
       lista = valuelist!;
-      var valueUser = await remoteDataBase.getUser(argumts!.codigoUser);
+      final valueUser = await remoteDataBase.getUser(argumts!.codigoUser);
       user = valueUser!;
       statusPage.value = StatusPage.done;
     }
   }
 
   Future<void> salvarComp(BuildContext context) async {
-    var comp = Compartilha(
+    final comp = Compartilha(
       creatAp: DateTime.now(),
       updatAp: DateTime.now(),
       idLista: argumts!.codigoList,
       idUser: argumts!.codigoUser,
       isRead: argumts!.codigRead == 'true' ? true : false,
     );
-    var ret = await compartilhaRepository.list(idUser: comp.idUser);
-    if (ret.where((element) => element.idLista == comp.idLista && element.idUser == comp.idUser).isEmpty) {
-      await compartilhaRepository.createUpdate(idUser: gb.usuario!.id!, object: comp);
+    final ret = await compartilhaRepository.list(idUser: comp.idUser);
+    if (ret
+        .where(
+          (element) =>
+              element.idLista == comp.idLista && element.idUser == comp.idUser,
+        )
+        .isEmpty) {
+      await compartilhaRepository.createUpdate(
+        idUser: gb.usuario!.id!,
+        object: comp,
+      );
     } else {
       await Fluttertoast.showToast(
-          msg: "A lista já foi salva!!",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 5,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 18.0);
+        msg: 'A lista já foi salva!!',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 5,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 18.0,
+      );
     }
     Navigator.pop(context);
   }

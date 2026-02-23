@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BordaPadrao {
-  static build() {
+  static OutlineInputBorder build() {
     return const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(25)),
       borderSide: BorderSide(
@@ -11,7 +11,7 @@ class BordaPadrao {
     );
   }
 
-  static check() {
+  static OutlineInputBorder check() {
     return const OutlineInputBorder(
       borderSide: BorderSide(color: Colors.white),
     );
