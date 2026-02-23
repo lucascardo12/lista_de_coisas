@@ -13,21 +13,26 @@ class AppHelps {
           builder: (BuildContext context) {
             if (child != null) {
               return AlertDialog(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(22),
+                ),
                 elevation: barrierColor != null ? 0 : null,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 8,
+                ),
                 title: title != null ? Text(title) : null,
-                content: child,
+                content: SafeArea(child: child),
               );
             }
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(22),
+              ),
               title: Text(title ?? ''),
               content: SingleChildScrollView(
-                child: ListBody(
-                  children: [
-                    Text(content ?? ''),
-                  ],
+                child: SafeArea(
+                  child: ListBody(children: [Text(content ?? '')]),
                 ),
               ),
               actions: [

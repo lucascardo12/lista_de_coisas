@@ -138,92 +138,94 @@ class HomeController extends IController {
       context: context,
       builder: (context) {
         final theme = Theme.of(context);
-        return Wrap(
-          children: [
-            ListTile(
-              title: Text(
-                'Escolha o tipo de Lista',
-                style: theme.textTheme.titleMedium!.copyWith(
-                  color: global.getWhiteOrBlack(),
-                ),
-              ),
-              tileColor: global.getPrimary(),
-            ),
-            for (int i = 0; i < listaTipo.length; i++)
+        return SafeArea(
+          child: Wrap(
+            children: [
               ListTile(
                 title: Text(
-                  listaTipo[i],
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium!.copyWith(color: Colors.black),
+                  'Escolha o tipo de Lista',
+                  style: theme.textTheme.titleMedium!.copyWith(
+                    color: global.getWhiteOrBlack(),
+                  ),
                 ),
-                leading: Radio(
-                  value: i,
-                  activeColor: global.getPrimary(),
-                  onChanged: (int? value) {
-                    tipo = value ?? 1;
-                    Navigator.pop(context);
-                    showCria(context: context);
-                  },
-                  groupValue: tipo,
-                ),
+                tileColor: global.getPrimary(),
               ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.white,
-                      ),
-                      child: Text(
-                        'Cancelar',
-                        style: theme.textTheme.titleMedium!.copyWith(
-                          color: Colors.black,
+              for (int i = 0; i < listaTipo.length; i++)
+                ListTile(
+                  title: Text(
+                    listaTipo[i],
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleMedium!.copyWith(color: Colors.black),
+                  ),
+                  leading: Radio(
+                    value: i,
+                    activeColor: global.getPrimary(),
+                    onChanged: (int? value) {
+                      tipo = value ?? 1;
+                      Navigator.pop(context);
+                      showCria(context: context);
+                    },
+                    groupValue: tipo,
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.white,
+                        ),
+                        child: Text(
+                          'Cancelar',
+                          style: theme.textTheme.titleMedium!.copyWith(
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(
-                          context,
-                          ListasPage.route,
-                          arguments: [
-                            Coisas(
-                              creatAp: DateTime.now(),
-                              updatAp: DateTime.now(),
-                              tipo: tipo,
-                              checkCompras: [],
-                              checklist: [],
-                              descricao: '',
-                              nome: '',
-                            ),
-                            false,
-                          ],
-                        ).then((value) => atualizaLista());
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.green,
-                      ),
-                      child: Text(
-                        'Continuar',
-                        style: theme.textTheme.titleMedium!.copyWith(
-                          color: global.getWhiteOrBlack(),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(
+                            context,
+                            ListasPage.route,
+                            arguments: [
+                              Coisas(
+                                creatAp: DateTime.now(),
+                                updatAp: DateTime.now(),
+                                tipo: tipo,
+                                checkCompras: [],
+                                checklist: [],
+                                descricao: '',
+                                nome: '',
+                              ),
+                              false,
+                            ],
+                          ).then((value) => atualizaLista());
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.green,
+                        ),
+                        child: Text(
+                          'Continuar',
+                          style: theme.textTheme.titleMedium!.copyWith(
+                            color: global.getWhiteOrBlack(),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
