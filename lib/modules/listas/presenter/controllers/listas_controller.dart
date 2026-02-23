@@ -4,7 +4,6 @@ import 'package:listadecoisa/core/interfaces/controller_interface.dart';
 import 'package:listadecoisa/modules/home/domain/repositories/compartilha_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
-import 'package:listadecoisa/core/services/admob.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
 
@@ -12,7 +11,6 @@ const umaHora = 2880000;
 
 class ListasController extends ChangeNotifier implements IController {
   final Global gb;
-  final AdMob admob;
   final ICompartilhaRepository compartilhaRepository;
   final ICoisasRepository coisasRepository;
   bool marcaTodos = false;
@@ -28,14 +26,12 @@ class ListasController extends ChangeNotifier implements IController {
   ListasController({
     required this.gb,
     required this.coisasRepository,
-    required this.admob,
     required this.compartilhaRepository,
   });
 
   @override
   void init(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as List;
-    if (verificaUltimaAds()) admob.loadInterstitialAd();
     isComp = arguments[1];
     coisas = arguments[0];
     statusPage.value = StatusPage.done;
@@ -43,8 +39,9 @@ class ListasController extends ChangeNotifier implements IController {
 
   Future<void> criaCoisa({required Coisas coisa}) async {
     final auxi = await compartilhaRepository.list(idUser: gb.usuario!.id!);
-    final indexAuxi =
-        auxi.indexWhere((element) => element.idLista == coisa.idFire);
+    final indexAuxi = auxi.indexWhere(
+      (element) => element.idLista == coisa.idFire,
+    );
     if (indexAuxi >= 0) {
       await coisasRepository.createUpdate(
         idUser: auxi[indexAuxi].idUser,
@@ -72,8 +69,9 @@ class ListasController extends ChangeNotifier implements IController {
   Future<void> atualizaCoisa() async {
     statusPage.value = StatusPage.loading;
     final auxi = await compartilhaRepository.list(idUser: gb.usuario!.id!);
-    final indexAuxi =
-        auxi.indexWhere((element) => element.idLista == coisas!.idFire);
+    final indexAuxi = auxi.indexWhere(
+      (element) => element.idLista == coisas!.idFire,
+    );
     if (indexAuxi >= 0) {
       coisas = await coisasRepository.get(
         idDoc: coisas!.idFire!,
@@ -167,10 +165,4 @@ class ListasController extends ChangeNotifier implements IController {
   }
 
   void update() => notifyListeners();
-  bool verificaUltimaAds() {
-    final agora = DateTime.now().millisecondsSinceEpoch;
-    final depois = gb.box.get('day') ?? DateTime.now().millisecondsSinceEpoch;
-    final dif = agora - depois;
-    return dif > umaHora || dif <= 0;
-  }
 }

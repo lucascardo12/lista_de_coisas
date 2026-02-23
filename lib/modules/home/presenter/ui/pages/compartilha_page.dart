@@ -43,10 +43,7 @@ class _CompartilhaPageState extends State<CompartilhaPage> {
                 label: '  Cancelar  ',
                 onPressed: () => Navigator.pop(context),
               ),
-              ButtonTextPadrao(
-                label: '  Confirmar  ',
-                onPressed: () async {},
-              ),
+              ButtonTextPadrao(label: '  Confirmar  ', onPressed: () async {}),
             ],
           ),
           appBar: AppBar(
@@ -55,42 +52,38 @@ class _CompartilhaPageState extends State<CompartilhaPage> {
             backgroundColor: ct.gb.getPrimary(),
             title: const Text(
               'Lista Compartilhada',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-              ),
+              style: TextStyle(color: Colors.white, fontSize: 25),
             ),
           ),
-          body: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [ct.gb.getPrimary(), ct.gb.getSecondary()],
+          body: SafeArea(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [ct.gb.getPrimary(), ct.gb.getSecondary()],
+                ),
               ),
-            ),
-            child: ListView(
-              padding: const EdgeInsets.all(30),
-              children: [
-                Text(
-                  'Desejar anexar a seguinte lista?',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall!
-                      .copyWith(color: Colors.white),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                ButtonTextPadrao(
-                  label: ct.lista.nome,
-                  onPressed: () => Navigator.pushNamed(
-                    context,
-                    ListasPage.route,
-                    arguments: [ct.lista, true],
+              child: ListView(
+                padding: const EdgeInsets.all(30),
+                children: [
+                  Text(
+                    'Desejar anexar a seguinte lista?',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.headlineSmall!.copyWith(color: Colors.white),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  ButtonTextPadrao(
+                    label: ct.lista.nome,
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      ListasPage.route,
+                      arguments: [ct.lista, true],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

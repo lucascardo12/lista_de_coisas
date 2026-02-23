@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:listadecoisa/core/configs/app_helps.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/pages/login_page.dart';
 import 'package:listadecoisa/modules/home/domain/models/list_view_type_enum.dart';
@@ -9,7 +8,6 @@ import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.
 import 'package:listadecoisa/modules/home/presenter/ui/atoms/drawer_button.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/organisms/select_theme.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/organisms/select_view_type.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/pages/list_compartilhada_page.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/list_text_page.dart';
 import 'package:listadecoisa/core/services/global.dart';
 
@@ -38,38 +36,30 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: WillPopScope(
-        onWillPop: () => ct.showExit(context: context),
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-              indicatorColor: gb.getWhiteOrBlack(),
-              tabs: const [
-                Tab(icon: Icon(Icons.list_alt, color: Colors.white)),
-                Tab(icon: Icon(Icons.share_outlined, color: Colors.white)),
-              ],
-            ),
-            iconTheme: const IconThemeData(color: Colors.white),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: IconButton(
-                  color: Colors.white,
-                  icon: const Icon(Icons.add_circle, size: 32),
-                  onPressed: () => ct.showCria(context: context),
-                ),
+    return WillPopScope(
+      onWillPop: () => ct.showExit(context: context),
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: IconButton(
+                color: Colors.white,
+                icon: const Icon(Icons.add_circle, size: 32),
+                onPressed: () => ct.showCria(context: context),
               ),
-            ],
-            centerTitle: true,
-            backgroundColor: gb.getPrimary(),
-            title: const Text(
-              'Listas',
-              style: TextStyle(color: Colors.white, fontSize: 25),
             ),
+          ],
+          centerTitle: true,
+          backgroundColor: gb.getPrimary(),
+          title: const Text(
+            'Listas',
+            style: TextStyle(color: Colors.white, fontSize: 25),
           ),
-          body: Container(
+        ),
+        body: SafeArea(
+          child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topRight,
@@ -77,14 +67,11 @@ class _HomePageState extends State<HomePage> {
                 colors: [gb.getPrimary(), gb.getSecondary()],
               ),
             ),
-            child: TabBarView(
-              children: [
-                ListTextoPage(ct: ct, gb: gb),
-                ListCompartilhadaPage(ct: ct),
-              ],
-            ),
+            child: ListTextoPage(ct: ct, gb: gb),
           ),
-          drawer: Drawer(
+        ),
+        drawer: SafeArea(
+          child: Drawer(
             elevation: 8,
             child: ListView(
               children: [
@@ -172,21 +159,6 @@ class _HomePageState extends State<HomePage> {
                   valueCurrent: gb.listViewType.title,
                 ),
               ],
-            ),
-          ),
-          bottomNavigationBar: SizedBox(
-            height: 50,
-            child: FutureBuilder<BannerAd>(
-              future: ct.admob.loadBanner(adUnitId: ct.admob.bannerAdUnitId),
-              builder: (context, value) {
-                if (value.hasError) {
-                  return const Center(child: Text('Erro na propaganda'));
-                }
-                if (value.hasData) {
-                  return AdWidget(ad: value.data!);
-                }
-                return const CircularProgressIndicator();
-              },
             ),
           ),
         ),

@@ -14,7 +14,6 @@ class ListasModule extends IModuleFactory {
       () => ListasController(
         gb: di(),
         coisasRepository: di(),
-        admob: di(),
         compartilhaRepository: di(),
       ),
     );

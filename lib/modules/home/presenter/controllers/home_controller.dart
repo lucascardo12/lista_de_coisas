@@ -9,7 +9,6 @@ import 'package:listadecoisa/modules/home/domain/repositories/compartilha_reposi
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
-import 'package:listadecoisa/core/services/admob.dart';
 
 class HomeController extends IController {
   final ILocalDatabase localDatabase;
@@ -17,7 +16,6 @@ class HomeController extends IController {
   final ICompartilhaRepository compartilhaRepository;
   final AuthService authService;
   final Global global;
-  final AdMob admob;
   var lisCoisa = ValueNotifier(<Coisas>[]);
   var lisCoisaComp = ValueNotifier(<Coisas>[]);
   var scaffoldKe = GlobalKey<ScaffoldState>();
@@ -28,7 +26,6 @@ class HomeController extends IController {
 
   HomeController({
     required this.coisasRepository,
-    required this.admob,
     required this.localDatabase,
     required this.global,
     required this.compartilhaRepository,
