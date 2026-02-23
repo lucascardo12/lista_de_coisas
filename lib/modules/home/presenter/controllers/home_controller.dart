@@ -5,7 +5,6 @@ import 'package:listadecoisa/core/interfaces/controller_interface.dart';
 import 'package:listadecoisa/core/interfaces/local_database_inter.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
-import 'package:listadecoisa/modules/home/domain/repositories/compartilha_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
@@ -13,7 +12,6 @@ import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart'
 class HomeController extends IController {
   final ILocalDatabase localDatabase;
   final ICoisasRepository coisasRepository;
-  final ICompartilhaRepository compartilhaRepository;
   final AuthService authService;
   final Global global;
   var lisCoisa = ValueNotifier(<Coisas>[]);
@@ -28,7 +26,6 @@ class HomeController extends IController {
     required this.coisasRepository,
     required this.localDatabase,
     required this.global,
-    required this.compartilhaRepository,
     required this.authService,
   });
 
@@ -46,24 +43,6 @@ class HomeController extends IController {
   Future<void> atualizaLista() async {
     lisCoisaComp.value.clear();
     lisCoisa.value = await coisasRepository.list(idUser: global.usuario!.id!);
-
-    final listcomp = await compartilhaRepository.list(
-      idUser: global.usuario!.id!,
-    );
-    for (var element in listcomp) {
-      final coisaComp = await coisasRepository.get(
-        idUser: element.idUser,
-        idDoc: element.idLista,
-      );
-      if (coisaComp != null) {
-        lisCoisaComp.value.add(coisaComp);
-      } else {
-        await compartilhaRepository.remove(
-          idUser: global.usuario!.id!,
-          idDoc: element.idFire!,
-        );
-      }
-    }
   }
 
   void logoff() async {

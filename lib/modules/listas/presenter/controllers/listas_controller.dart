@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
-import 'package:listadecoisa/modules/home/domain/repositories/compartilha_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 import 'package:listadecoisa/core/services/global.dart';
@@ -11,7 +10,6 @@ const umaHora = 2880000;
 
 class ListasController extends ChangeNotifier implements IController {
   final Global gb;
-  final ICompartilhaRepository compartilhaRepository;
   final ICoisasRepository coisasRepository;
   bool marcaTodos = false;
   bool? isComp;
@@ -23,11 +21,7 @@ class ListasController extends ChangeNotifier implements IController {
   final TextEditingController quant = TextEditingController();
   var totalGeral = ValueNotifier(0.0);
 
-  ListasController({
-    required this.gb,
-    required this.coisasRepository,
-    required this.compartilhaRepository,
-  });
+  ListasController({required this.gb, required this.coisasRepository});
 
   @override
   void init(BuildContext context) {
@@ -38,21 +32,8 @@ class ListasController extends ChangeNotifier implements IController {
   }
 
   Future<void> criaCoisa({required Coisas coisa}) async {
-    final auxi = await compartilhaRepository.list(idUser: gb.usuario!.id!);
-    final indexAuxi = auxi.indexWhere(
-      (element) => element.idLista == coisa.idFire,
-    );
-    if (indexAuxi >= 0) {
-      await coisasRepository.createUpdate(
-        idUser: auxi[indexAuxi].idUser,
-        object: coisa,
-      );
-    } else {
-      await coisasRepository.createUpdate(
-        idUser: gb.usuario!.id!,
-        object: coisa,
-      );
-    }
+    await coisasRepository.createUpdate(idUser: gb.usuario!.id!, object: coisa);
+
     Fluttertoast.showToast(
       msg: coisa.idFire != null
           ? 'Alterado com Sucesso!!'
@@ -68,21 +49,11 @@ class ListasController extends ChangeNotifier implements IController {
 
   Future<void> atualizaCoisa() async {
     statusPage.value = StatusPage.loading;
-    final auxi = await compartilhaRepository.list(idUser: gb.usuario!.id!);
-    final indexAuxi = auxi.indexWhere(
-      (element) => element.idLista == coisas!.idFire,
+
+    coisas = await coisasRepository.get(
+      idDoc: coisas!.idFire!,
+      idUser: gb.usuario!.id!,
     );
-    if (indexAuxi >= 0) {
-      coisas = await coisasRepository.get(
-        idDoc: coisas!.idFire!,
-        idUser: auxi[indexAuxi].idUser,
-      );
-    } else {
-      coisas = await coisasRepository.get(
-        idDoc: coisas!.idFire!,
-        idUser: gb.usuario!.id!,
-      );
-    }
 
     statusPage.value = StatusPage.done;
     Fluttertoast.showToast(

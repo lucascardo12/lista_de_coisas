@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/modules/home/domain/models/list_view_type_enum.dart';
 import 'package:listadecoisa/modules/home/presenter/controllers/home_controller.dart';
+import 'package:listadecoisa/modules/home/presenter/ui/molecules/empty_state.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/organisms/card_list.dart';
 import 'package:listadecoisa/core/services/global.dart';
 
-class ListTextoPage extends StatelessWidget {
+class ContentHome extends StatelessWidget {
   final Global gb;
   final HomeController ct;
   final String searchQuery;
 
-  const ListTextoPage({
+  const ContentHome({
     super.key,
     required this.ct,
     required this.gb,
@@ -33,38 +34,15 @@ class ListTextoPage extends StatelessWidget {
       valueListenable: ct.lisCoisa,
       builder: (context, value, child) {
         if (filteredLists.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  searchQuery.isEmpty ? Icons.list_alt : Icons.search_off,
-                  size: 64,
-                  color: gb.getSecondaryTextColor(),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  searchQuery.isEmpty
-                      ? 'Nenhuma lista encontrada'
-                      : 'Nenhuma lista corresponde à busca',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: gb.getTextColor(),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                if (searchQuery.isEmpty) ...[
-                  const SizedBox(height: 8),
-                  Text(
-                    'Crie sua primeira lista usando o botão abaixo',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: gb.getSecondaryTextColor(),
-                    ),
-                  ),
-                ],
-              ],
-            ),
+          return EmptyState(
+            global: gb,
+            title: searchQuery.isEmpty
+                ? 'Nenhuma lista encontrada'
+                : 'Nenhuma lista corresponde à busca',
+            subtitle: searchQuery.isEmpty
+                ? 'Crie sua primeira lista usando o botão abaixo'
+                : null,
+            icon: searchQuery.isEmpty ? Icons.list_alt : Icons.search_off,
           );
         }
 

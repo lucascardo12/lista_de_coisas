@@ -8,7 +8,6 @@ import 'package:listadecoisa/modules/listas/listas_module.dart';
 import 'package:listadecoisa/modules/splash/splash_module.dart';
 import 'package:listadecoisa/modules/splash/ui/splash_page.dart';
 import 'package:listadecoisa/core/services/global.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/pages/compartilha_page.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/home_page.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
 import 'package:listadecoisa/core/services/service_module.dart';
@@ -54,7 +53,6 @@ class MyApp extends StatelessWidget {
           routes: {
             '/': (context) => const SplashPage(),
             SplashPage.route: (context) => const SplashPage(),
-            CompartilhaPage.route: (context) => const CompartilhaPage(),
             CadastroPage.route: (context) => const CadastroPage(),
             ListasPage.route: (context) => const ListasPage(),
             HomePage.route: (context) => const HomePage(),

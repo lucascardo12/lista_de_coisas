@@ -11,11 +11,7 @@ class ListasModule extends IModuleFactory {
     di.registerFactory<ICoisasRepository>(() => CoisasRepository(di()));
     //register controllers
     di.registerFactory(
-      () => ListasController(
-        gb: di(),
-        coisasRepository: di(),
-        compartilhaRepository: di(),
-      ),
+      () => ListasController(gb: di(), coisasRepository: di()),
     );
   }
 }
