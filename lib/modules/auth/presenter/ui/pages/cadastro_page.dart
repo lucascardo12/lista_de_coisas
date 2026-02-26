@@ -96,7 +96,7 @@ class _CadastroPageState extends State<CadastroPage> {
                 label: 'Cadastro',
                 color: gb.getWhiteOrBlack(),
                 textColor: gb.getPrimary(),
-                onPressed: () => ct.valida(mounted, context),
+                onPressed: () => ct.createUserWithEmailAndPassword(context),
               ),
               ButtonTextPadrao(
                 label: 'Voltar',

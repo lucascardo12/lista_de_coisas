@@ -1,8 +1,10 @@
+import 'package:listadecoisa/core/services/banco.dart';
 import 'package:listadecoisa/modules/home/domain/models/compartilha.dart';
 import 'package:listadecoisa/modules/home/domain/repositories/compartilha_repository_inter.dart';
 
 class CompartilhaRepository extends ICompartilhaRepository {
-  CompartilhaRepository(super.remoteDataBase);
+  final BancoFire remoteDataBase;
+  CompartilhaRepository(this.remoteDataBase);
 
   @override
   String get idCollection => 'compartilha';
@@ -38,8 +40,10 @@ class CompartilhaRepository extends ICompartilhaRepository {
 
   @override
   Future<List<Compartilha>> list({required String idUser}) async {
-    final ret =
-        await remoteDataBase.list(idUser: idUser, collection: idCollection);
+    final ret = await remoteDataBase.list(
+      idUser: idUser,
+      collection: idCollection,
+    );
     return ret.map((e) => Compartilha.fromJson(e)).toList();
   }
 

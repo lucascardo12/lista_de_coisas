@@ -1,17 +1,20 @@
-import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:listadecoisa/core/configs/app_helps.dart';
 import 'package:listadecoisa/core/interfaces/service_interface.dart';
-import 'package:listadecoisa/modules/auth/domain/models/user.dart';
+import 'package:listadecoisa/core/services/crashlytics_service.dart';
+import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.dart';
 import 'package:listadecoisa/modules/home/domain/models/list_view_type_enum.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class Global extends IService {
+  final AuthService auth;
+  final CrashlyticsService crashlyticsService;
   late PackageInfo packageInfo;
   late Box box;
-  UserP? usuario;
+  User? usuario;
   int hora = 12;
   int dia = 12;
   var tema = ValueNotifier('');
@@ -23,6 +26,8 @@ class Global extends IService {
   Color secondaryLight = const Color(0xFF6ec5ff);
   Color secondaryDark = const Color(0xFF0068bf);
 
+  Global(this.auth, this.crashlyticsService);
+
   @override
   Future<void> start() async {
     packageInfo = await PackageInfo.fromPlatform();
@@ -30,9 +35,9 @@ class Global extends IService {
     box = await Hive.openBox('global');
     tema.value = box.get('tema', defaultValue: 'Original');
     listViewType = ListViewType.fromString(box.get('listViewType'));
-    final auxi = box.get('user', defaultValue: '');
     if (box.get('fezLogin', defaultValue: false)) {
-      usuario = UserP.fromJson(json.decode(auxi));
+      usuario = auth.currentUser;
+      crashlyticsService.setUserIdentifier(usuario!.uid);
     }
   }
 

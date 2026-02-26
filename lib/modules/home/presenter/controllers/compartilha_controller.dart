@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
-import 'package:listadecoisa/core/interfaces/remote_database_inter.dart';
 import 'package:listadecoisa/modules/home/domain/models/compartilha.dart';
 import 'package:listadecoisa/modules/home/domain/models/compartilha_params.dart';
 import 'package:listadecoisa/modules/home/domain/repositories/compartilha_repository_inter.dart';
 import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
-import 'package:listadecoisa/modules/auth/domain/models/user.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
+import 'package:listadecoisa/core/services/banco.dart';
 
 class CompartilhaController extends IController {
   final Global gb;
   final ICompartilhaRepository compartilhaRepository;
   final ICoisasRepository coisasRepository;
-  final IRemoteDataBase remoteDataBase;
+  final BancoFire remoteDataBase;
   late Coisas lista;
-  late UserP user;
   CompartilharParams? argumts;
   var statusPage = ValueNotifier(StatusPage.loading);
 
@@ -46,8 +44,6 @@ class CompartilhaController extends IController {
         idUser: argumts!.codigoUser,
       );
       lista = valuelist!;
-      final valueUser = await remoteDataBase.getUser(argumts!.codigoUser);
-      user = valueUser!;
       statusPage.value = StatusPage.done;
     }
   }
@@ -68,7 +64,7 @@ class CompartilhaController extends IController {
         )
         .isEmpty) {
       await compartilhaRepository.createUpdate(
-        idUser: gb.usuario!.id!,
+        idUser: gb.usuario!.uid,
         object: comp,
       );
     } else {

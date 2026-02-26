@@ -8,9 +8,9 @@ class AuthModule extends IModuleFactory {
   @override
   void register() {
     //register services
-    di.registerFactory(() => AuthService(di(), di()));
+    di.registerFactory(() => AuthService());
     //register controllers
-    di.registerFactory(() => CadastroController(banco: di(), gb: di(), authService: di()));
-    di.registerFactory(() => LoginController(banco: di(), gb: di(), authService: di()));
+    di.registerFactory(() => CadastroController(di(), di()));
+    di.registerFactory(() => LoginController(di(), di()));
   }
 }

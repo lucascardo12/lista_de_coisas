@@ -92,9 +92,9 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        gb.usuario?.login != null
+                        gb.usuario?.email != null
                             ? Text(
-                                gb.usuario!.login!,
+                                gb.usuario!.email!,
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,

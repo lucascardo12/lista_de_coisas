@@ -38,7 +38,7 @@ class ListasController extends ChangeNotifier implements IController {
   }
 
   Future<void> criaCoisa({required Coisas coisa}) async {
-    final auxi = await compartilhaRepository.list(idUser: gb.usuario!.id!);
+    final auxi = await compartilhaRepository.list(idUser: gb.usuario!.uid);
     final indexAuxi = auxi.indexWhere(
       (element) => element.idLista == coisa.idFire,
     );
@@ -49,7 +49,7 @@ class ListasController extends ChangeNotifier implements IController {
       );
     } else {
       await coisasRepository.createUpdate(
-        idUser: gb.usuario!.id!,
+        idUser: gb.usuario!.uid,
         object: coisa,
       );
     }
@@ -68,7 +68,7 @@ class ListasController extends ChangeNotifier implements IController {
 
   Future<void> atualizaCoisa() async {
     statusPage.value = StatusPage.loading;
-    final auxi = await compartilhaRepository.list(idUser: gb.usuario!.id!);
+    final auxi = await compartilhaRepository.list(idUser: gb.usuario!.uid);
     final indexAuxi = auxi.indexWhere(
       (element) => element.idLista == coisas!.idFire,
     );
@@ -80,7 +80,7 @@ class ListasController extends ChangeNotifier implements IController {
     } else {
       coisas = await coisasRepository.get(
         idDoc: coisas!.idFire!,
-        idUser: gb.usuario!.id!,
+        idUser: gb.usuario!.uid,
       );
     }
 
