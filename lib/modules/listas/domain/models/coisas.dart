@@ -32,29 +32,32 @@ class Coisas implements IModel {
   });
 
   Coisas.fromJson(Map<String, dynamic> xjson)
-      : nome = xjson['nome'] ?? '',
-        descricao = xjson['descricao'] ?? '',
-        idFire = xjson['idFire'],
-        checklist = (xjson['checklist'] ?? []).map<Checklist>((i) => Checklist.fromJson(i)).toList(),
-        checkCompras =
-            (xjson['checkCompras'] ?? []).map<CheckCompras>((i) => CheckCompras.fromJson(i)).toList(),
-        creatAp = validationDate(xjson['creatAp']),
-        updatAp = validationDate(xjson['updatAp']),
-        tipo = xjson['tipo'] ?? 0;
+    : nome = xjson['nome'] ?? '',
+      descricao = xjson['descricao'] ?? '',
+      idFire = xjson['idFire'],
+      checklist = (xjson['checklist'] ?? [])
+          .map<Checklist>((i) => Checklist.fromJson(i))
+          .toList(),
+      checkCompras = (xjson['checkCompras'] ?? [])
+          .map<CheckCompras>((i) => CheckCompras.fromJson(i))
+          .toList(),
+      creatAp = validationDate(xjson['creatAp']),
+      updatAp = validationDate(xjson['updatAp']),
+      tipo = xjson['tipo'] ?? 0;
 
   @override
   Map<String, dynamic> toJson() => {
-        'nome': nome,
-        'descricao': descricao,
-        'idFire': idFire,
-        'checklist': checklist.map((i) => i.toJson()).toList(),
-        'checkCompras': checkCompras.map((e) => e.toJson()).toList(),
-        'tipo': tipo,
-        'creatAp': creatAp,
-        'updatAp': updatAp,
-      };
+    'nome': nome,
+    'descricao': descricao,
+    'idFire': idFire,
+    'checklist': checklist.map((i) => i.toJson()).toList(),
+    'checkCompras': checkCompras.map((e) => e.toJson()).toList(),
+    'tipo': tipo,
+    'creatAp': creatAp,
+    'updatAp': updatAp,
+  };
 
-  static DateTime validationDate(date) {
+  static DateTime validationDate(dynamic date) {
     if (date is Timestamp) {
       return date.toDate();
     }
@@ -62,5 +65,17 @@ class Coisas implements IModel {
       return DateTime.parse(date);
     }
     return date ?? DateTime.now();
+  }
+
+  Coisas copyWith() {
+    return Coisas(
+      checkCompras: checkCompras,
+      checklist: checklist,
+      creatAp: creatAp,
+      updatAp: updatAp,
+      nome: nome,
+      descricao: descricao,
+      tipo: tipo,
+    );
   }
 }

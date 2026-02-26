@@ -6,6 +6,7 @@ import 'package:listadecoisa/modules/home/presenter/ui/molecules/app_header.dart
 import 'package:listadecoisa/modules/home/presenter/ui/molecules/custom_drawer.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/organisms/content_home.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 
 class HomePage extends StatefulWidget {
   static const route = '/Home';
@@ -37,10 +38,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => ct.showExit(context: context),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) ct.showExit(context: context);
+      },
       child: Scaffold(
-        backgroundColor: gb.getBackgroundColor(),
+        backgroundColor: ThemeService.instance.getBackgroundColor(),
         body: CustomScrollView(
           slivers: [
             AppHeader(
@@ -57,7 +61,6 @@ class _HomePageState extends State<HomePage> {
                   }
                 });
               },
-              onCreateList: () => ct.showCria(context: context),
               onSearchChanged: (value) {
                 setState(() {});
               },
@@ -76,8 +79,10 @@ class _HomePageState extends State<HomePage> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      gb.getPrimary().withOpacity(0.05),
-                      gb.getBackgroundColor(),
+                      ThemeService.instance.getPrimary().withValues(
+                        alpha: 0.05,
+                      ),
+                      ThemeService.instance.getBackgroundColor(),
                     ],
                   ),
                 ),
@@ -92,7 +97,7 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => ct.showCria(context: context),
-          backgroundColor: gb.getPrimary(),
+          backgroundColor: ThemeService.instance.getPrimary(),
           foregroundColor: Colors.white,
           icon: const Icon(Icons.add),
           label: const Text('Nova Lista'),

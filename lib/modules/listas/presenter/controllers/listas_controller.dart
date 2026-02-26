@@ -4,6 +4,7 @@ import 'package:listadecoisa/core/interfaces/controller_interface.dart';
 import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
 
 const umaHora = 2880000;
@@ -41,7 +42,7 @@ class ListasController extends ChangeNotifier implements IController {
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 5,
-      backgroundColor: gb.getPrimary(),
+      backgroundColor: ThemeService.instance.getPrimary(),
       textColor: Colors.white,
       fontSize: 18.0,
     );
@@ -61,7 +62,7 @@ class ListasController extends ChangeNotifier implements IController {
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 5,
-      backgroundColor: gb.getPrimary(),
+      backgroundColor: ThemeService.instance.getPrimary(),
       textColor: Colors.white,
       fontSize: 18.0,
     );

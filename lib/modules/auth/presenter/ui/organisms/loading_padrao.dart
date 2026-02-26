@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/core/services/global.dart';
 
@@ -20,9 +21,9 @@ class LoadPadrao extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               'carregando as coisas ⏳',
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall!.copyWith(color: gb.getSecondary()),
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                color: ThemeService.instance.getSecondary(),
+              ),
             ),
           ],
         ),

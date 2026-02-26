@@ -25,23 +25,23 @@ class Compartilha implements IModel {
   });
 
   Compartilha.fromJson(Map<String, dynamic> xjson)
-      : idUser = xjson['idUser'],
-        idLista = xjson['idLista'],
-        isRead = xjson['isRead'],
-        creatAp = validationDate(xjson['creatAp']),
-        updatAp = validationDate(xjson['updatAp']),
-        idFire = xjson['idFire'];
+    : idUser = xjson['idUser'],
+      idLista = xjson['idLista'],
+      isRead = xjson['isRead'],
+      creatAp = validationDate(xjson['creatAp']),
+      updatAp = validationDate(xjson['updatAp']),
+      idFire = xjson['idFire'];
 
   @override
   Map<String, dynamic> toJson() => {
-        'idUser': idUser,
-        'idLista': idLista,
-        'isRead': isRead,
-        'idFire': idFire,
-        'updatAp': updatAp,
-        'creatAp': creatAp,
-      };
-  static DateTime validationDate(date) {
+    'idUser': idUser,
+    'idLista': idLista,
+    'isRead': isRead,
+    'idFire': idFire,
+    'updatAp': updatAp,
+    'creatAp': creatAp,
+  };
+  static DateTime validationDate(dynamic date) {
     if (date is Timestamp) {
       return date.toDate();
     }

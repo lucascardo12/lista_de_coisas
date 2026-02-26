@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/home/presenter/controllers/home_controller.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/atoms/option_item.dart';
 import 'package:intl/intl.dart';
+import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 
 class ContentGrid extends StatelessWidget {
   final Global gb;
   final HomeController ct;
-  final int index;
+  final Coisas coisa;
 
   const ContentGrid({
     super.key,
     required this.gb,
     required this.ct,
-    required this.index,
+    required this.coisa,
   });
 
   @override
   Widget build(BuildContext context) {
-    final coisa = ct.lisCoisa.value[index];
     final tipoIcon = _getTipoIcon(coisa.tipo);
     final tipoCor = _getTipoColor(coisa.tipo);
 
@@ -26,7 +27,7 @@ class ContentGrid extends StatelessWidget {
       elevation: 3,
       shadowColor: Colors.black12,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: gb.getSurfaceColor(),
+      color: ThemeService.instance.getSurfaceColor(),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () =>
@@ -43,12 +44,12 @@ class ContentGrid extends StatelessWidget {
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: tipoCor.withOpacity(0.1),
+                      color: tipoCor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(tipoIcon, color: tipoCor, size: 20),
                   ),
-                  OptionItem(ct: ct, gb: gb, index: index),
+                  OptionItem(ct: ct, gb: gb, coisa: coisa),
                 ],
               ),
               const SizedBox(height: 12),
@@ -57,7 +58,7 @@ class ContentGrid extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: gb.getTextColor(),
+                  color: ThemeService.instance.getTextColor(),
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -67,7 +68,7 @@ class ContentGrid extends StatelessWidget {
                 _getTipoDescription(coisa.tipo),
                 style: TextStyle(
                   fontSize: 12,
-                  color: gb.getSecondaryTextColor(),
+                  color: ThemeService.instance.getSecondaryTextColor(),
                 ),
               ),
               const Spacer(),
@@ -75,7 +76,7 @@ class ContentGrid extends StatelessWidget {
                 _formatDate(coisa.updatAp),
                 style: TextStyle(
                   fontSize: 10,
-                  color: gb.getSecondaryTextColor(),
+                  color: ThemeService.instance.getSecondaryTextColor(),
                 ),
               ),
             ],

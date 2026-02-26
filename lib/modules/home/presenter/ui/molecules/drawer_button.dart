@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 
 class DrawerButtonItem extends StatelessWidget {
   final gb = di.get<Global>();
@@ -29,14 +30,12 @@ class DrawerButtonItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           prefixo ?? const SizedBox.shrink(),
-          const SizedBox(
-            width: 10,
-          ),
+          const SizedBox(width: 10),
           Text(
             title,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: gb.getPrimary(),
-                ),
+              color: ThemeService.instance.getPrimary(),
+            ),
           ),
           const Spacer(),
           TextButton.icon(

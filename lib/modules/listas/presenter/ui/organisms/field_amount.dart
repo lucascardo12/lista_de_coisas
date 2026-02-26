@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/listas/domain/models/ckeck_compras.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/atoms/field_list.dart';
@@ -8,7 +9,12 @@ class FieldAmount extends StatefulWidget {
   final ListasController ct;
   final Global global;
   final CheckCompras check;
-  const FieldAmount({super.key, required this.global, required this.ct, required this.check});
+  const FieldAmount({
+    super.key,
+    required this.global,
+    required this.ct,
+    required this.check,
+  });
 
   @override
   State<FieldAmount> createState() => _FieldAmountState();
@@ -32,10 +38,7 @@ class _FieldAmountState extends State<FieldAmount> {
             },
             icon: CircleAvatar(
               backgroundColor: Colors.white,
-              child: Icon(
-                Icons.add,
-                color: widget.global.getPrimary(),
-              ),
+              child: Icon(Icons.add, color: ThemeService.instance.getPrimary()),
             ),
           ),
           Padding(
@@ -72,7 +75,7 @@ class _FieldAmountState extends State<FieldAmount> {
               backgroundColor: Colors.white,
               child: Icon(
                 Icons.remove,
-                color: widget.global.getPrimary(),
+                color: ThemeService.instance.getPrimary(),
               ),
             ),
           ),

@@ -14,10 +14,12 @@ class SplashController extends IController {
   @override
   Future<void> init(BuildContext context) async {
     await ServiceModule().starting();
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      di.get<Global>().usuario != null ? HomePage.route : LoginPage.route,
-      (route) => false,
-    );
+    if (context.mounted) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        di.get<Global>().usuario != null ? HomePage.route : LoginPage.route,
+        (route) => false,
+      );
+    }
   }
 }

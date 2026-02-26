@@ -19,10 +19,7 @@ class LocalDatabaseHive implements ILocalDatabase<String> {
   }
 
   @override
-  Future<void> create({
-    required dynamic objeto,
-    String? id,
-  }) async {
+  Future<void> create({required dynamic objeto, String? id}) async {
     await box.put(id, objeto);
   }
 
@@ -47,10 +44,7 @@ class LocalDatabaseHive implements ILocalDatabase<String> {
   }
 
   @override
-  Future<void> update({
-    required dynamic objeto,
-    required String id,
-  }) async {
+  Future<void> update({required dynamic objeto, required String id}) async {
     await box.put(id, objeto);
   }
 }

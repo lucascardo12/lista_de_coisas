@@ -57,22 +57,18 @@ class ContentHome extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             itemCount: filteredLists.length,
             itemBuilder: (context, index) {
-              final originalIndex = ct.lisCoisa.value.indexOf(
-                filteredLists[index],
-              );
-              return CardList(ct: ct, gb: gb, index: originalIndex);
+              final coisa = filteredLists[index].copyWith();
+              return CardList(ct: ct, gb: gb, coisa: coisa);
             },
           ),
           ListViewType.list => ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             itemCount: filteredLists.length,
             itemBuilder: (context, index) {
-              final originalIndex = ct.lisCoisa.value.indexOf(
-                filteredLists[index],
-              );
+              final coisa = filteredLists[index].copyWith();
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
-                child: CardList(ct: ct, gb: gb, index: originalIndex),
+                child: CardList(ct: ct, gb: gb, coisa: coisa),
               );
             },
           ),

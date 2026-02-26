@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 
 class CustomDrawerHeader extends StatelessWidget {
   final Global global;
@@ -22,7 +23,10 @@ class CustomDrawerHeader extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [global.getPrimary(), global.getSecondary()],
+          colors: [
+            ThemeService.instance.getPrimary(),
+            ThemeService.instance.getSecondary(),
+          ],
         ),
       ),
       child: Column(
@@ -34,7 +38,7 @@ class CustomDrawerHeader extends StatelessWidget {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(28),
                 ),
                 child: const Icon(Icons.person, size: 32, color: Colors.white),
@@ -56,7 +60,7 @@ class CustomDrawerHeader extends StatelessWidget {
                     Text(
                       'Versão $version',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 14,
                       ),
                     ),

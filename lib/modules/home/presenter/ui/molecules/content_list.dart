@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/home/presenter/controllers/home_controller.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/atoms/option_item.dart';
 import 'package:intl/intl.dart';
+import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 
 class ContentList extends StatelessWidget {
   final Global gb;
   final HomeController ct;
-  final int index;
+  final Coisas coisa;
 
   const ContentList({
     super.key,
     required this.gb,
     required this.ct,
-    required this.index,
+    required this.coisa,
   });
 
   @override
   Widget build(BuildContext context) {
-    final coisa = ct.lisCoisa.value[index];
     final tipoIcon = _getTipoIcon(coisa.tipo);
     final tipoCor = _getTipoColor(coisa.tipo);
 
@@ -28,7 +29,7 @@ class ContentList extends StatelessWidget {
         elevation: 2,
         shadowColor: Colors.black12,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: gb.getSurfaceColor(),
+        color: ThemeService.instance.getSurfaceColor(),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () => Navigator.pushNamed(
@@ -44,7 +45,7 @@ class ContentList extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: tipoCor.withOpacity(0.1),
+                    color: tipoCor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(tipoIcon, color: tipoCor, size: 24),
@@ -59,7 +60,7 @@ class ContentList extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: gb.getTextColor(),
+                          color: ThemeService.instance.getTextColor(),
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -69,7 +70,7 @@ class ContentList extends StatelessWidget {
                         _getTipoDescription(coisa.tipo),
                         style: TextStyle(
                           fontSize: 14,
-                          color: gb.getSecondaryTextColor(),
+                          color: ThemeService.instance.getSecondaryTextColor(),
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -77,13 +78,13 @@ class ContentList extends StatelessWidget {
                         'Atualizado ${_formatDate(coisa.updatAp)}',
                         style: TextStyle(
                           fontSize: 12,
-                          color: gb.getSecondaryTextColor(),
+                          color: ThemeService.instance.getSecondaryTextColor(),
                         ),
                       ),
                     ],
                   ),
                 ),
-                OptionItem(ct: ct, gb: gb, index: index),
+                OptionItem(ct: ct, gb: gb, coisa: coisa),
               ],
             ),
           ),
@@ -94,11 +95,11 @@ class ContentList extends StatelessWidget {
 
   IconData _getTipoIcon(int tipo) {
     switch (tipo) {
-      case 1:
+      case 0:
         return Icons.note_alt_outlined;
-      case 2:
+      case 1:
         return Icons.checklist_outlined;
-      case 3:
+      case 2:
         return Icons.shopping_cart_outlined;
       default:
         return Icons.list_alt;
@@ -107,11 +108,11 @@ class ContentList extends StatelessWidget {
 
   Color _getTipoColor(int tipo) {
     switch (tipo) {
-      case 1:
+      case 0:
         return Colors.blue;
-      case 2:
+      case 1:
         return Colors.green;
-      case 3:
+      case 2:
         return Colors.orange;
       default:
         return Colors.grey;
@@ -120,11 +121,11 @@ class ContentList extends StatelessWidget {
 
   String _getTipoDescription(int tipo) {
     switch (tipo) {
-      case 1:
+      case 0:
         return 'Texto Simples';
-      case 2:
+      case 1:
         return 'Check-List';
-      case 3:
+      case 2:
         return 'Lista de Compras';
       default:
         return 'Tipo desconhecido';

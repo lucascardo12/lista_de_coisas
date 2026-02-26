@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
 import 'package:listadecoisa/core/interfaces/local_database_inter.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
@@ -17,7 +18,6 @@ class HomeController extends IController {
   var lisCoisa = ValueNotifier(<Coisas>[]);
   var lisCoisaComp = ValueNotifier(<Coisas>[]);
   var scaffoldKe = GlobalKey<ScaffoldState>();
-  var isAnonimo = false;
   var isread = false;
   var tipo = 1;
   var listaTipo = ['Texto Simples', 'Check-List', 'Lista de Compras'];
@@ -34,9 +34,6 @@ class HomeController extends IController {
 
   @override
   void init(BuildContext context) {
-    localDatabase
-        .get(id: 'isAnonimo')
-        .then((value) => isAnonimo = value ?? false);
     atualizaLista();
   }
 
@@ -78,7 +75,9 @@ class HomeController extends IController {
               child: const Text('Continar'),
               onPressed: () async {
                 await deleteList(coisa: coisas);
-                Navigator.pop(context);
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
               },
             ),
           ],
@@ -124,28 +123,64 @@ class HomeController extends IController {
                 title: Text(
                   'Escolha o tipo de Lista',
                   style: theme.textTheme.titleMedium!.copyWith(
-                    color: global.getWhiteOrBlack(),
+                    color: ThemeService.instance.getWhiteOrBlack(),
                   ),
                 ),
-                tileColor: global.getPrimary(),
+                tileColor: ThemeService.instance.getPrimary(),
               ),
               for (int i = 0; i < listaTipo.length; i++)
-                ListTile(
-                  title: Text(
-                    listaTipo[i],
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleMedium!.copyWith(color: Colors.black),
-                  ),
-                  leading: Radio(
-                    value: i,
-                    activeColor: global.getPrimary(),
-                    onChanged: (int? value) {
-                      tipo = value ?? 1;
-                      Navigator.pop(context);
-                      showCria(context: context);
-                    },
-                    groupValue: tipo,
+                GestureDetector(
+                  onTap: () {
+                    tipo = i;
+                    Navigator.pop(context);
+                    showCria(context: context);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: tipo == i
+                          ? ThemeService.instance.getPrimary().withValues(
+                              alpha: 0.1,
+                            )
+                          : Colors.transparent,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: ThemeService.instance.getPrimary(),
+                              width: 2,
+                            ),
+                            color: tipo == i
+                                ? ThemeService.instance.getPrimary()
+                                : Colors.transparent,
+                          ),
+                          child: tipo == i
+                              ? const Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 14,
+                                )
+                              : null,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          listaTipo[i],
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                color: Colors.black,
+                                fontWeight: tipo == i
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               Padding(
@@ -195,7 +230,7 @@ class HomeController extends IController {
                         child: Text(
                           'Continuar',
                           style: theme.textTheme.titleMedium!.copyWith(
-                            color: global.getWhiteOrBlack(),
+                            color: ThemeService.instance.getWhiteOrBlack(),
                           ),
                         ),
                       ),

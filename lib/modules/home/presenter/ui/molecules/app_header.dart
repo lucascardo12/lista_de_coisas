@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/molecules/search_bar.dart';
 
 class AppHeader extends StatelessWidget {
@@ -8,7 +9,7 @@ class AppHeader extends StatelessWidget {
   final FocusNode searchFocusNode;
   final bool isSearching;
   final VoidCallback onSearchToggle;
-  final VoidCallback onCreateList;
+
   final ValueChanged<String> onSearchChanged;
   final VoidCallback onSearchClose;
 
@@ -19,7 +20,7 @@ class AppHeader extends StatelessWidget {
     required this.searchFocusNode,
     required this.isSearching,
     required this.onSearchToggle,
-    required this.onCreateList,
+
     required this.onSearchChanged,
     required this.onSearchClose,
   });
@@ -37,7 +38,10 @@ class AppHeader extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [global.getPrimary(), global.getSecondary()],
+            colors: [
+              ThemeService.instance.getPrimary(),
+              ThemeService.instance.getSecondary(),
+            ],
           ),
         ),
       ),
@@ -56,13 +60,6 @@ class AppHeader extends StatelessWidget {
           color: Colors.white,
           onPressed: onSearchToggle,
         ),
-        if (!isSearching) ...[
-          IconButton(
-            icon: const Icon(Icons.add_circle_outline, size: 28),
-            color: Colors.white,
-            onPressed: onCreateList,
-          ),
-        ],
       ],
     );
   }

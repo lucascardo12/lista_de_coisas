@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/configs/app_helps.dart';
 import 'package:listadecoisa/core/extensions/empty_string_null.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/pages/login_page.dart';
 import 'package:listadecoisa/modules/home/domain/models/list_view_type_enum.dart';
 import 'package:listadecoisa/modules/home/presenter/controllers/home_controller.dart';
@@ -55,36 +56,35 @@ class CustomDrawer extends StatelessWidget {
                       (route) => false,
                     ),
                   ),
-                  Visibility(
-                    visible: !controller.isAnonimo,
-                    child: DrawerMenuItem(
-                      icon: Icons.lock_reset,
-                      title: 'Redefinir Senha',
-                      iconColor: Colors.blue,
-                      textColor: global.getTextColor(),
-                      onTap: () =>
-                          controller.showAlertRedefinir(context: context),
-                    ),
+                  DrawerMenuItem(
+                    icon: Icons.lock_reset,
+                    title: 'Redefinir Senha',
+                    iconColor: Colors.blue,
+                    textColor: ThemeService.instance.getTextColor(),
+                    onTap: () =>
+                        controller.showAlertRedefinir(context: context),
                   ),
                   const Divider(height: 32),
                   DrawerMenuItem(
                     icon: Icons.palette,
                     title: 'Temas',
-                    iconColor: global.getPrimary(),
-                    textColor: global.getTextColor(),
+                    iconColor: ThemeService.instance.getPrimary(),
+                    textColor: ThemeService.instance.getTextColor(),
                     trailing: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: global.getPrimary().withOpacity(0.1),
+                        color: ThemeService.instance.getPrimary().withValues(
+                          alpha: 0.1,
+                        ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        global.tema.value,
+                        ThemeService.instance.getCurrentTheme().title,
                         style: TextStyle(
-                          color: global.getPrimary(),
+                          color: ThemeService.instance.getPrimary(),
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -92,10 +92,7 @@ class CustomDrawer extends StatelessWidget {
                     ),
                     onTap: () => AppHelps.defaultDialog(
                       context: context,
-                      child: SelectTheme(
-                        gb: global,
-                        items: const ['Original', 'Dark', 'Azul', 'Roxo'],
-                      ),
+                      child: SelectTheme(gb: global),
                       barrierColor: Colors.transparent,
                     ),
                   ),
@@ -103,14 +100,14 @@ class CustomDrawer extends StatelessWidget {
                     icon: _getIconViewType(global.listViewType),
                     title: 'Visualização',
                     iconColor: Colors.green,
-                    textColor: global.getTextColor(),
+                    textColor: ThemeService.instance.getTextColor(),
                     trailing: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
+                        color: Colors.green.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(

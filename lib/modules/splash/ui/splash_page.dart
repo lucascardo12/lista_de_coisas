@@ -5,7 +5,7 @@ import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.
 
 class SplashPage extends StatefulWidget {
   static const route = '/Splash';
-  const SplashPage({Key? key}) : super(key: key);
+  const SplashPage({super.key});
   @override
   State<SplashPage> createState() => _SplashPageState();
 }

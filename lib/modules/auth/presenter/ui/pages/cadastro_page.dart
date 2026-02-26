@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/auth/presenter/controllers/cadastro_controller.dart';
 import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/core/services/global.dart';
@@ -7,7 +8,7 @@ import 'package:listadecoisa/modules/home/presenter/ui/atoms/compo_padrao.dart';
 
 class CadastroPage extends StatefulWidget {
   static const route = '/Cadastro';
-  const CadastroPage({Key? key}) : super(key: key);
+  const CadastroPage({super.key});
   @override
   State<CadastroPage> createState() => _CadastroPageState();
 }
@@ -37,7 +38,10 @@ class _CadastroPageState extends State<CadastroPage> {
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [gb.getPrimary(), gb.getSecondary()],
+              colors: [
+                ThemeService.instance.getPrimary(),
+                ThemeService.instance.getSecondary(),
+              ],
             ),
           ),
           child: ListView(
@@ -94,8 +98,8 @@ class _CadastroPageState extends State<CadastroPage> {
               const SizedBox(height: 20),
               ButtonTextPadrao(
                 label: 'Cadastro',
-                color: gb.getWhiteOrBlack(),
-                textColor: gb.getPrimary(),
+                color: ThemeService.instance.getWhiteOrBlack(),
+                textColor: ThemeService.instance.getPrimary(),
                 onPressed: () => ct.createUserWithEmailAndPassword(context),
               ),
               ButtonTextPadrao(

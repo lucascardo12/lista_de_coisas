@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 
 class EmptyState extends StatelessWidget {
   final Global global;
@@ -24,14 +25,14 @@ class EmptyState extends StatelessWidget {
           Icon(
             icon,
             size: 64,
-            color: global.getSecondaryTextColor(),
+            color: ThemeService.instance.getSecondaryTextColor(),
           ),
           const SizedBox(height: 16),
           Text(
             title,
             style: TextStyle(
               fontSize: 18,
-              color: global.getTextColor(),
+              color: ThemeService.instance.getTextColor(),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -41,7 +42,7 @@ class EmptyState extends StatelessWidget {
               subtitle!,
               style: TextStyle(
                 fontSize: 14,
-                color: global.getSecondaryTextColor(),
+                color: ThemeService.instance.getSecondaryTextColor(),
               ),
             ),
           ],

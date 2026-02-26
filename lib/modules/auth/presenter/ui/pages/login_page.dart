@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/auth/presenter/controllers/login_controller.dart';
 import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/pages/cadastro_page.dart';
@@ -38,7 +39,10 @@ class _LoginPageState extends State<LoginPage> {
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [gb.getPrimary(), gb.getSecondary()],
+              colors: [
+                ThemeService.instance.getPrimary(),
+                ThemeService.instance.getSecondary(),
+              ],
             ),
           ),
           child: ListView(
@@ -93,14 +97,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               ButtonTextPadrao(
                 label: 'Login',
-                color: gb.getWhiteOrBlack(),
-                textColor: gb.getPrimary(),
+                color: ThemeService.instance.getWhiteOrBlack(),
+                textColor: ThemeService.instance.getPrimary(),
                 onPressed: () => ct.signInWithEmailAndPassword(context),
               ),
               ButtonTextPadrao(
-                color: gb.getWhiteOrBlack(),
+                color: ThemeService.instance.getWhiteOrBlack(),
                 label: 'Google',
-                textColor: gb.getPrimary(),
+                textColor: ThemeService.instance.getPrimary(),
                 onPressed: () => ct.signInWithGoogle(context),
               ),
               ButtonTextPadrao(

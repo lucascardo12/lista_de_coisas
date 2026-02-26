@@ -14,6 +14,7 @@ import 'package:listadecoisa/core/services/crashlytics_service.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/home_page.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
 import 'package:listadecoisa/core/services/service_module.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 
 GetIt di = GetIt.instance;
 
@@ -66,23 +67,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: gb.tema,
+      valueListenable: ThemeService.instance.currentTheme,
       builder: (context, value, child) {
         return MaterialApp(
           themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,
           title: 'Lista de Coisas',
           theme: ThemeData.light().copyWith(
-            primaryColor: gb.getPrimary(),
+            primaryColor: ThemeService.instance.getPrimary(),
             textSelectionTheme: const TextSelectionThemeData(
               cursorColor: Colors.white,
             ),
             colorScheme: ThemeData.light().colorScheme
                 .copyWith(
-                  primary: gb.getPrimary(),
-                  secondary: gb.getSecondary(),
+                  primary: ThemeService.instance.getPrimary(),
+                  secondary: ThemeService.instance.getSecondary(),
                 )
-                .copyWith(secondary: gb.getSecondary()),
+                .copyWith(secondary: ThemeService.instance.getSecondary()),
           ),
           initialRoute: SplashPage.route,
           routes: {

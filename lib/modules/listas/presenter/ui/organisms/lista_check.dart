@@ -2,17 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
 import 'package:listadecoisa/modules/listas/domain/models/check_list.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/atoms/borda_padrao.dart';
 
 class ListaCheck extends StatelessWidget {
   final Global gb;
   final ListasController ct;
 
-  const ListaCheck({
-    super.key,
-    required this.ct,
-    required this.gb,
-  });
+  const ListaCheck({super.key, required this.ct, required this.gb});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +21,7 @@ class ListaCheck extends StatelessWidget {
                   const SizedBox(width: 8),
                   Checkbox(
                     fillColor: WidgetStateProperty.all(Colors.white),
-                    checkColor: gb.getPrimary(),
+                    checkColor: ThemeService.instance.getPrimary(),
                     onChanged: (bool? value) {
                       ct.marcaTodos = !ct.marcaTodos;
                       for (var element in ct.coisas!.checklist) {
@@ -40,7 +37,7 @@ class ListaCheck extends StatelessWidget {
                     child: IconButton(
                       icon: Icon(
                         Icons.add,
-                        color: gb.getPrimary(),
+                        color: ThemeService.instance.getPrimary(),
                       ),
                       onPressed: () {
                         ct.coisas!.checklist.add(
@@ -56,9 +53,7 @@ class ListaCheck extends StatelessWidget {
               )
             : const SizedBox(),
         const SizedBox(height: 5),
-        const Divider(
-          color: Colors.white,
-        ),
+        const Divider(color: Colors.white),
         Expanded(
           flex: 10,
           child: Padding(
@@ -77,16 +72,14 @@ class ListaCheck extends StatelessWidget {
                       !ct.isComp!
                           ? Checkbox(
                               fillColor: WidgetStateProperty.all(Colors.white),
-                              checkColor: gb.getPrimary(),
+                              checkColor: ThemeService.instance.getPrimary(),
                               onChanged: (bool? value) {
                                 ct.coisas!.checklist[i].feito = value!;
                                 ct.update();
                               },
                               value: ct.coisas!.checklist[i].feito,
                             )
-                          : const SizedBox(
-                              width: 20,
-                            ),
+                          : const SizedBox(width: 20),
                       Expanded(
                         child: TextFormField(
                           readOnly: ct.isComp!,
@@ -133,20 +126,15 @@ class ListaCheck extends StatelessWidget {
                       ),
                       !ct.isComp!
                           ? IconButton(
-                              icon: const Icon(
-                                Icons.clear,
-                                color: Colors.red,
-                              ),
+                              icon: const Icon(Icons.clear, color: Colors.red),
                               onPressed: () {
                                 ct.coisas!.checklist.removeAt(i);
-                                ct.coisas!.checklist =
-                                    ct.coisas!.checklist.toList();
+                                ct.coisas!.checklist = ct.coisas!.checklist
+                                    .toList();
                                 ct.update();
                               },
                             )
-                          : const SizedBox(
-                              width: 20,
-                            ),
+                          : const SizedBox(width: 20),
                     ],
                   );
                 },

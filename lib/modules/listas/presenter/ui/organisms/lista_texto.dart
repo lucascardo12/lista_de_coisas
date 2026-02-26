@@ -7,11 +7,7 @@ class ListaTexto extends StatelessWidget {
   final Global gb;
   final ListasController ct;
 
-  const ListaTexto({
-    super.key,
-    required this.ct,
-    required this.gb,
-  });
+  const ListaTexto({super.key, required this.ct, required this.gb});
 
   @override
   Widget build(BuildContext context) {

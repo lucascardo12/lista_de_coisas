@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/main.dart';
+import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.dart';
 import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
@@ -40,14 +41,20 @@ class _ListasPageState extends State<ListasPage> {
         if (ct.statusPage.value == StatusPage.loading) return LoadPadrao();
         return Scaffold(
           body: SafeArea(
-            child: WillPopScope(
-              onWillPop: () => ct.bottonVoltar(context),
+            child: PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (didPop, result) {
+                if (!didPop) ct.bottonVoltar(context);
+              },
               child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
-                    colors: [ct.gb.getPrimary(), ct.gb.getSecondary()],
+                    colors: [
+                      ThemeService.instance.getPrimary(),
+                      ThemeService.instance.getSecondary(),
+                    ],
                   ),
                 ),
                 child: Form(
@@ -122,7 +129,9 @@ class _ListasPageState extends State<ListasPage> {
                             onPressed: () async {
                               if (ct.formKey.currentState!.validate()) {
                                 await ct.criaCoisa(coisa: ct.coisas!);
-                                Navigator.pop(context);
+                                if (mounted && context.mounted) {
+                                  Navigator.pop(context);
+                                }
                               }
                             },
                           ),
