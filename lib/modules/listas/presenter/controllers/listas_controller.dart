@@ -32,7 +32,7 @@ class ListasController extends ChangeNotifier implements IController {
   }
 
   Future<void> criaCoisa({required Coisas coisa}) async {
-    await coisasRepository.createUpdate(idUser: gb.usuario!.id!, object: coisa);
+    await coisasRepository.createUpdate(idUser: gb.usuario!.uid, object: coisa);
 
     Fluttertoast.showToast(
       msg: coisa.idFire != null
@@ -52,7 +52,7 @@ class ListasController extends ChangeNotifier implements IController {
 
     coisas = await coisasRepository.get(
       idDoc: coisas!.idFire!,
-      idUser: gb.usuario!.id!,
+      idUser: gb.usuario!.uid,
     );
 
     statusPage.value = StatusPage.done;

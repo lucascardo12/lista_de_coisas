@@ -42,7 +42,7 @@ class HomeController extends IController {
 
   Future<void> atualizaLista() async {
     lisCoisaComp.value.clear();
-    lisCoisa.value = await coisasRepository.list(idUser: global.usuario!.id!);
+    lisCoisa.value = await coisasRepository.list(idUser: global.usuario!.uid);
   }
 
   void logoff() async {
@@ -53,7 +53,7 @@ class HomeController extends IController {
 
   Future<void> deleteList({required Coisas coisa}) async {
     await coisasRepository.remove(
-      idUser: global.usuario!.id!,
+      idUser: global.usuario!.uid,
       idDoc: coisa.idFire!,
     );
     await atualizaLista();

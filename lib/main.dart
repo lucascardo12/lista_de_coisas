@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:listadecoisa/modules/auth/auth_module.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/pages/cadastro_page.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/pages/login_page.dart';
@@ -8,6 +10,7 @@ import 'package:listadecoisa/modules/listas/listas_module.dart';
 import 'package:listadecoisa/modules/splash/splash_module.dart';
 import 'package:listadecoisa/modules/splash/ui/splash_page.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/core/services/crashlytics_service.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/home_page.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
 import 'package:listadecoisa/core/services/service_module.dart';
@@ -16,11 +19,43 @@ GetIt di = GetIt.instance;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicializar Firebase
+  await Firebase.initializeApp();
+
+  // Registrar serviços
   ServiceModule().register();
   AuthModule().register();
   HomeModule().register();
   ListasModule().register();
   SplashModule().register();
+
+  // Inicializar serviços
+  await ServiceModule().starting();
+
+  // Configurar tratamento de erros globais
+  final crashlyticsService = di.get<CrashlyticsService>();
+
+  FlutterError.onError = (errorDetails) {
+    crashlyticsService.recordError(
+      errorDetails.exception,
+      errorDetails.stack,
+      fatal: true,
+      information: ['FlutterError caught'],
+    );
+  };
+
+  // Capturar erros em plataformas não-web
+  PlatformDispatcher.instance.onError = (error, stack) {
+    crashlyticsService.recordError(
+      error,
+      stack,
+      fatal: true,
+      information: ['PlatformDispatcher error caught'],
+    );
+    return true;
+  };
+
   runApp(MyApp());
 }
 
