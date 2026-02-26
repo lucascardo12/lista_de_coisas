@@ -1,3 +1,6 @@
+---
+trigger: always_on
+---
 # Regra: Nunca use print, use sempre log do dart:developer
 
 ## Import obrigatório
