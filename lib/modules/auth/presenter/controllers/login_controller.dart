@@ -1,16 +1,17 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:listadecoisa/core/configs/app_helps.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
 import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/home_page.dart';
 import 'package:listadecoisa/core/services/global.dart';
-import 'package:translator/translator.dart';
 
 class LoginController extends IController {
   final Global gb;
   final AuthService authService;
-  final translator = GoogleTranslator();
+
   var loginControler = TextEditingController();
   var senhaControler = TextEditingController();
   bool isVali = false;
@@ -66,7 +67,7 @@ class LoginController extends IController {
             TextButton(
               child: const Text('Confirmar'),
               onPressed: () {
-                authService.resetarSenha(user: gb.usuario!);
+                authService.resetarSenha(email: loginControler.text);
                 Navigator.pop(context);
               },
             ),
@@ -96,22 +97,13 @@ class LoginController extends IController {
         );
       }
     } catch (e) {
-      final dynamic error = e;
-      final auxi = await translator.translate(
-        error.message ?? '',
-        from: 'en',
-        to: 'pt',
-      );
-      Fluttertoast.showToast(
-        msg: auxi.text,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 5,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 18.0,
-      );
-      rethrow;
+      if (context.mounted) {
+        Navigator.pop(context);
+        AppHelps.showErrorDialog(context, e);
+      }
+      if (e is! FirebaseAuthException) {
+        rethrow;
+      }
     }
   }
 
@@ -129,22 +121,13 @@ class LoginController extends IController {
         );
       }
     } catch (e) {
-      final dynamic error = e;
-      final auxi = await translator.translate(
-        error.message ?? '',
-        from: 'en',
-        to: 'pt',
-      );
-      Fluttertoast.showToast(
-        msg: auxi.text,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 5,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 18.0,
-      );
-      rethrow;
+      if (context.mounted) {
+        Navigator.pop(context);
+        AppHelps.showErrorDialog(context, e);
+      }
+      if (e is! FirebaseAuthException) {
+        rethrow;
+      }
     }
   }
 }
