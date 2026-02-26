@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/configs/app_helps.dart';
+import 'package:listadecoisa/core/extensions/empty_string_null.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/pages/login_page.dart';
 import 'package:listadecoisa/modules/home/domain/models/list_view_type_enum.dart';
@@ -34,7 +35,10 @@ class CustomDrawer extends StatelessWidget {
           children: [
             CustomDrawerHeader(
               global: global,
-              userName: global.usuario?.login ?? 'Visitante',
+              userName:
+                  global.usuario?.displayName?.emptyOrNull ??
+                  global.usuario?.email?.emptyOrNull ??
+                  '',
               version: global.packageInfo.version,
             ),
             Expanded(
