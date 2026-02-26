@@ -8,7 +8,7 @@ import 'package:listadecoisa/modules/home/presenter/ui/atoms/compo_padrao.dart';
 
 class LoginPage extends StatefulWidget {
   static const route = '/Login';
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -95,13 +95,13 @@ class _LoginPageState extends State<LoginPage> {
                 label: 'Login',
                 color: gb.getWhiteOrBlack(),
                 textColor: gb.getPrimary(),
-                onPressed: () => ct.logar(mounted, context),
+                onPressed: () => ct.signInWithEmailAndPassword(context),
               ),
               ButtonTextPadrao(
                 color: gb.getWhiteOrBlack(),
                 label: 'Google',
                 textColor: gb.getPrimary(),
-                onPressed: () => ct.loginGoogle(mounted, context),
+                onPressed: () => ct.signInWithGoogle(context),
               ),
               ButtonTextPadrao(
                 label: 'Cadastrar-se',

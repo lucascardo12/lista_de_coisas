@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
-import 'package:listadecoisa/core/interfaces/remote_database_inter.dart';
 import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/home_page.dart';
 import 'package:listadecoisa/core/services/global.dart';
@@ -11,7 +9,6 @@ import 'package:translator/translator.dart';
 
 class LoginController extends IController {
   final Global gb;
-  final IRemoteDataBase banco;
   final AuthService authService;
   final translator = GoogleTranslator();
   var loginControler = TextEditingController();
@@ -19,11 +16,7 @@ class LoginController extends IController {
   bool isVali = false;
   var lObescure = ValueNotifier(true);
 
-  LoginController({
-    required this.gb,
-    required this.banco,
-    required this.authService,
-  });
+  LoginController(this.gb, this.authService);
 
   @override
   void dispose() {}
@@ -64,9 +57,7 @@ class LoginController extends IController {
           title: const Text(
             'Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam.',
           ),
-          content: TextField(
-            controller: loginControler,
-          ),
+          content: TextField(controller: loginControler),
           actions: [
             TextButton(
               child: const Text('Cancelar'),
@@ -85,34 +76,32 @@ class LoginController extends IController {
     );
   }
 
-  Future<void> logar(bool mounted, BuildContext context) async {
+  Future<void> signInWithEmailAndPassword(BuildContext context) async {
     try {
       gb.load(context);
-      final value = await authService.login(
+      gb.box.put('login', loginControler.text);
+      gb.box.put('senha', senhaControler.text);
+      final value = await authService.signInWithEmailAndPassword(
         email: loginControler.text,
         password: senhaControler.text,
       );
-      if (value != null) {
-        gb.usuario = value;
-        final userCo = jsonEncode(value);
-        gb.box.put('user', userCo);
-        gb.box.put('fezLogin', true);
-        gb.box.put('login', loginControler.text);
-        gb.box.put('senha', senhaControler.text);
-        gb.box.put('isAnonimo', false);
-        if (!mounted) return;
+
+      gb.usuario = value;
+      gb.box.put('fezLogin', true);
+      if (context.mounted) {
         await Navigator.pushNamedAndRemoveUntil(
           context,
           HomePage.route,
           (route) => false,
         );
       }
-      if (!mounted) return;
-      Navigator.pop(context, true);
     } catch (e) {
       final dynamic error = e;
-      final auxi =
-          await translator.translate(error.message ?? '', from: 'en', to: 'pt');
+      final auxi = await translator.translate(
+        error.message ?? '',
+        from: 'en',
+        to: 'pt',
+      );
       Fluttertoast.showToast(
         msg: auxi.text,
         toastLength: Toast.LENGTH_LONG,
@@ -122,66 +111,30 @@ class LoginController extends IController {
         textColor: Colors.white,
         fontSize: 18.0,
       );
+      rethrow;
     }
   }
 
-  Future<void> loginAnonimo(bool mounted, BuildContext context) async {
+  Future<void> signInWithGoogle(BuildContext context) async {
     try {
       gb.load(context);
-      final value = await authService.criaUserAnonimo();
+      final value = await authService.signInWithGoogle();
       gb.usuario = value;
-      if (value != null) {
-        final userCo = jsonEncode(value);
-        gb.box.put('user', userCo);
-        gb.box.put('fezLogin', true);
-        gb.box.put('isAnonimo', true);
-        if (!mounted) return;
-        await Navigator.of(context).pushNamedAndRemoveUntil(
-          HomePage.route,
-          (Route<dynamic> route) => false,
-        );
-      }
-      if (!mounted) return;
-      Navigator.pop(context, true);
-    } catch (e) {
-      final dynamic error = e;
-      final auxi =
-          await translator.translate(error.message ?? '', from: 'en', to: 'pt');
-      Fluttertoast.showToast(
-        msg: auxi.text,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 5,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 18.0,
-      );
-    }
-  }
-
-  Future<void> loginGoogle(bool mounted, BuildContext context) async {
-    try {
-      gb.load(context);
-      final value = await authService.criaUserGoogle();
-      gb.usuario = value;
-      if (value != null) {
-        final userCo = jsonEncode(value);
-        gb.box.put('user', userCo);
-        gb.box.put('fezLogin', true);
-        if (!mounted) return;
+      gb.box.put('fezLogin', true);
+      if (context.mounted) {
         await Navigator.pushNamedAndRemoveUntil(
           context,
           HomePage.route,
           (route) => false,
         );
       }
-
-      if (!mounted) return;
-      Navigator.pop(context, true);
     } catch (e) {
       final dynamic error = e;
-      final auxi =
-          await translator.translate(error.message ?? '', from: 'en', to: 'pt');
+      final auxi = await translator.translate(
+        error.message ?? '',
+        from: 'en',
+        to: 'pt',
+      );
       Fluttertoast.showToast(
         msg: auxi.text,
         toastLength: Toast.LENGTH_LONG,
@@ -191,6 +144,7 @@ class LoginController extends IController {
         textColor: Colors.white,
         fontSize: 18.0,
       );
+      rethrow;
     }
   }
 }

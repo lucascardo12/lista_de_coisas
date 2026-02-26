@@ -1,8 +1,10 @@
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
+import 'package:listadecoisa/core/services/banco.dart';
 
 class CoisasRepository extends ICoisasRepository {
-  CoisasRepository(super.remoteDataBase);
+  final BancoFire remoteDataBase;
+  CoisasRepository(this.remoteDataBase);
 
   @override
   String get idCollection => 'coisas';
@@ -35,8 +37,10 @@ class CoisasRepository extends ICoisasRepository {
 
   @override
   Future<List<Coisas>> list({required String idUser}) async {
-    final ret =
-        await remoteDataBase.list(idUser: idUser, collection: idCollection);
+    final ret = await remoteDataBase.list(
+      idUser: idUser,
+      collection: idCollection,
+    );
     return ret.map((e) => Coisas.fromJson(e)).toList();
   }
 
