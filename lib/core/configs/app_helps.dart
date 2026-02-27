@@ -1,6 +1,11 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:translator/translator.dart';
 
 class AppHelps {
+  static final translator = GoogleTranslator();
   static Future<bool> defaultDialog({
     required BuildContext context,
     String? content,
@@ -55,5 +60,39 @@ class AppHelps {
           },
         ) ??
         false;
+  }
+
+  static void showErrorDialog(BuildContext context, Object error) async {
+    String errorMessage = error.toString();
+    if (error is FirebaseAuthException && error.message != null) {
+      errorMessage = error.message!;
+      try {
+        final auxi = await translator.translate(
+          errorMessage,
+          from: 'en',
+          to: 'pt',
+        );
+        errorMessage = auxi.text;
+      } catch (e) {
+        log('Erro ao traduzir mensagem de erro: $e');
+      }
+    }
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Erro'),
+            content: Text(errorMessage),
+            actions: [
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

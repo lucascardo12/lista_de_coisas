@@ -1,5 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:listadecoisa/core/configs/app_helps.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
 import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/home_page.dart';
@@ -49,23 +50,11 @@ class CadastroController extends IController {
     } catch (e) {
       if (context.mounted) {
         Navigator.pop(context);
+        AppHelps.showErrorDialog(context, e);
       }
-      final dynamic error = e;
-      final auxi = await translator.translate(
-        error.message ?? '',
-        from: 'en',
-        to: 'pt',
-      );
-      Fluttertoast.showToast(
-        msg: auxi.text,
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 5,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 18.0,
-      );
-      rethrow;
+      if (e is! FirebaseAuthException) {
+        rethrow;
+      }
     }
   }
 }

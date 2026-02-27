@@ -15,11 +15,11 @@ class AuthService {
     return user.user!;
   }
 
-  Future<void> resetarSenha({required User user}) async {
-    if (user.email == null) {
+  Future<void> resetarSenha({required String email}) async {
+    if (email.isEmpty) {
       throw Exception('E-mail não pode estar vazio');
     }
-    await firebaseAuth.sendPasswordResetEmail(email: user.email!);
+    await firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   Future<User> signInWithGoogle() async {

@@ -15,6 +15,7 @@ import 'package:listadecoisa/modules/home/presenter/ui/pages/compartilha_page.da
 import 'package:listadecoisa/modules/home/presenter/ui/pages/home_page.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
 import 'package:listadecoisa/core/services/service_module.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 GetIt di = GetIt.instance;
 
@@ -23,6 +24,7 @@ Future<void> main() async {
 
   // Inicializar Firebase
   await Firebase.initializeApp();
+  await GoogleSignIn.instance.initialize();
 
   // Registrar serviços
   ServiceModule().register();

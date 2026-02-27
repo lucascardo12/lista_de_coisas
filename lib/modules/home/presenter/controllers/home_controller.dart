@@ -248,7 +248,7 @@ class HomeController extends IController {
             TextButton(
               child: const Text('Confirmar'),
               onPressed: () {
-                authService.resetarSenha(user: global.usuario!);
+                authService.resetarSenha(email: global.usuario!.email!);
                 Navigator.pop(context);
               },
             ),
