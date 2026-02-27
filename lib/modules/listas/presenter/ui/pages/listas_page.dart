@@ -44,7 +44,11 @@ class _ListasPageState extends State<ListasPage> {
             child: PopScope(
               canPop: false,
               onPopInvokedWithResult: (didPop, result) {
-                if (!didPop) ct.bottonVoltar(context);
+                if (ct.bottonVoltar(context)) {
+                  if (Navigator.of(context).canPop()) {
+                    Navigator.of(context).pop();
+                  }
+                }
               },
               child: Container(
                 decoration: BoxDecoration(
