@@ -69,13 +69,25 @@ class Coisas implements IModel {
 
   Coisas copyWith() {
     return Coisas(
-      checkCompras: checkCompras,
-      checklist: checklist,
+      checkCompras: checkCompras.map((e) => e.copy()).toList(),
+      checklist: checklist.map((e) => e.copy()).toList(),
       creatAp: creatAp,
       updatAp: updatAp,
       nome: nome,
       descricao: descricao,
       tipo: tipo,
+      idFire: idFire,
     );
   }
+
+  Coisas.empty()
+    : this(
+        nome: '',
+        descricao: '',
+        checkCompras: [],
+        checklist: [],
+        tipo: 0,
+        creatAp: DateTime.now(),
+        updatAp: DateTime.now(),
+      );
 }

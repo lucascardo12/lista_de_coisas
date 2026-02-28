@@ -23,71 +23,60 @@ class ContentList extends StatelessWidget {
     final tipoIcon = _getTipoIcon(coisa.tipo);
     final tipoCor = _getTipoColor(coisa.tipo);
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      child: Card(
-        elevation: 2,
-        shadowColor: Colors.black12,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: ThemeService.instance.getSurfaceColor(),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(12),
-          onTap: () => Navigator.pushNamed(
-            context,
-            '/Listas',
-            arguments: [coisa, false],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: tipoCor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(tipoIcon, color: tipoCor, size: 24),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        coisa.nome.isEmpty ? 'Sem título' : coisa.nome,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: ThemeService.instance.getTextColor(),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        _getTipoDescription(coisa.tipo),
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: ThemeService.instance.getSecondaryTextColor(),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Atualizado ${_formatDate(coisa.updatAp)}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: ThemeService.instance.getSecondaryTextColor(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                OptionItem(ct: ct, gb: gb, coisa: coisa),
-              ],
+    return Card(
+      elevation: 2,
+      shadowColor: Colors.black12,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: ThemeService.instance.getSurfaceColor(),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: tipoCor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(tipoIcon, color: tipoCor, size: 24),
             ),
-          ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    coisa.nome.isEmpty ? 'Sem título' : coisa.nome,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: ThemeService.instance.getTextColor(),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    _getTipoDescription(coisa.tipo),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: ThemeService.instance.getSecondaryTextColor(),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Atualizado ${_formatDate(coisa.updatAp)}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: ThemeService.instance.getSecondaryTextColor(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            OptionItem(ct: ct, gb: gb, coisa: coisa),
+          ],
         ),
       ),
     );

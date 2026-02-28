@@ -8,4 +8,8 @@ class Checklist {
       feito = xjson['feito'] ?? false;
 
   Map<String, dynamic> toJson() => {'descri': item, 'feito': feito};
+
+  Checklist copy() {
+    return Checklist(item: item, feito: feito);
+  }
 }

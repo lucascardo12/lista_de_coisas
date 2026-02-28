@@ -5,15 +5,15 @@ import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
-import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
+import 'package:listadecoisa/modules/listas/infra/coisas_repository.dart';
+import 'package:listadecoisa/modules/listas/presenter/arguments/lists_argument.dart';
 
 const umaHora = 2880000;
 
 class ListasController extends ChangeNotifier implements IController {
   final Global gb;
-  final ICoisasRepository coisasRepository;
+  final CoisasRepository coisasRepository;
   bool marcaTodos = false;
-  bool? isComp;
   final formKey = GlobalKey<FormState>();
   Coisas? coisas;
   late FocusScopeNode node;
@@ -25,15 +25,19 @@ class ListasController extends ChangeNotifier implements IController {
   ListasController({required this.gb, required this.coisasRepository});
 
   @override
-  void init(BuildContext context) {
-    final arguments = ModalRoute.of(context)!.settings.arguments as List;
-    isComp = arguments[1];
-    coisas = arguments[0];
+  void init(BuildContext context) async {
+    final arguments =
+        ModalRoute.of(context)!.settings.arguments as ListsArgument;
+    if (arguments.idDoc != null) {
+      coisas = await coisasRepository.get(idDoc: arguments.idDoc!);
+    } else {
+      coisas = Coisas.empty();
+    }
     statusPage.value = StatusPage.done;
   }
 
   Future<void> criaCoisa({required Coisas coisa}) async {
-    await coisasRepository.createUpdate(idUser: gb.usuario!.uid, object: coisa);
+    await coisasRepository.createUpdate(object: coisa);
 
     Fluttertoast.showToast(
       msg: coisa.idFire != null
@@ -51,10 +55,7 @@ class ListasController extends ChangeNotifier implements IController {
   Future<void> atualizaCoisa() async {
     statusPage.value = StatusPage.loading;
 
-    coisas = await coisasRepository.get(
-      idDoc: coisas!.idFire!,
-      idUser: gb.usuario!.uid,
-    );
+    coisas = await coisasRepository.get(idDoc: coisas!.idFire!);
 
     statusPage.value = StatusPage.done;
     Fluttertoast.showToast(
@@ -93,12 +94,12 @@ class ListasController extends ChangeNotifier implements IController {
     );
   }
 
-  Future<bool> bottonVoltar(BuildContext context) async {
+  bool bottonVoltar(BuildContext context) {
     if (coisas!.idFire == null) {
       if (coisas!.checkCompras.isNotEmpty ||
           coisas!.checklist.isNotEmpty ||
           coisas!.descricao.isNotEmpty) {
-        await showDialog(
+        showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(

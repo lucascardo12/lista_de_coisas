@@ -5,6 +5,7 @@ import 'package:listadecoisa/modules/home/presenter/controllers/home_controller.
 import 'package:listadecoisa/modules/home/presenter/ui/molecules/content_grid.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/molecules/content_list.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
+import 'package:listadecoisa/modules/listas/presenter/arguments/lists_argument.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
 
 class CardList extends StatelessWidget {
@@ -25,7 +26,7 @@ class CardList extends StatelessWidget {
       onTap: () => Navigator.pushNamed(
         context,
         ListasPage.route,
-        arguments: [coisa, false],
+        arguments: ListsArgument(idDoc: coisa.idFire),
       ),
       child: Card(
         child: switch (gb.listViewType) {

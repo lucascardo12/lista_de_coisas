@@ -15,43 +15,39 @@ class ListaCheck extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        !ct.isComp!
-            ? Row(
-                children: [
-                  const SizedBox(width: 8),
-                  Checkbox(
-                    fillColor: WidgetStateProperty.all(Colors.white),
-                    checkColor: ThemeService.instance.getPrimary(),
-                    onChanged: (bool? value) {
-                      ct.marcaTodos = !ct.marcaTodos;
-                      for (var element in ct.coisas!.checklist) {
-                        element.feito = ct.marcaTodos;
-                      }
-                      ct.update();
-                    },
-                    value: ct.marcaTodos,
-                  ),
-                  const Spacer(),
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.add,
-                        color: ThemeService.instance.getPrimary(),
-                      ),
-                      onPressed: () {
-                        ct.coisas!.checklist.add(
-                          Checklist(feito: false, item: ''),
-                        );
-                        ct.update();
-                      },
-                    ),
-                  ),
-                  const Spacer(),
-                  const SizedBox(width: 50),
-                ],
-              )
-            : const SizedBox(),
+        Row(
+          children: [
+            const SizedBox(width: 8),
+            Checkbox(
+              fillColor: WidgetStateProperty.all(Colors.white),
+              checkColor: ThemeService.instance.getPrimary(),
+              onChanged: (bool? value) {
+                ct.marcaTodos = !ct.marcaTodos;
+                for (var element in ct.coisas!.checklist) {
+                  element.feito = ct.marcaTodos;
+                }
+                ct.update();
+              },
+              value: ct.marcaTodos,
+            ),
+            const Spacer(),
+            CircleAvatar(
+              backgroundColor: Colors.white,
+              child: IconButton(
+                icon: Icon(
+                  Icons.add,
+                  color: ThemeService.instance.getPrimary(),
+                ),
+                onPressed: () {
+                  ct.coisas!.checklist.add(Checklist(feito: false, item: ''));
+                  ct.update();
+                },
+              ),
+            ),
+            const Spacer(),
+            const SizedBox(width: 50),
+          ],
+        ),
         const SizedBox(height: 5),
         const Divider(color: Colors.white),
         Expanded(
@@ -69,20 +65,17 @@ class ListaCheck extends StatelessWidget {
                 itemBuilder: (BuildContext context, int i) {
                   return Row(
                     children: [
-                      !ct.isComp!
-                          ? Checkbox(
-                              fillColor: WidgetStateProperty.all(Colors.white),
-                              checkColor: ThemeService.instance.getPrimary(),
-                              onChanged: (bool? value) {
-                                ct.coisas!.checklist[i].feito = value!;
-                                ct.update();
-                              },
-                              value: ct.coisas!.checklist[i].feito,
-                            )
-                          : const SizedBox(width: 20),
+                      Checkbox(
+                        fillColor: WidgetStateProperty.all(Colors.white),
+                        checkColor: ThemeService.instance.getPrimary(),
+                        onChanged: (bool? value) {
+                          ct.coisas!.checklist[i].feito = value!;
+                          ct.update();
+                        },
+                        value: ct.coisas!.checklist[i].feito,
+                      ),
                       Expanded(
                         child: TextFormField(
-                          readOnly: ct.isComp!,
                           onEditingComplete: () => ct.node.nextFocus(),
                           validator: (value) {
                             ct.coisas!.checklist[i].item = value!;
@@ -124,17 +117,14 @@ class ListaCheck extends StatelessWidget {
                           ),
                         ),
                       ),
-                      !ct.isComp!
-                          ? IconButton(
-                              icon: const Icon(Icons.clear, color: Colors.red),
-                              onPressed: () {
-                                ct.coisas!.checklist.removeAt(i);
-                                ct.coisas!.checklist = ct.coisas!.checklist
-                                    .toList();
-                                ct.update();
-                              },
-                            )
-                          : const SizedBox(width: 20),
+                      IconButton(
+                        icon: const Icon(Icons.clear, color: Colors.red),
+                        onPressed: () {
+                          ct.coisas!.checklist.removeAt(i);
+                          ct.coisas!.checklist = ct.coisas!.checklist.toList();
+                          ct.update();
+                        },
+                      ),
                     ],
                   );
                 },

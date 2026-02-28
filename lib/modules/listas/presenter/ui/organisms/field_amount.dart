@@ -46,7 +46,6 @@ class _FieldAmountState extends State<FieldAmount> {
             child: SizedBox(
               width: 50,
               child: FieldList(
-                readOnly: widget.ct.isComp!,
                 keyboardType: TextInputType.number,
                 controller: TextEditingController(
                   text: widget.check.quant.toString(),

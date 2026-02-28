@@ -68,7 +68,6 @@ class _ListasPageState extends State<ListasPage> {
                       const SizedBox(height: 60),
                       Expanded(
                         child: TextFormField(
-                          readOnly: ct.isComp ?? false,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Titulo não pode ser vazio';
@@ -123,25 +122,23 @@ class _ListasPageState extends State<ListasPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const BackButton(color: Colors.white),
-                !ct.isComp!
-                    ? Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(width: 15),
-                          IconButton(
-                            icon: const Icon(Icons.done, color: Colors.white),
-                            onPressed: () async {
-                              if (ct.formKey.currentState!.validate()) {
-                                await ct.criaCoisa(coisa: ct.coisas!);
-                                if (mounted && context.mounted) {
-                                  Navigator.pop(context);
-                                }
-                              }
-                            },
-                          ),
-                        ],
-                      )
-                    : const SizedBox(width: 15),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 15),
+                    IconButton(
+                      icon: const Icon(Icons.done, color: Colors.white),
+                      onPressed: () async {
+                        if (ct.formKey.currentState!.validate()) {
+                          await ct.criaCoisa(coisa: ct.coisas!);
+                          if (mounted && context.mounted) {
+                            Navigator.pop(context);
+                          }
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

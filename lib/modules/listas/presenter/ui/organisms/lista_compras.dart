@@ -87,7 +87,6 @@ class ListaCompras extends StatelessWidget {
                           Expanded(
                             flex: 5,
                             child: FieldList(
-                              readOnly: ct.isComp!,
                               onEditingComplete: () => ct.node.nextFocus(),
                               validator: (value) {
                                 ct.coisas!.checkCompras[i].item = value!;
@@ -111,7 +110,6 @@ class ListaCompras extends StatelessWidget {
                           Expanded(
                             flex: 2,
                             child: FieldList(
-                              readOnly: ct.isComp!,
                               keyboardType: TextInputType.number,
                               onEditingComplete: () => ct.node.nextFocus(),
                               inputFormatters: [

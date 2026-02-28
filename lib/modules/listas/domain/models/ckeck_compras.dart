@@ -23,4 +23,7 @@ class CheckCompras {
     'quant': quant,
     'valor': valor,
   };
+  CheckCompras copy() {
+    return CheckCompras(item: item, feito: feito, quant: quant, valor: valor);
+  }
 }

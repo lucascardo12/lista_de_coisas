@@ -25,7 +25,6 @@ class Global extends IService {
   @override
   Future<void> start() async {
     packageInfo = await PackageInfo.fromPlatform();
-    await Hive.initFlutter();
     box = await Hive.openBox('global');
     listViewType = ListViewType.fromString(box.get('listViewType'));
     if (box.get('fezLogin', defaultValue: false)) {

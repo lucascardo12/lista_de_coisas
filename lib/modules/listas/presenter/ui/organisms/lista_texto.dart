@@ -16,7 +16,6 @@ class ListaTexto extends StatelessWidget {
       shrinkWrap: true,
       children: [
         TextFormField(
-          readOnly: ct.isComp!,
           validator: (value) {
             if (value!.isEmpty) return 'Conteudo não pode ser vazio';
             return null;

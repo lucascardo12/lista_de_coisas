@@ -4,6 +4,7 @@ import 'package:listadecoisa/modules/home/presenter/controllers/home_controller.
 import 'package:listadecoisa/modules/home/presenter/ui/molecules/empty_state.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/organisms/card_list.dart';
 import 'package:listadecoisa/core/services/global.dart';
+import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 
 class ContentHome extends StatelessWidget {
   final Global gb;
@@ -17,9 +18,8 @@ class ContentHome extends StatelessWidget {
     this.searchQuery = '',
   });
 
-  @override
-  Widget build(BuildContext context) {
-    final filteredLists = searchQuery.isEmpty
+  List<Coisas> get filteredLists {
+    return searchQuery.isEmpty
         ? ct.lisCoisa.value
         : ct.lisCoisa.value.where((coisa) {
             return coisa.nome.toLowerCase().contains(
@@ -29,7 +29,10 @@ class ContentHome extends StatelessWidget {
                   searchQuery.toLowerCase(),
                 );
           }).toList();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: ct.lisCoisa,
       builder: (context, value, child) {
@@ -57,7 +60,7 @@ class ContentHome extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             itemCount: filteredLists.length,
             itemBuilder: (context, index) {
-              final coisa = filteredLists[index].copyWith();
+              final coisa = filteredLists[index];
               return CardList(ct: ct, gb: gb, coisa: coisa);
             },
           ),
@@ -65,7 +68,7 @@ class ContentHome extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             itemCount: filteredLists.length,
             itemBuilder: (context, index) {
-              final coisa = filteredLists[index].copyWith();
+              final coisa = filteredLists[index];
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: CardList(ct: ct, gb: gb, coisa: coisa),

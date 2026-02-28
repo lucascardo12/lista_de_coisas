@@ -7,16 +7,17 @@ import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
-import 'package:listadecoisa/modules/listas/domain/repositories/coisas_repository_inter.dart';
+import 'package:listadecoisa/modules/listas/infra/coisas_repository.dart';
+import 'package:listadecoisa/modules/listas/presenter/arguments/lists_argument.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/pages/listas_page.dart';
 
 class HomeController extends IController {
   final ILocalDatabase localDatabase;
-  final ICoisasRepository coisasRepository;
+  final CoisasRepository coisasRepository;
   final AuthService authService;
   final Global global;
   var lisCoisa = ValueNotifier(<Coisas>[]);
-  var lisCoisaComp = ValueNotifier(<Coisas>[]);
+
   var scaffoldKe = GlobalKey<ScaffoldState>();
   var isread = false;
   var tipo = 1;
@@ -38,8 +39,7 @@ class HomeController extends IController {
   }
 
   Future<void> atualizaLista() async {
-    lisCoisaComp.value.clear();
-    lisCoisa.value = await coisasRepository.list(idUser: global.usuario!.uid);
+    lisCoisa.value = await coisasRepository.list();
   }
 
   void logoff() async {
@@ -49,10 +49,7 @@ class HomeController extends IController {
   }
 
   Future<void> deleteList({required Coisas coisa}) async {
-    await coisasRepository.remove(
-      idUser: global.usuario!.uid,
-      idDoc: coisa.idFire!,
-    );
+    await coisasRepository.remove(idDoc: coisa.idFire!);
     await atualizaLista();
   }
 
@@ -210,18 +207,7 @@ class HomeController extends IController {
                           Navigator.pushNamed(
                             context,
                             ListasPage.route,
-                            arguments: [
-                              Coisas(
-                                creatAp: DateTime.now(),
-                                updatAp: DateTime.now(),
-                                tipo: tipo,
-                                checkCompras: [],
-                                checklist: [],
-                                descricao: '',
-                                nome: '',
-                              ),
-                              false,
-                            ],
+                            arguments: ListsArgument(),
                           ).then((value) => atualizaLista());
                         },
                         style: TextButton.styleFrom(
