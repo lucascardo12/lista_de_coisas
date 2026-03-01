@@ -15,7 +15,7 @@ class ListasController extends ChangeNotifier implements IController {
   final CoisasRepository coisasRepository;
   bool marcaTodos = false;
   final formKey = GlobalKey<FormState>();
-  Coisas? coisas;
+  late Coisas coisas;
   late FocusScopeNode node;
   final FocusNode nodeText1 = FocusNode();
   var statusPage = ValueNotifier(StatusPage.loading);
@@ -55,7 +55,7 @@ class ListasController extends ChangeNotifier implements IController {
   Future<void> atualizaCoisa() async {
     statusPage.value = StatusPage.loading;
 
-    coisas = await coisasRepository.get(idDoc: coisas!.idFire!);
+    coisas = await coisasRepository.get(idDoc: coisas.idFire!);
 
     statusPage.value = StatusPage.done;
     Fluttertoast.showToast(
@@ -70,10 +70,10 @@ class ListasController extends ChangeNotifier implements IController {
   }
 
   bool bottonVoltar(BuildContext context) {
-    if (coisas!.idFire == null) {
-      if (coisas!.checkCompras.isNotEmpty ||
-          coisas!.checklist.isNotEmpty ||
-          coisas!.descricao.isNotEmpty) {
+    if (coisas.idFire == null) {
+      if (coisas.checkCompras.isNotEmpty ||
+          coisas.checklist.isNotEmpty ||
+          coisas.descricao.isNotEmpty) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -106,7 +106,7 @@ class ListasController extends ChangeNotifier implements IController {
 
   void calculaValorTotal() {
     double total = 0;
-    for (var element in coisas!.checkCompras) {
+    for (var element in coisas.checkCompras) {
       total += element.quant * element.valor;
     }
     totalGeral.value = total;

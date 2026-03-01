@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:listadecoisa/core/interfaces/model_inter.dart';
 import 'package:listadecoisa/modules/listas/domain/models/check_list.dart';
 import 'package:listadecoisa/modules/listas/domain/models/ckeck_compras.dart';
+import 'package:listadecoisa/modules/listas/domain/enums/type_list.dart';
 
 class Coisas implements IModel {
   static String idCollection = 'coisas';
   String nome;
   String descricao;
-  int tipo;
+  TypeList tipo;
   List<Checklist> checklist;
   List<CheckCompras> checkCompras;
 
@@ -43,7 +44,7 @@ class Coisas implements IModel {
           .toList(),
       creatAp = validationDate(xjson['creatAp']),
       updatAp = validationDate(xjson['updatAp']),
-      tipo = xjson['tipo'] ?? 0;
+      tipo = TypeList.fromString(xjson['tipo']);
 
   @override
   Map<String, dynamic> toJson() => {
@@ -52,7 +53,7 @@ class Coisas implements IModel {
     'idFire': idFire,
     'checklist': checklist.map((i) => i.toJson()).toList(),
     'checkCompras': checkCompras.map((e) => e.toJson()).toList(),
-    'tipo': tipo,
+    'tipo': tipo.index,
     'creatAp': creatAp,
     'updatAp': updatAp,
   };
@@ -86,7 +87,7 @@ class Coisas implements IModel {
         descricao: '',
         checkCompras: [],
         checklist: [],
-        tipo: 0,
+        tipo: TypeList.text,
         creatAp: DateTime.now(),
         updatAp: DateTime.now(),
       );

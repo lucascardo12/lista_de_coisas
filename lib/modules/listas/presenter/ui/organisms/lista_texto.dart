@@ -17,8 +17,8 @@ class ListaTexto extends StatelessWidget {
       children: [
         ListSystemField(
           hintText: 'Conteudo da lista',
-          initialValue: ct.coisas!.descricao,
-          autofocus: ct.coisas!.descricao.isEmpty ? true : false,
+          initialValue: ct.coisas.descricao,
+          autofocus: ct.coisas.descricao.isEmpty ? true : false,
           maxLines: 300,
           minLines: 20,
           textAlign: TextAlign.center,
@@ -26,7 +26,7 @@ class ListaTexto extends StatelessWidget {
             if (value!.isEmpty) return 'Conteudo não pode ser vazio';
             return null;
           },
-          onChanged: (value) => ct.coisas!.descricao = value,
+          onChanged: (value) => ct.coisas.descricao = value,
         ),
       ],
     );

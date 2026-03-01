@@ -12,13 +12,13 @@ class CoisasRepository {
     await remoteDataBase.createUpdate(object: object, collection: idCollection);
   }
 
-  Future<Coisas?> get({required String idDoc}) async {
+  Future<Coisas> get({required String idDoc}) async {
     final ret = await remoteDataBase.get(
       collection: idCollection,
       idDoc: idDoc,
     );
     if (ret == null) {
-      return null;
+      throw Exception('Lista não encontrada');
     }
     return Coisas.fromJson(ret);
   }

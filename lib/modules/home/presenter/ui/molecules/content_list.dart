@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/home/presenter/controllers/home_controller.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/atoms/option_item.dart';
+import 'package:listadecoisa/modules/home/presenter/ui/atoms/delete_list_button.dart';
 import 'package:intl/intl.dart';
+import 'package:listadecoisa/modules/listas/domain/enums/type_list.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 
 class ContentList extends StatelessWidget {
@@ -58,7 +59,7 @@ class ContentList extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    _getTipoDescription(coisa.tipo),
+                    coisa.tipo.title,
                     style: TextStyle(
                       fontSize: 14,
                       color: ThemeService.instance.getSecondaryTextColor(),
@@ -75,51 +76,28 @@ class ContentList extends StatelessWidget {
                 ],
               ),
             ),
-            OptionItem(ct: ct, gb: gb, coisa: coisa),
+            DeleteListButton(
+              onPressed: () async {
+                await ct.showAlertDialog2(coisas: coisa, context: context);
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  IconData _getTipoIcon(int tipo) {
-    switch (tipo) {
-      case 0:
-        return Icons.note_alt_outlined;
-      case 1:
-        return Icons.checklist_outlined;
-      case 2:
-        return Icons.shopping_cart_outlined;
-      default:
-        return Icons.list_alt;
-    }
-  }
+  IconData _getTipoIcon(TypeList tipo) => switch (tipo) {
+    TypeList.text => Icons.note_alt_outlined,
+    TypeList.check => Icons.checklist_outlined,
+    TypeList.checkout => Icons.shopping_cart_outlined,
+  };
 
-  Color _getTipoColor(int tipo) {
-    switch (tipo) {
-      case 0:
-        return Colors.blue;
-      case 1:
-        return Colors.green;
-      case 2:
-        return Colors.orange;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  String _getTipoDescription(int tipo) {
-    switch (tipo) {
-      case 0:
-        return 'Texto Simples';
-      case 1:
-        return 'Check-List';
-      case 2:
-        return 'Lista de Compras';
-      default:
-        return 'Tipo desconhecido';
-    }
-  }
+  Color _getTipoColor(TypeList tipo) => switch (tipo) {
+    TypeList.text => ThemeService.instance.getInfoColor(),
+    TypeList.check => ThemeService.instance.getSuccessColor(),
+    TypeList.checkout => ThemeService.instance.getWarningColor(),
+  };
 
   String _formatDate(DateTime date) {
     final now = DateTime.now();

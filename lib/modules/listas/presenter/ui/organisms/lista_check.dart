@@ -23,7 +23,7 @@ class ListaCheck extends StatelessWidget {
               checkColor: ThemeService.instance.getPrimary(),
               onChanged: (bool? value) {
                 ct.marcaTodos = !ct.marcaTodos;
-                for (var element in ct.coisas!.checklist) {
+                for (var element in ct.coisas.checklist) {
                   element.feito = ct.marcaTodos;
                 }
                 ct.update();
@@ -39,7 +39,7 @@ class ListaCheck extends StatelessWidget {
                   color: ThemeService.instance.getPrimary(),
                 ),
                 onPressed: () {
-                  ct.coisas!.checklist.add(Checklist(feito: false, item: ''));
+                  ct.coisas.checklist.add(Checklist(feito: false, item: ''));
                   ct.update();
                 },
               ),
@@ -61,7 +61,7 @@ class ListaCheck extends StatelessWidget {
               child: ListView.builder(
                 padding: const EdgeInsets.all(4),
                 shrinkWrap: true,
-                itemCount: ct.coisas!.checklist.length,
+                itemCount: ct.coisas.checklist.length,
                 itemBuilder: (BuildContext context, int i) {
                   return Row(
                     children: [
@@ -69,36 +69,36 @@ class ListaCheck extends StatelessWidget {
                         fillColor: WidgetStateProperty.all(Colors.white),
                         checkColor: ThemeService.instance.getPrimary(),
                         onChanged: (bool? value) {
-                          ct.coisas!.checklist[i].feito = value!;
+                          ct.coisas.checklist[i].feito = value!;
                           ct.update();
                         },
-                        value: ct.coisas!.checklist[i].feito,
+                        value: ct.coisas.checklist[i].feito,
                       ),
                       Expanded(
                         child: ListSystemField(
                           hintText: '',
-                          initialValue: ct.coisas!.checklist[i].item,
-                          autofocus: ct.coisas!.checklist[i].item.isEmpty
+                          initialValue: ct.coisas.checklist[i].item,
+                          autofocus: ct.coisas.checklist[i].item.isEmpty
                               ? true
                               : false,
                           minLines: 1,
                           maxLines: 2,
                           textAlign: TextAlign.center,
                           validator: (value) {
-                            ct.coisas!.checklist[i].item = value!;
+                            ct.coisas.checklist[i].item = value!;
                             if (value.isEmpty) {
                               return 'Conteudo não pode ser vazio';
                             }
                             return null;
                           },
-                          onChanged: (v) => ct.coisas!.checklist[i].item = v,
+                          onChanged: (v) => ct.coisas.checklist[i].item = v,
                         ),
                       ),
                       IconButton(
                         icon: const Icon(Icons.clear, color: Colors.red),
                         onPressed: () {
-                          ct.coisas!.checklist.removeAt(i);
-                          ct.coisas!.checklist = ct.coisas!.checklist.toList();
+                          ct.coisas.checklist.removeAt(i);
+                          ct.coisas.checklist = ct.coisas.checklist.toList();
                           ct.update();
                         },
                       ),

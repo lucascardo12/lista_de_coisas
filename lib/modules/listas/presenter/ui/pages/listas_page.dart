@@ -4,6 +4,7 @@ import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/core/design_system/loading_page.dart';
 import 'package:listadecoisa/core/design_system/list_system_field.dart';
 import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
+import 'package:listadecoisa/modules/listas/domain/enums/type_list.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/organisms/lista_check.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/organisms/lista_compras.dart';
@@ -70,7 +71,7 @@ class _ListasPageState extends State<ListasPage> {
                       Expanded(
                         child: ListSystemField(
                           hintText: 'Digite um Titulo',
-                          initialValue: ct.coisas?.nome,
+                          initialValue: ct.coisas.nome,
                           textAlign: TextAlign.center,
                           showBorder: false,
                           validator: (value) {
@@ -79,24 +80,20 @@ class _ListasPageState extends State<ListasPage> {
                             }
                             return null;
                           },
-                          onChanged: (value) => ct.coisas!.nome = value,
+                          onChanged: (value) => ct.coisas.nome = value,
                         ),
                       ),
                       Expanded(
                         flex: 8,
                         child: AnimatedBuilder(
                           animation: ct,
-                          builder: (context, child) {
-                            switch (ct.coisas?.tipo ?? 0) {
-                              case 0:
-                                return ListaTexto(ct: ct, gb: ct.gb);
-                              case 1:
-                                return ListaCheck(ct: ct, gb: ct.gb);
-                              case 2:
-                                return ListaCompras(ct: ct, gb: ct.gb);
-                              default:
-                                return const Text('Erro');
-                            }
+                          builder: (context, child) => switch (ct.coisas.tipo) {
+                            TypeList.text => ListaTexto(ct: ct, gb: ct.gb),
+                            TypeList.check => ListaCheck(ct: ct, gb: ct.gb),
+                            TypeList.checkout => ListaCompras(
+                              ct: ct,
+                              gb: ct.gb,
+                            ),
                           },
                         ),
                       ),
@@ -120,7 +117,7 @@ class _ListasPageState extends State<ListasPage> {
                       icon: const Icon(Icons.done, color: Colors.white),
                       onPressed: () async {
                         if (ct.formKey.currentState!.validate()) {
-                          await ct.criaCoisa(coisa: ct.coisas!);
+                          await ct.criaCoisa(coisa: ct.coisas);
                           if (mounted && context.mounted) {
                             Navigator.pop(context);
                           }

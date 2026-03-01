@@ -18,7 +18,7 @@ class TypeListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final icon = _getIconForType(type);
     final color = _getColorForType(type);
-    
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -26,14 +26,16 @@ class TypeListCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected 
+          color: isSelected
               ? color.withValues(alpha: 0.1)
               : ThemeService.instance.getSurfaceColor(),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected 
+            color: isSelected
                 ? color
-                : ThemeService.instance.getSurfaceColor().withValues(alpha: 0.3),
+                : ThemeService.instance.getSurfaceColor().withValues(
+                    alpha: 0.3,
+                  ),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -44,14 +46,12 @@ class TypeListCard extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: isSelected 
-                    ? color
-                    : color.withValues(alpha: 0.1),
+                color: isSelected ? color : color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 icon,
-                color: isSelected 
+                color: isSelected
                     ? ThemeService.instance.getWhiteOrBlack()
                     : color,
                 size: 24,
@@ -63,10 +63,12 @@ class TypeListCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    type.value,
+                    type.title,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: ThemeService.instance.getTextColor(),
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -79,12 +81,7 @@ class TypeListCard extends StatelessWidget {
                 ],
               ),
             ),
-            if (isSelected)
-              Icon(
-                Icons.check_circle,
-                color: color,
-                size: 24,
-              ),
+            if (isSelected) Icon(Icons.check_circle, color: color, size: 24),
           ],
         ),
       ),
@@ -93,7 +90,7 @@ class TypeListCard extends StatelessWidget {
 
   IconData _getIconForType(TypeList type) {
     switch (type) {
-      case TypeList.test:
+      case TypeList.text:
         return Icons.text_fields;
       case TypeList.check:
         return Icons.checklist;
@@ -104,7 +101,7 @@ class TypeListCard extends StatelessWidget {
 
   Color _getColorForType(TypeList type) {
     switch (type) {
-      case TypeList.test:
+      case TypeList.text:
         return ThemeService.instance.getInfoColor();
       case TypeList.check:
         return ThemeService.instance.getSuccessColor();
@@ -115,7 +112,7 @@ class TypeListCard extends StatelessWidget {
 
   String _getDescriptionForType(TypeList type) {
     switch (type) {
-      case TypeList.test:
+      case TypeList.text:
         return 'Crie listas de texto simples e anotações';
       case TypeList.check:
         return 'Listas de tarefas com marcação de conclusão';

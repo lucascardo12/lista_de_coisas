@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/home/presenter/controllers/home_controller.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/atoms/option_item.dart';
+import 'package:listadecoisa/modules/home/presenter/ui/atoms/delete_list_button.dart';
 import 'package:intl/intl.dart';
+import 'package:listadecoisa/modules/listas/domain/enums/type_list.dart';
 import 'package:listadecoisa/modules/listas/domain/models/coisas.dart';
 
 class ContentGrid extends StatelessWidget {
@@ -45,10 +46,12 @@ class ContentGrid extends StatelessWidget {
                   ),
                   child: Icon(tipoIcon, color: tipoCor, size: 20),
                 ),
-                OptionItem(ct: ct, gb: gb, coisa: coisa),
+                DeleteListButton(onPressed: () async {
+                  await ct.showAlertDialog2(coisas: coisa, context: context);
+                }),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             Text(
               coisa.nome.isEmpty ? 'Sem título' : coisa.nome,
               style: TextStyle(
@@ -60,19 +63,13 @@ class ContentGrid extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 8),
-            Text(
-              _getTipoDescription(coisa.tipo),
-              style: TextStyle(
-                fontSize: 12,
-                color: ThemeService.instance.getSecondaryTextColor(),
-              ),
-            ),
-            const Spacer(),
-            Text(
-              _formatDate(coisa.updatAp),
-              style: TextStyle(
-                fontSize: 10,
-                color: ThemeService.instance.getSecondaryTextColor(),
+            Flexible(
+              child: Text(
+                _formatDate(coisa.updatAp),
+                style: TextStyle(
+                  fontSize: 10,
+                  color: ThemeService.instance.getSecondaryTextColor(),
+                ),
               ),
             ),
           ],
@@ -81,44 +78,17 @@ class ContentGrid extends StatelessWidget {
     );
   }
 
-  IconData _getTipoIcon(int tipo) {
-    switch (tipo) {
-      case 1:
-        return Icons.note_alt_outlined;
-      case 2:
-        return Icons.checklist_outlined;
-      case 3:
-        return Icons.shopping_cart_outlined;
-      default:
-        return Icons.list_alt;
-    }
-  }
+  IconData _getTipoIcon(TypeList tipo) => switch (tipo) {
+    TypeList.text => Icons.note_alt_outlined,
+    TypeList.check => Icons.checklist_outlined,
+    TypeList.checkout => Icons.shopping_cart_outlined,
+  };
 
-  Color _getTipoColor(int tipo) {
-    switch (tipo) {
-      case 1:
-        return Colors.blue;
-      case 2:
-        return Colors.green;
-      case 3:
-        return Colors.orange;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  String _getTipoDescription(int tipo) {
-    switch (tipo) {
-      case 1:
-        return 'Texto';
-      case 2:
-        return 'Check-List';
-      case 3:
-        return 'Compras';
-      default:
-        return 'Lista';
-    }
-  }
+  Color _getTipoColor(TypeList tipo) => switch (tipo) {
+    TypeList.text => Colors.blue,
+    TypeList.check => Colors.green,
+    TypeList.checkout => Colors.orange,
+  };
 
   String _formatDate(DateTime date) {
     final now = DateTime.now();

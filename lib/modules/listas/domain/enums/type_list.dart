@@ -1,9 +1,13 @@
 enum TypeList {
-  test('Texto Simples'),
+  text('Texto Simples'),
   check('Check-List'),
   checkout('Lista de Compras');
 
-  const TypeList(this.value);
+  const TypeList(this.title);
 
-  final String value;
+  final String title;
+
+  factory TypeList.fromString(dynamic id) {
+    return TypeList.values[int.tryParse(id.toString()) ?? 0];
+  }
 }
