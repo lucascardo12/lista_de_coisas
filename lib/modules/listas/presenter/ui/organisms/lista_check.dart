@@ -3,7 +3,7 @@ import 'package:listadecoisa/modules/listas/presenter/controllers/listas_control
 import 'package:listadecoisa/modules/listas/domain/models/check_list.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/atoms/borda_padrao.dart';
+import 'package:listadecoisa/core/design_system/borda_padrao.dart';
 
 class ListaCheck extends StatelessWidget {
   final Global gb;
@@ -104,9 +104,9 @@ class ListaCheck extends StatelessWidget {
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.zero,
-                            border: BordaPadrao.check(),
-                            enabledBorder: BordaPadrao.check(),
-                            focusedBorder: BordaPadrao.check(),
+                            border: ListSystemBorder.check(),
+                            enabledBorder: ListSystemBorder.check(),
+                            focusedBorder: ListSystemBorder.check(),
                             hintStyle: const TextStyle(color: Colors.white),
                             alignLabelWithHint: true,
                             hintText: '',

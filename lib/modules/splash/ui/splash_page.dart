@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/modules/splash/controllers/splash_controller.dart';
 import 'package:listadecoisa/main.dart';
-import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.dart';
+import 'package:listadecoisa/core/design_system/loading_page.dart';
 
 class SplashPage extends StatefulWidget {
   static const route = '/Splash';
@@ -27,6 +27,6 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return LoadPadrao();
+    return LoadingPage();
   }
 }

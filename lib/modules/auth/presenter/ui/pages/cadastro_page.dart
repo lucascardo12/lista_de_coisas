@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/auth/presenter/controllers/cadastro_controller.dart';
 import 'package:listadecoisa/main.dart';
-import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/atoms/compo_padrao.dart';
+import 'package:listadecoisa/core/design_system/list_system_field.dart';
 
 class CadastroPage extends StatefulWidget {
   static const route = '/Cadastro';
@@ -14,7 +13,6 @@ class CadastroPage extends StatefulWidget {
 }
 
 class _CadastroPageState extends State<CadastroPage> {
-  final gb = di.get<Global>();
   final ct = di.get<CadastroController>();
 
   @override
@@ -63,8 +61,7 @@ class _CadastroPageState extends State<CadastroPage> {
                   ),
                 ),
               ),
-              CampoPadrao(
-                gb: gb,
+              ListSystemField(
                 hintText: 'E-mail',
                 controller: ct.loginControler,
               ),
@@ -72,9 +69,8 @@ class _CadastroPageState extends State<CadastroPage> {
               ValueListenableBuilder(
                 valueListenable: ct.lObescure,
                 builder: (context, value, child) {
-                  return CampoPadrao(
+                  return ListSystemField(
                     hintText: 'Senha',
-                    gb: gb,
                     lObescure: ct.lObescure.value,
                     suffixIcon: IconButton(
                       color: Colors.white,
@@ -90,11 +86,7 @@ class _CadastroPageState extends State<CadastroPage> {
                 },
               ),
               const SizedBox(height: 10),
-              CampoPadrao(
-                hintText: 'Nome',
-                gb: gb,
-                controller: ct.nomeControler,
-              ),
+              ListSystemField(hintText: 'Nome', controller: ct.nomeControler),
               const SizedBox(height: 20),
               ButtonTextPadrao(
                 label: 'Cadastro',

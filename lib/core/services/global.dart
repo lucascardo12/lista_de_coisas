@@ -5,7 +5,7 @@ import 'package:listadecoisa/core/configs/app_helps.dart';
 import 'package:listadecoisa/core/interfaces/service_interface.dart';
 import 'package:listadecoisa/core/services/crashlytics_service.dart';
 import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
-import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.dart';
+import 'package:listadecoisa/core/design_system/loading_page.dart';
 import 'package:listadecoisa/modules/home/domain/models/list_view_type_enum.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -37,7 +37,7 @@ class Global extends IService {
     AppHelps.defaultDialog(
       context: context,
       barrierColor: Colors.white,
-      child: LoadPadrao(),
+      child: LoadingPage(),
     );
   }
 }

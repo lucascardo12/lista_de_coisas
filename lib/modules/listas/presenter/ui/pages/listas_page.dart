@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
-import 'package:listadecoisa/modules/auth/presenter/ui/organisms/loading_padrao.dart';
+import 'package:listadecoisa/core/design_system/loading_page.dart';
 import 'package:listadecoisa/modules/listas/domain/enums/status_page.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/organisms/lista_check.dart';
@@ -38,7 +38,7 @@ class _ListasPageState extends State<ListasPage> {
     return ValueListenableBuilder(
       valueListenable: ct.statusPage,
       builder: (context, value, child) {
-        if (ct.statusPage.value == StatusPage.loading) return LoadPadrao();
+        if (ct.statusPage.value == StatusPage.loading) return LoadingPage();
         return Scaffold(
           body: SafeArea(
             child: PopScope(

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/atoms/borda_padrao.dart';
+import 'package:listadecoisa/core/design_system/borda_padrao.dart';
 
-class FieldList extends StatelessWidget {
+class ListSystemField extends StatelessWidget {
+  final Widget? suffixIcon;
+  final bool? lObescure;
+  final String hintText;
   final TextEditingController? controller;
   final bool autofocus;
   final void Function(String)? onChanged;
@@ -16,15 +19,18 @@ class FieldList extends StatelessWidget {
   final int? maxLines;
   final MaxLengthEnforcement? maxLengthEnforcement;
   final List<TextInputFormatter>? inputFormatters;
-  const FieldList({
+  const ListSystemField({
     super.key,
+    required this.hintText,
+    this.lObescure,
+    this.suffixIcon,
+    this.controller,
     this.autofocus = false,
     this.initialValue,
     this.keyboardType,
     this.onChanged,
     this.onEditingComplete,
     this.readOnly = false,
-    this.controller,
     this.textAlign = TextAlign.center,
     this.validator,
     this.minLines,
@@ -35,6 +41,7 @@ class FieldList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      obscureText: lObescure ?? false,
       readOnly: readOnly,
       initialValue: initialValue,
       controller: controller,
@@ -50,11 +57,12 @@ class FieldList extends StatelessWidget {
       inputFormatters: inputFormatters,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
+        hintText: hintText,
         contentPadding: EdgeInsets.zero,
-        border: BordaPadrao.check(),
-        enabledBorder: BordaPadrao.check(),
-        focusedBorder: BordaPadrao.check(),
-        hintStyle: const TextStyle(color: Colors.white),
+        border: ListSystemBorder.check(),
+        enabledBorder: ListSystemBorder.check(),
+        focusedBorder: ListSystemBorder.check(),
+        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
         alignLabelWithHint: true,
         labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
       ),

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
-import 'package:listadecoisa/main.dart';
-import 'package:listadecoisa/core/services/global.dart';
 
-class LoadPadrao extends StatelessWidget {
-  final gb = di.get<Global>();
-
-  LoadPadrao({super.key});
+class LoadingPage extends StatelessWidget {
+  const LoadingPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -20,7 +16,7 @@ class LoadPadrao extends StatelessWidget {
             const CircularProgressIndicator.adaptive(),
             const SizedBox(height: 20),
             Text(
-              'carregando as coisas ⏳',
+              'carregando ...',
               style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                 color: ThemeService.instance.getSecondary(),
               ),

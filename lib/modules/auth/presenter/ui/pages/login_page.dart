@@ -5,7 +5,7 @@ import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/pages/cadastro_page.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/atoms/compo_padrao.dart';
+import 'package:listadecoisa/core/design_system/list_system_field.dart';
 
 class LoginPage extends StatefulWidget {
   static const route = '/Login';
@@ -64,17 +64,15 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              CampoPadrao(
+              ListSystemField(
                 hintText: 'E-mail',
                 controller: ct.loginControler,
-                gb: gb,
               ),
               const SizedBox(height: 10),
               ValueListenableBuilder(
                 valueListenable: ct.lObescure,
                 builder: (context, value, child) {
-                  return CampoPadrao(
-                    gb: gb,
+                  return ListSystemField(
                     lObescure: ct.lObescure.value,
                     suffixIcon: IconButton(
                       color: Colors.white,

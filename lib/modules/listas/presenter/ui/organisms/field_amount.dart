@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:listadecoisa/core/design_system/list_system_field.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/listas/domain/models/ckeck_compras.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
-import 'package:listadecoisa/modules/listas/presenter/ui/atoms/field_list.dart';
 
 class FieldAmount extends StatefulWidget {
   final ListasController ct;
@@ -45,7 +45,8 @@ class _FieldAmountState extends State<FieldAmount> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: SizedBox(
               width: 50,
-              child: FieldList(
+              child: ListSystemField(
+                hintText: 'quantidade',
                 keyboardType: TextInputType.number,
                 controller: TextEditingController(
                   text: widget.check.quant.toString(),

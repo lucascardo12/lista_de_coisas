@@ -2,11 +2,11 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:listadecoisa/core/design_system/export_list_system.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
 import 'package:listadecoisa/modules/listas/domain/models/ckeck_compras.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
-import 'package:listadecoisa/modules/listas/presenter/ui/atoms/field_list.dart';
 import 'package:listadecoisa/modules/listas/presenter/ui/organisms/field_amount.dart';
 
 class ListaCompras extends StatelessWidget {
@@ -86,7 +86,8 @@ class ListaCompras extends StatelessWidget {
                           ),
                           Expanded(
                             flex: 5,
-                            child: FieldList(
+                            child: ListSystemField(
+                              hintText: 'item',
                               onEditingComplete: () => ct.node.nextFocus(),
                               validator: (value) {
                                 ct.coisas!.checkCompras[i].item = value!;
@@ -109,7 +110,8 @@ class ListaCompras extends StatelessWidget {
                           ),
                           Expanded(
                             flex: 2,
-                            child: FieldList(
+                            child: ListSystemField(
+                              hintText: 'valor',
                               keyboardType: TextInputType.number,
                               onEditingComplete: () => ct.node.nextFocus(),
                               inputFormatters: [

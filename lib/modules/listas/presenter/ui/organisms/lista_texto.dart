@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
 import 'package:listadecoisa/core/services/global.dart';
-import 'package:listadecoisa/modules/home/presenter/ui/atoms/borda_padrao.dart';
+import 'package:listadecoisa/core/design_system/borda_padrao.dart';
 
 class ListaTexto extends StatelessWidget {
   final Global gb;
@@ -30,9 +30,9 @@ class ListaTexto extends StatelessWidget {
           style: const TextStyle(color: Colors.white),
           textAlign: TextAlign.center,
           decoration: InputDecoration(
-            border: BordaPadrao.build(),
-            enabledBorder: BordaPadrao.build(),
-            focusedBorder: BordaPadrao.build(),
+            border: ListSystemBorder.check(),
+            enabledBorder: ListSystemBorder.check(),
+            focusedBorder: ListSystemBorder.check(),
             hintStyle: const TextStyle(color: Colors.white),
             alignLabelWithHint: true,
             labelText: 'Conteudo da lista',
