@@ -16,18 +16,20 @@ class BottomSheetActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(
         children: [
           Expanded(
             child: TextButton(
               onPressed: onCancel,
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                   side: BorderSide(
-                    color: ThemeService.instance.getSurfaceColor().withValues(alpha: 0.5),
+                    color: ThemeService.instance.getSurfaceColor().withValues(
+                      alpha: 0.5,
+                    ),
                   ),
                 ),
               ),

@@ -21,30 +21,33 @@ class _NewListBottomSheetState extends State<NewListBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: ThemeService.instance.getBackgroundColor(),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          color: ThemeService.instance.getBackgroundColor(),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
         ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const BottomSheetHandle(),
-          BottomSheetHeader(
-            title: 'Nova Lista',
-            subtitle: 'Escolha o tipo de lista que deseja criar',
-          ),
-          _buildTypeOptions(),
-          BottomSheetActions(
-            onCancel: () => Navigator.pop(context),
-            onContinue: _onContinue,
-            canContinue: selectedType != null,
-          ),
-        ],
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const BottomSheetHandle(),
+            BottomSheetHeader(
+              title: 'Nova Lista',
+              subtitle: 'Escolha o tipo de lista que deseja criar',
+            ),
+            _buildTypeOptions(),
+            BottomSheetActions(
+              onCancel: () => Navigator.pop(context),
+              onContinue: _onContinue,
+              canContinue: selectedType != null,
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }
