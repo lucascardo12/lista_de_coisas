@@ -69,31 +69,6 @@ class ListasController extends ChangeNotifier implements IController {
     );
   }
 
-  Future<void> refreshCoisa(BuildContext context) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Atualizar'),
-          content: const Text('Deseja atualizar essa lista ?'),
-          actions: [
-            TextButton(
-              child: const Text('Sim'),
-              onPressed: () {
-                atualizaCoisa();
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: const Text('Não'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   bool bottonVoltar(BuildContext context) {
     if (coisas!.idFire == null) {
       if (coisas!.checkCompras.isNotEmpty ||

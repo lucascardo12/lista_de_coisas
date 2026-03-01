@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/auth/presenter/controllers/cadastro_controller.dart';
 import 'package:listadecoisa/main.dart';
-import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.dart';
-import 'package:listadecoisa/core/design_system/list_system_field.dart';
+import 'package:listadecoisa/core/design_system/export_list_system.dart';
 
 class CadastroPage extends StatefulWidget {
   static const route = '/Cadastro';
@@ -88,13 +87,13 @@ class _CadastroPageState extends State<CadastroPage> {
               const SizedBox(height: 10),
               ListSystemField(hintText: 'Nome', controller: ct.nomeControler),
               const SizedBox(height: 20),
-              ButtonTextPadrao(
+              ListSystemButton(
                 label: 'Cadastro',
                 color: ThemeService.instance.getWhiteOrBlack(),
                 textColor: ThemeService.instance.getPrimary(),
                 onPressed: () => ct.createUserWithEmailAndPassword(context),
               ),
-              ButtonTextPadrao(
+              ListSystemButton(
                 label: 'Voltar',
                 textColor: Colors.white,
                 color: Colors.transparent,

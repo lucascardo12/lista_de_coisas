@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 
 class ListSystemBorder {
   static OutlineInputBorder check() {
-    return const OutlineInputBorder(
+    return OutlineInputBorder(
       borderSide: BorderSide(color: Colors.white),
-      borderRadius: BorderRadius.all(Radius.circular(12)),
+      borderRadius: borderRadius,
     );
   }
 
-  static BorderRadius borderRadius() {
-    return BorderRadius.circular(12);
-  }
+  static BorderRadius get borderRadius => BorderRadius.circular(12);
 }

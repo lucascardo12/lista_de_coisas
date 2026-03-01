@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:listadecoisa/core/design_system/export_list_system.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
 import 'package:listadecoisa/modules/auth/presenter/controllers/login_controller.dart';
 import 'package:listadecoisa/main.dart';
 import 'package:listadecoisa/modules/auth/presenter/ui/pages/cadastro_page.dart';
 import 'package:listadecoisa/core/services/global.dart';
-import 'package:listadecoisa/modules/auth/presenter/ui/atoms/button_text_padrao.dart';
-import 'package:listadecoisa/core/design_system/list_system_field.dart';
 
 class LoginPage extends StatefulWidget {
   static const route = '/Login';
@@ -88,24 +87,24 @@ class _LoginPageState extends State<LoginPage> {
                   );
                 },
               ),
-              ButtonTextPadrao(
+              ListSystemButton(
                 label: 'Esqueceu sua senha?',
                 color: Colors.transparent,
                 onPressed: () => ct.showAlertRedefinir(context: context),
               ),
-              ButtonTextPadrao(
+              ListSystemButton(
                 label: 'Login',
                 color: ThemeService.instance.getWhiteOrBlack(),
                 textColor: ThemeService.instance.getPrimary(),
                 onPressed: () => ct.signInWithEmailAndPassword(context),
               ),
-              ButtonTextPadrao(
+              ListSystemButton(
                 color: ThemeService.instance.getWhiteOrBlack(),
                 label: 'Google',
                 textColor: ThemeService.instance.getPrimary(),
                 onPressed: () => ct.signInWithGoogle(context),
               ),
-              ButtonTextPadrao(
+              ListSystemButton(
                 label: 'Cadastrar-se',
                 onPressed: () =>
                     Navigator.pushNamed(context, CadastroPage.route),
