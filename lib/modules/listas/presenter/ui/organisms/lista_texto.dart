@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:listadecoisa/modules/listas/presenter/controllers/listas_controller.dart';
 import 'package:listadecoisa/core/services/global.dart';
-import 'package:listadecoisa/core/design_system/borda_padrao.dart';
+import 'package:listadecoisa/core/design_system/list_system_field.dart';
 
 class ListaTexto extends StatelessWidget {
   final Global gb;
@@ -15,29 +15,18 @@ class ListaTexto extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       shrinkWrap: true,
       children: [
-        TextFormField(
+        ListSystemField(
+          hintText: 'Conteudo da lista',
+          initialValue: ct.coisas!.descricao,
+          autofocus: ct.coisas!.descricao.isEmpty ? true : false,
+          maxLines: 300,
+          minLines: 20,
+          textAlign: TextAlign.center,
           validator: (value) {
             if (value!.isEmpty) return 'Conteudo não pode ser vazio';
             return null;
           },
-          focusNode: ct.nodeText1,
-          autofocus: ct.coisas!.descricao.isEmpty ? true : false,
-          maxLines: 300,
-          initialValue: ct.coisas!.descricao,
           onChanged: (value) => ct.coisas!.descricao = value,
-          minLines: 20,
-          cursorColor: Colors.white,
-          style: const TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-          decoration: InputDecoration(
-            border: ListSystemBorder.check(),
-            enabledBorder: ListSystemBorder.check(),
-            focusedBorder: ListSystemBorder.check(),
-            hintStyle: const TextStyle(color: Colors.white),
-            alignLabelWithHint: true,
-            labelText: 'Conteudo da lista',
-            labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
-          ),
         ),
       ],
     );

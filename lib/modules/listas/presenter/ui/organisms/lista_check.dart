@@ -3,7 +3,7 @@ import 'package:listadecoisa/modules/listas/presenter/controllers/listas_control
 import 'package:listadecoisa/modules/listas/domain/models/check_list.dart';
 import 'package:listadecoisa/core/services/global.dart';
 import 'package:listadecoisa/core/services/theme/theme_service.dart';
-import 'package:listadecoisa/core/design_system/borda_padrao.dart';
+import 'package:listadecoisa/core/design_system/list_system_field.dart';
 
 class ListaCheck extends StatelessWidget {
   final Global gb;
@@ -75,8 +75,15 @@ class ListaCheck extends StatelessWidget {
                         value: ct.coisas!.checklist[i].feito,
                       ),
                       Expanded(
-                        child: TextFormField(
-                          onEditingComplete: () => ct.node.nextFocus(),
+                        child: ListSystemField(
+                          hintText: '',
+                          initialValue: ct.coisas!.checklist[i].item,
+                          autofocus: ct.coisas!.checklist[i].item.isEmpty
+                              ? true
+                              : false,
+                          minLines: 1,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
                           validator: (value) {
                             ct.coisas!.checklist[i].item = value!;
                             if (value.isEmpty) {
@@ -85,36 +92,6 @@ class ListaCheck extends StatelessWidget {
                             return null;
                           },
                           onChanged: (v) => ct.coisas!.checklist[i].item = v,
-                          autofocus: ct.coisas!.checklist[i].item.isEmpty
-                              ? true
-                              : false,
-                          initialValue: ct.coisas!.checklist[i].item,
-                          cursorColor: Colors.white,
-                          minLines: 1,
-                          maxLines: 2,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            decoration: ct.coisas!.checklist[i].feito
-                                ? TextDecoration.lineThrough
-                                : null,
-                            decorationThickness: 2.85,
-                            decorationColor: Colors.red,
-                          ),
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.zero,
-                            border: ListSystemBorder.check(),
-                            enabledBorder: ListSystemBorder.check(),
-                            focusedBorder: ListSystemBorder.check(),
-                            hintStyle: const TextStyle(color: Colors.white),
-                            alignLabelWithHint: true,
-                            hintText: '',
-                            labelStyle: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                            ),
-                          ),
                         ),
                       ),
                       IconButton(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:listadecoisa/core/design_system/list_system_field.dart';
 
 class CustomSearchBar extends StatefulWidget {
   final TextEditingController controller;
@@ -27,31 +28,15 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       return const SizedBox.shrink();
     }
 
-    return Container(
+    return SizedBox(
       height: 40,
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: TextField(
+      child: ListSystemField(
+        hintText: 'Buscar listas...',
         controller: widget.controller,
-        focusNode: widget.focusNode,
         autofocus: true,
-        decoration: InputDecoration(
-          hintText: 'Buscar listas...',
-          hintStyle: TextStyle(color: Colors.grey[600]),
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: widget.onClose,
-          ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 8,
-          ),
-        ),
         onChanged: widget.onChanged,
+        textAlign: TextAlign.left,
+        showBorder: false,
       ),
     );
   }

@@ -19,6 +19,7 @@ class ListSystemField extends StatelessWidget {
   final int? maxLines;
   final MaxLengthEnforcement? maxLengthEnforcement;
   final List<TextInputFormatter>? inputFormatters;
+  final bool showBorder;
   const ListSystemField({
     super.key,
     required this.hintText,
@@ -34,9 +35,10 @@ class ListSystemField extends StatelessWidget {
     this.textAlign = TextAlign.center,
     this.validator,
     this.minLines,
-    this.maxLines,
+    this.maxLines = 1,
     this.maxLengthEnforcement,
     this.inputFormatters,
+    this.showBorder = true,
   });
   @override
   Widget build(BuildContext context) {
@@ -59,9 +61,9 @@ class ListSystemField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         contentPadding: EdgeInsets.zero,
-        border: ListSystemBorder.check(),
-        enabledBorder: ListSystemBorder.check(),
-        focusedBorder: ListSystemBorder.check(),
+        border: showBorder ? ListSystemBorder.check() : InputBorder.none,
+        enabledBorder: showBorder ? ListSystemBorder.check() : InputBorder.none,
+        focusedBorder: showBorder ? ListSystemBorder.check() : InputBorder.none,
         hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
         alignLabelWithHint: true,
         labelStyle: const TextStyle(color: Colors.white, fontSize: 18),

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:listadecoisa/core/interfaces/controller_interface.dart';
+import 'package:listadecoisa/core/design_system/list_system_field.dart';
 import 'package:listadecoisa/modules/auth/domain/services/auth_service.dart';
 import 'package:listadecoisa/modules/home/presenter/ui/pages/home_page.dart';
 import 'package:listadecoisa/core/services/global.dart';
@@ -57,7 +58,10 @@ class LoginController extends IController {
           title: const Text(
             'Será encaminhado um e-mail para redefinição de senha, verifique sua caixa de spam.',
           ),
-          content: TextField(controller: loginControler),
+          content: ListSystemField(
+            hintText: 'Email para redefinição',
+            controller: loginControler,
+          ),
           actions: [
             TextButton(
               child: const Text('Cancelar'),
