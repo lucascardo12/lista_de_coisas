@@ -30,7 +30,9 @@ linter:
     require_trailing_commas: true
     sort_child_properties_last: true
     unnecessary_await_in_return: true
-    use_enums: true 
+    use_enums: true
+    prefer_const_constructors: true
+    empty_constructor_bodies: true  
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
