@@ -11,7 +11,7 @@ class DeleteListButton extends StatelessWidget {
     return IconButton(
       icon: Icon(
         Icons.delete_outline,
-        color: ThemeService.instance.getErrorColor(),
+        color: ThemeService.of.errorColor,
         size: 20,
       ),
       onPressed: onPressed,

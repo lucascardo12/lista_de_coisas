@@ -18,7 +18,7 @@ class LoadingPage extends StatelessWidget {
             Text(
               'carregando ...',
               style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                color: ThemeService.instance.getSecondary(),
+                color: ThemeService.of.secondary,
               ),
             ),
           ],

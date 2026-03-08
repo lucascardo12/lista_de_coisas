@@ -46,7 +46,7 @@ class ListasController extends ChangeNotifier implements IController {
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 5,
-      backgroundColor: ThemeService.instance.getPrimary(),
+      backgroundColor: ThemeService.of.primary,
       textColor: Colors.white,
       fontSize: 18.0,
     );
@@ -63,7 +63,7 @@ class ListasController extends ChangeNotifier implements IController {
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.TOP,
       timeInSecForIosWeb: 5,
-      backgroundColor: ThemeService.instance.getPrimary(),
+      backgroundColor: ThemeService.of.primary,
       textColor: Colors.white,
       fontSize: 18.0,
     );

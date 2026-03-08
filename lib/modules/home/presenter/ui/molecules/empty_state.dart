@@ -22,17 +22,13 @@ class EmptyState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 64,
-            color: ThemeService.instance.getSecondaryTextColor(),
-          ),
+          Icon(icon, size: 64, color: ThemeService.of.secondaryTextColor),
           const SizedBox(height: 16),
           Text(
             title,
             style: TextStyle(
               fontSize: 18,
-              color: ThemeService.instance.getTextColor(),
+              color: ThemeService.of.textColor,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -42,7 +38,7 @@ class EmptyState extends StatelessWidget {
               subtitle!,
               style: TextStyle(
                 fontSize: 14,
-                color: ThemeService.instance.getSecondaryTextColor(),
+                color: ThemeService.of.secondaryTextColor,
               ),
             ),
           ],

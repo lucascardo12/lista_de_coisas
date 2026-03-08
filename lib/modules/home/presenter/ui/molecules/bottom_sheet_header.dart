@@ -21,7 +21,7 @@ class BottomSheetHeader extends StatelessWidget {
           Text(
             title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: ThemeService.instance.getTextColor(),
+              color: ThemeService.of.textColor,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -29,7 +29,7 @@ class BottomSheetHeader extends StatelessWidget {
           Text(
             subtitle,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: ThemeService.instance.getSecondaryTextColor(),
+              color: ThemeService.of.secondaryTextColor,
             ),
           ),
         ],

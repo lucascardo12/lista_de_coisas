@@ -28,7 +28,7 @@ class ContentGrid extends StatelessWidget {
       elevation: 3,
       shadowColor: Colors.black12,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: ThemeService.instance.getSurfaceColor(),
+      color: ThemeService.of.backgroundColor,
       child: Container(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -46,9 +46,11 @@ class ContentGrid extends StatelessWidget {
                   ),
                   child: Icon(tipoIcon, color: tipoCor, size: 20),
                 ),
-                DeleteListButton(onPressed: () async {
-                  await ct.showAlertDialog2(coisas: coisa, context: context);
-                }),
+                DeleteListButton(
+                  onPressed: () async {
+                    await ct.showAlertDialog2(coisas: coisa, context: context);
+                  },
+                ),
               ],
             ),
             const SizedBox(height: 8),
@@ -57,7 +59,7 @@ class ContentGrid extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: ThemeService.instance.getTextColor(),
+                color: ThemeService.of.textColor,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -68,7 +70,7 @@ class ContentGrid extends StatelessWidget {
                 _formatDate(coisa.updatAp),
                 style: TextStyle(
                   fontSize: 10,
-                  color: ThemeService.instance.getSecondaryTextColor(),
+                  color: ThemeService.of.secondaryTextColor,
                 ),
               ),
             ),

@@ -33,9 +33,9 @@ class DrawerButtonItem extends StatelessWidget {
           const SizedBox(width: 10),
           Text(
             title,
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              color: ThemeService.instance.getPrimary(),
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium!.copyWith(color: ThemeService.of.primary),
           ),
           const Spacer(),
           TextButton.icon(

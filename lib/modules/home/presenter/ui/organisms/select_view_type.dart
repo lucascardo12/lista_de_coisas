@@ -31,9 +31,7 @@ class SelectViewType extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   color: isSelected
-                      ? ThemeService.instance.getPrimary().withValues(
-                          alpha: 0.1,
-                        )
+                      ? ThemeService.of.primary.withValues(alpha: 0.1)
                       : Colors.transparent,
                 ),
                 child: Row(
@@ -44,11 +42,11 @@ class SelectViewType extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: ThemeService.instance.getPrimary(),
+                          color: ThemeService.of.primary,
                           width: 2,
                         ),
                         color: isSelected
-                            ? ThemeService.instance.getPrimary()
+                            ? ThemeService.of.primary
                             : Colors.transparent,
                       ),
                       child: isSelected

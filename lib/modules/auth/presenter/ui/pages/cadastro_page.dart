@@ -35,10 +35,7 @@ class _CadastroPageState extends State<CadastroPage> {
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [
-                ThemeService.instance.getPrimary(),
-                ThemeService.instance.getSecondary(),
-              ],
+              colors: [ThemeService.of.primary, ThemeService.of.secondary],
             ),
           ),
           child: ListView(
@@ -89,8 +86,8 @@ class _CadastroPageState extends State<CadastroPage> {
               const SizedBox(height: 20),
               ListSystemButton(
                 label: 'Cadastro',
-                color: ThemeService.instance.getWhiteOrBlack(),
-                textColor: ThemeService.instance.getPrimary(),
+                color: ThemeService.of.whiteOrBlack,
+                textColor: ThemeService.of.primary,
                 onPressed: () => ct.createUserWithEmailAndPassword(context),
               ),
               ListSystemButton(

@@ -24,7 +24,7 @@ class ListaCompras extends StatelessWidget {
             const SizedBox(width: 8),
             Checkbox(
               fillColor: WidgetStateProperty.all(Colors.white),
-              checkColor: ThemeService.instance.getPrimary(),
+              checkColor: ThemeService.of.primary,
               onChanged: (bool? value) {
                 ct.marcaTodos = !ct.marcaTodos;
                 for (var element in ct.coisas.checkCompras) {
@@ -41,10 +41,7 @@ class ListaCompras extends StatelessWidget {
             CircleAvatar(
               backgroundColor: Colors.white,
               child: IconButton(
-                icon: Icon(
-                  Icons.add,
-                  color: ThemeService.instance.getPrimary(),
-                ),
+                icon: Icon(Icons.add, color: ThemeService.of.primary),
                 onPressed: () {
                   ct.coisas.checkCompras.add(
                     CheckCompras(feito: false, item: '', valor: 0.0, quant: 1),
@@ -77,7 +74,7 @@ class ListaCompras extends StatelessWidget {
                         children: [
                           Checkbox(
                             fillColor: WidgetStateProperty.all(Colors.white),
-                            checkColor: ThemeService.instance.getPrimary(),
+                            checkColor: ThemeService.of.primary,
                             onChanged: (bool? value) {
                               ct.coisas.checkCompras[i].feito = value!;
                               ct.update();

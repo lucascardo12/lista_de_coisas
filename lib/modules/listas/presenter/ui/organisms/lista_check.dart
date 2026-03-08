@@ -20,7 +20,7 @@ class ListaCheck extends StatelessWidget {
             const SizedBox(width: 8),
             Checkbox(
               fillColor: WidgetStateProperty.all(Colors.white),
-              checkColor: ThemeService.instance.getPrimary(),
+              checkColor: ThemeService.of.primary,
               onChanged: (bool? value) {
                 ct.marcaTodos = !ct.marcaTodos;
                 for (var element in ct.coisas.checklist) {
@@ -34,10 +34,7 @@ class ListaCheck extends StatelessWidget {
             CircleAvatar(
               backgroundColor: Colors.white,
               child: IconButton(
-                icon: Icon(
-                  Icons.add,
-                  color: ThemeService.instance.getPrimary(),
-                ),
+                icon: Icon(Icons.add, color: ThemeService.of.primary),
                 onPressed: () {
                   ct.coisas.checklist.add(Checklist(feito: false, item: ''));
                   ct.update();
@@ -67,7 +64,7 @@ class ListaCheck extends StatelessWidget {
                     children: [
                       Checkbox(
                         fillColor: WidgetStateProperty.all(Colors.white),
-                        checkColor: ThemeService.instance.getPrimary(),
+                        checkColor: ThemeService.of.primary,
                         onChanged: (bool? value) {
                           ct.coisas.checklist[i].feito = value!;
                           ct.update();

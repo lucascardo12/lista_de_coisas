@@ -28,7 +28,7 @@ class ContentList extends StatelessWidget {
       elevation: 2,
       shadowColor: Colors.black12,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: ThemeService.instance.getSurfaceColor(),
+      color: ThemeService.of.backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
@@ -52,7 +52,7 @@ class ContentList extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: ThemeService.instance.getTextColor(),
+                      color: ThemeService.of.textColor,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -62,7 +62,7 @@ class ContentList extends StatelessWidget {
                     coisa.tipo.title,
                     style: TextStyle(
                       fontSize: 14,
-                      color: ThemeService.instance.getSecondaryTextColor(),
+                      color: ThemeService.of.secondaryTextColor,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -70,7 +70,7 @@ class ContentList extends StatelessWidget {
                     'Atualizado ${_formatDate(coisa.updatAp)}',
                     style: TextStyle(
                       fontSize: 12,
-                      color: ThemeService.instance.getSecondaryTextColor(),
+                      color: ThemeService.of.secondaryTextColor,
                     ),
                   ),
                 ],
@@ -94,9 +94,9 @@ class ContentList extends StatelessWidget {
   };
 
   Color _getTipoColor(TypeList tipo) => switch (tipo) {
-    TypeList.text => ThemeService.instance.getInfoColor(),
-    TypeList.check => ThemeService.instance.getSuccessColor(),
-    TypeList.checkout => ThemeService.instance.getWarningColor(),
+    TypeList.text => ThemeService.of.infoColor,
+    TypeList.check => ThemeService.of.successColor,
+    TypeList.checkout => ThemeService.of.warningColor,
   };
 
   String _formatDate(DateTime date) {

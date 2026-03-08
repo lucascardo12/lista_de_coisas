@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
         if (!didPop) ct.showExit(context: context);
       },
       child: Scaffold(
-        backgroundColor: ThemeService.instance.getBackgroundColor(),
+        backgroundColor: ThemeService.of.backgroundColor,
         body: CustomScrollView(
           slivers: [
             AppHeader(
@@ -79,10 +79,8 @@ class _HomePageState extends State<HomePage> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      ThemeService.instance.getPrimary().withValues(
-                        alpha: 0.05,
-                      ),
-                      ThemeService.instance.getBackgroundColor(),
+                      ThemeService.of.primary.withValues(alpha: 0.05),
+                      ThemeService.of.backgroundColor,
                     ],
                   ),
                 ),
@@ -97,7 +95,7 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => ct.showCria(context: context),
-          backgroundColor: ThemeService.instance.getPrimary(),
+          backgroundColor: ThemeService.of.primary,
           foregroundColor: Colors.white,
           icon: const Icon(Icons.add),
           label: const Text('Nova Lista'),

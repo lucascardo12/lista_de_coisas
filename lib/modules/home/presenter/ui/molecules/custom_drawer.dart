@@ -60,7 +60,7 @@ class CustomDrawer extends StatelessWidget {
                     icon: Icons.lock_reset,
                     title: 'Redefinir Senha',
                     iconColor: Colors.blue,
-                    textColor: ThemeService.instance.getTextColor(),
+                    textColor: ThemeService.of.textColor,
                     onTap: () =>
                         controller.showAlertRedefinir(context: context),
                   ),
@@ -68,23 +68,21 @@ class CustomDrawer extends StatelessWidget {
                   DrawerMenuItem(
                     icon: Icons.palette,
                     title: 'Temas',
-                    iconColor: ThemeService.instance.getPrimary(),
-                    textColor: ThemeService.instance.getTextColor(),
+                    iconColor: ThemeService.of.primary,
+                    textColor: ThemeService.of.textColor,
                     trailing: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: ThemeService.instance.getPrimary().withValues(
-                          alpha: 0.1,
-                        ),
+                        color: ThemeService.of.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        ThemeService.instance.getCurrentTheme().title,
+                        ThemeService.of.getCurrentTheme().title,
                         style: TextStyle(
-                          color: ThemeService.instance.getPrimary(),
+                          color: ThemeService.of.primary,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -100,7 +98,7 @@ class CustomDrawer extends StatelessWidget {
                     icon: _getIconViewType(global.listViewType),
                     title: 'Visualização',
                     iconColor: Colors.green,
-                    textColor: ThemeService.instance.getTextColor(),
+                    textColor: ThemeService.of.textColor,
                     trailing: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,

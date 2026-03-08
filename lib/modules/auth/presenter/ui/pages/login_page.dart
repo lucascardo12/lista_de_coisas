@@ -38,10 +38,7 @@ class _LoginPageState extends State<LoginPage> {
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [
-                ThemeService.instance.getPrimary(),
-                ThemeService.instance.getSecondary(),
-              ],
+              colors: [ThemeService.of.primary, ThemeService.of.secondary],
             ),
           ),
           child: ListView(
@@ -94,14 +91,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               ListSystemButton(
                 label: 'Login',
-                color: ThemeService.instance.getWhiteOrBlack(),
-                textColor: ThemeService.instance.getPrimary(),
+                color: ThemeService.of.whiteOrBlack,
+                textColor: ThemeService.of.primary,
                 onPressed: () => ct.signInWithEmailAndPassword(context),
               ),
               ListSystemButton(
-                color: ThemeService.instance.getWhiteOrBlack(),
+                color: ThemeService.of.whiteOrBlack,
                 label: 'Google',
-                textColor: ThemeService.instance.getPrimary(),
+                textColor: ThemeService.of.primary,
                 onPressed: () => ct.signInWithGoogle(context),
               ),
               ListSystemButton(

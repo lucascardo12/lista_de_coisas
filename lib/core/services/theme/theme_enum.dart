@@ -1,10 +1,11 @@
 enum ThemeEnum {
-  original('Original'),
-  dark('Dark'),
-  blue('Azul'),
-  purple('Roxo');
+  original('Original', false),
+  dark('Dark', true),
+  blue('Azul', false),
+  purple('Roxo', false);
 
   final String title;
+  final bool isDark;
 
-  const ThemeEnum(this.title);
+  const ThemeEnum(this.title, this.isDark);
 }

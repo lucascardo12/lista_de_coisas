@@ -38,7 +38,7 @@ class _FieldAmountState extends State<FieldAmount> {
             },
             icon: CircleAvatar(
               backgroundColor: Colors.white,
-              child: Icon(Icons.add, color: ThemeService.instance.getPrimary()),
+              child: Icon(Icons.add, color: ThemeService.of.primary),
             ),
           ),
           Padding(
@@ -73,10 +73,7 @@ class _FieldAmountState extends State<FieldAmount> {
             },
             icon: CircleAvatar(
               backgroundColor: Colors.white,
-              child: Icon(
-                Icons.remove,
-                color: ThemeService.instance.getPrimary(),
-              ),
+              child: Icon(Icons.remove, color: ThemeService.of.primary),
             ),
           ),
         ],

@@ -17,10 +17,10 @@ class SelectTheme extends StatelessWidget {
       children: [
         Wrap(
           children: ThemeEnum.values.map((e) {
-            final isSelected = ThemeService.instance.getCurrentTheme() == e;
+            final isSelected = ThemeService.of.getCurrentTheme() == e;
             return GestureDetector(
               onTap: () async {
-                await ThemeService.instance.setTheme(e);
+                await ThemeService.of.setTheme(e);
                 if (context.mounted) {
                   Navigator.pop(context);
                 }
@@ -31,9 +31,7 @@ class SelectTheme extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   color: isSelected
-                      ? ThemeService.instance.getPrimary().withValues(
-                          alpha: 0.1,
-                        )
+                      ? ThemeService.of.primary.withValues(alpha: 0.1)
                       : Colors.transparent,
                 ),
                 child: Row(
@@ -44,11 +42,11 @@ class SelectTheme extends StatelessWidget {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: ThemeService.instance.getPrimary(),
+                          color: ThemeService.of.primary,
                           width: 2,
                         ),
                         color: isSelected
-                            ? ThemeService.instance.getPrimary()
+                            ? ThemeService.of.primary
                             : Colors.transparent,
                       ),
                       child: isSelected

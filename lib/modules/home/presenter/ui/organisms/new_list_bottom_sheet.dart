@@ -24,7 +24,7 @@ class _NewListBottomSheetState extends State<NewListBottomSheet> {
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
-          color: ThemeService.instance.getBackgroundColor(),
+          color: ThemeService.of.backgroundColor,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
@@ -35,7 +35,7 @@ class _NewListBottomSheetState extends State<NewListBottomSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const BottomSheetHandle(),
-            BottomSheetHeader(
+            const BottomSheetHeader(
               title: 'Nova Lista',
               subtitle: 'Escolha o tipo de lista que deseja criar',
             ),

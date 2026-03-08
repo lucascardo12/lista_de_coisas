@@ -23,10 +23,10 @@ class ListSystemButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: ListSystemBorder.borderRadius,
           ),
-          disabledForegroundColor: ThemeService.instance
-              .getSecondary()
-              .withValues(alpha: 0.38),
-          backgroundColor: color ?? ThemeService.instance.getPrimary(),
+          disabledForegroundColor: ThemeService.of.secondary.withValues(
+            alpha: 0.38,
+          ),
+          backgroundColor: color ?? ThemeService.of.primary,
         ),
         onPressed: onPressed,
         child: Text(

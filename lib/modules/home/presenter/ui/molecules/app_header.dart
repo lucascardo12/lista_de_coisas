@@ -38,10 +38,7 @@ class AppHeader extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              ThemeService.instance.getPrimary(),
-              ThemeService.instance.getSecondary(),
-            ],
+            colors: [ThemeService.of.primary, ThemeService.of.secondary],
           ),
         ),
       ),

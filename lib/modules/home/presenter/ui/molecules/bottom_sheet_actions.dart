@@ -27,7 +27,7 @@ class BottomSheetActions extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                   side: BorderSide(
-                    color: ThemeService.instance.getSurfaceColor().withValues(
+                    color: ThemeService.of.backgroundColor.withValues(
                       alpha: 0.5,
                     ),
                   ),
@@ -36,7 +36,7 @@ class BottomSheetActions extends StatelessWidget {
               child: Text(
                 'Cancelar',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: ThemeService.instance.getTextColor(),
+                  color: ThemeService.of.textColor,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -47,7 +47,7 @@ class BottomSheetActions extends StatelessWidget {
             child: ElevatedButton(
               onPressed: canContinue ? onContinue : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: ThemeService.instance.getPrimary(),
+                backgroundColor: ThemeService.of.primary,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -57,7 +57,7 @@ class BottomSheetActions extends StatelessWidget {
               child: Text(
                 'Continuar',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: ThemeService.instance.getWhiteOrBlack(),
+                  color: ThemeService.of.whiteOrBlack,
                   fontWeight: FontWeight.w600,
                 ),
               ),

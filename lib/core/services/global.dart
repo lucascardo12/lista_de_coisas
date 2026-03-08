@@ -37,7 +37,7 @@ class Global extends IService {
     AppHelps.defaultDialog(
       context: context,
       barrierColor: Colors.white,
-      child: LoadingPage(),
+      child: const LoadingPage(),
     );
   }
 }

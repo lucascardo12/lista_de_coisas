@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -34,7 +36,7 @@ Future<void> main() async {
 
   // Inicializar serviços
   await di.get<CrashlyticsService>().initialize();
-  await ThemeService.instance.start();
+  await ThemeService.of.start();
 
   // Configurar tratamento de erros globais
   final crashlyticsService = di.get<CrashlyticsService>();
@@ -59,7 +61,7 @@ Future<void> main() async {
     return true;
   };
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -67,23 +69,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: ThemeService.instance.currentTheme,
+      valueListenable: ThemeService.of.currentTheme,
       builder: (context, value, child) {
         return MaterialApp(
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            FlutterQuillLocalizations.delegate,
+          ],
           themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,
           title: 'Lista de Coisas',
           theme: ThemeData.light().copyWith(
-            primaryColor: ThemeService.instance.getPrimary(),
+            primaryColor: ThemeService.of.primary,
             textSelectionTheme: const TextSelectionThemeData(
               cursorColor: Colors.white,
             ),
             colorScheme: ThemeData.light().colorScheme
                 .copyWith(
-                  primary: ThemeService.instance.getPrimary(),
-                  secondary: ThemeService.instance.getSecondary(),
+                  primary: ThemeService.of.primary,
+                  secondary: ThemeService.of.secondary,
                 )
-                .copyWith(secondary: ThemeService.instance.getSecondary()),
+                .copyWith(secondary: ThemeService.of.secondary),
           ),
           initialRoute: SplashPage.route,
           routes: {

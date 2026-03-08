@@ -28,14 +28,12 @@ class TypeListCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? color.withValues(alpha: 0.1)
-              : ThemeService.instance.getSurfaceColor(),
+              : ThemeService.of.backgroundColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected
                 ? color
-                : ThemeService.instance.getSurfaceColor().withValues(
-                    alpha: 0.3,
-                  ),
+                : ThemeService.of.backgroundColor.withValues(alpha: 0.3),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -51,9 +49,7 @@ class TypeListCard extends StatelessWidget {
               ),
               child: Icon(
                 icon,
-                color: isSelected
-                    ? ThemeService.instance.getWhiteOrBlack()
-                    : color,
+                color: isSelected ? ThemeService.of.whiteOrBlack : color,
                 size: 24,
               ),
             ),
@@ -65,7 +61,7 @@ class TypeListCard extends StatelessWidget {
                   Text(
                     type.title,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: ThemeService.instance.getTextColor(),
+                      color: ThemeService.of.textColor,
                       fontWeight: isSelected
                           ? FontWeight.w600
                           : FontWeight.w500,
@@ -75,7 +71,7 @@ class TypeListCard extends StatelessWidget {
                   Text(
                     _getDescriptionForType(type),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: ThemeService.instance.getSecondaryTextColor(),
+                      color: ThemeService.of.secondaryTextColor,
                     ),
                   ),
                 ],
@@ -102,11 +98,11 @@ class TypeListCard extends StatelessWidget {
   Color _getColorForType(TypeList type) {
     switch (type) {
       case TypeList.text:
-        return ThemeService.instance.getInfoColor();
+        return ThemeService.of.infoColor;
       case TypeList.check:
-        return ThemeService.instance.getSuccessColor();
+        return ThemeService.of.successColor;
       case TypeList.checkout:
-        return ThemeService.instance.getWarningColor();
+        return ThemeService.of.warningColor;
     }
   }
 

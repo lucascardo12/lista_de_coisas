@@ -9,7 +9,7 @@ class ThemeService extends IService {
   ThemeService._internal();
 
   // Método estático para acesso direto ao singleton
-  static ThemeService get instance => _instance;
+  static ThemeService get of => _instance;
 
   late Box box;
   ValueNotifier<ThemeEnum> currentTheme = ValueNotifier(ThemeEnum.original);
@@ -74,74 +74,74 @@ class ThemeService extends IService {
 
   List<ThemeEnum> getAvailableThemes() => _themes.keys.toList();
 
-  Color getPrimary() {
-    return _themes[currentTheme.value]?['primary'] ??
-        _themes[ThemeEnum.original]!['primary']!;
+  Color get primary =>
+      _themes[currentTheme.value]?['primary'] ??
+      _themes[ThemeEnum.original]!['primary']!;
+
+  Color get secondary =>
+      _themes[currentTheme.value]?['secondary'] ??
+      _themes[ThemeEnum.original]!['secondary']!;
+
+  Color get whiteOrBlack =>
+      _themes[currentTheme.value]?['whiteOrBlack'] ??
+      _themes[ThemeEnum.original]!['whiteOrBlack']!;
+
+  Color get textColor =>
+      _themes[currentTheme.value]?['textColor'] ??
+      _themes[ThemeEnum.original]!['textColor']!;
+
+  Color get secondaryTextColor =>
+      _themes[currentTheme.value]?['secondaryTextColor'] ??
+      _themes[ThemeEnum.original]!['secondaryTextColor']!;
+
+  Color get backgroundColor =>
+      _themes[currentTheme.value]?['backgroundColor'] ??
+      _themes[ThemeEnum.original]!['backgroundColor']!;
+
+  Color get surfaceColor =>
+      _themes[currentTheme.value]?['surfaceColor'] ??
+      _themes[ThemeEnum.original]!['surfaceColor']!;
+
+  Color get successColor => Colors.green;
+
+  Color get errorColor => Colors.red;
+
+  Color get warningColor => Colors.orange;
+
+  Color get infoColor => Colors.blue;
+
+  ThemeData get getTheme {
+    if (currentTheme.value.isDark) {
+      return getDarkTheme();
+    }
+    return getLightTheme();
   }
-
-  Color getSecondary() {
-    return _themes[currentTheme.value]?['secondary'] ??
-        _themes[ThemeEnum.original]!['secondary']!;
-  }
-
-  Color getWhiteOrBlack() {
-    return _themes[currentTheme.value]?['whiteOrBlack'] ??
-        _themes[ThemeEnum.original]!['whiteOrBlack']!;
-  }
-
-  Color getTextColor() {
-    return _themes[currentTheme.value]?['textColor'] ??
-        _themes[ThemeEnum.original]!['textColor']!;
-  }
-
-  Color getSecondaryTextColor() {
-    return _themes[currentTheme.value]?['secondaryTextColor'] ??
-        _themes[ThemeEnum.original]!['secondaryTextColor']!;
-  }
-
-  Color getBackgroundColor() {
-    return _themes[currentTheme.value]?['backgroundColor'] ??
-        _themes[ThemeEnum.original]!['backgroundColor']!;
-  }
-
-  Color getSurfaceColor() {
-    return _themes[currentTheme.value]?['surfaceColor'] ??
-        _themes[ThemeEnum.original]!['surfaceColor']!;
-  }
-
-  Color getSuccessColor() => Colors.green;
-
-  Color getErrorColor() => Colors.red;
-
-  Color getWarningColor() => Colors.orange;
-
-  Color getInfoColor() => Colors.blue;
 
   ThemeData getLightTheme() {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      primaryColor: getPrimary(),
+      primaryColor: primary,
       colorScheme: ColorScheme.light(
-        primary: getPrimary(),
-        secondary: getSecondary(),
-        surface: getSurfaceColor(),
-        onSurface: getTextColor(),
-        onPrimary: getWhiteOrBlack(),
-        onSecondary: getWhiteOrBlack(),
-        error: getErrorColor(),
+        primary: primary,
+        secondary: secondary,
+        surface: backgroundColor,
+        onSurface: textColor,
+        onPrimary: whiteOrBlack,
+        onSecondary: whiteOrBlack,
+        error: errorColor,
       ),
-      scaffoldBackgroundColor: getBackgroundColor(),
+      scaffoldBackgroundColor: backgroundColor,
       appBarTheme: AppBarTheme(
-        backgroundColor: getPrimary(),
-        foregroundColor: getWhiteOrBlack(),
+        backgroundColor: primary,
+        foregroundColor: whiteOrBlack,
         elevation: 0,
       ),
-      cardTheme: CardThemeData(color: getSurfaceColor(), elevation: 2),
+      cardTheme: CardThemeData(color: backgroundColor, elevation: 2),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: getPrimary(),
-          foregroundColor: getWhiteOrBlack(),
+          backgroundColor: primary,
+          foregroundColor: whiteOrBlack,
         ),
       ),
     );
@@ -151,27 +151,27 @@ class ThemeService extends IService {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      primaryColor: getPrimary(),
+      primaryColor: primary,
       colorScheme: ColorScheme.dark(
-        primary: getPrimary(),
-        secondary: getSecondary(),
-        surface: getSurfaceColor(),
-        onSurface: getTextColor(),
-        onPrimary: getWhiteOrBlack(),
-        onSecondary: getWhiteOrBlack(),
-        error: getErrorColor(),
+        primary: primary,
+        secondary: secondary,
+        surface: backgroundColor,
+        onSurface: textColor,
+        onPrimary: whiteOrBlack,
+        onSecondary: whiteOrBlack,
+        error: errorColor,
       ),
-      scaffoldBackgroundColor: getBackgroundColor(),
+      scaffoldBackgroundColor: backgroundColor,
       appBarTheme: AppBarTheme(
-        backgroundColor: getPrimary(),
-        foregroundColor: getWhiteOrBlack(),
+        backgroundColor: primary,
+        foregroundColor: whiteOrBlack,
         elevation: 0,
       ),
-      cardTheme: CardThemeData(color: getSurfaceColor(), elevation: 2),
+      cardTheme: CardThemeData(color: backgroundColor, elevation: 2),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: getPrimary(),
-          foregroundColor: getWhiteOrBlack(),
+          backgroundColor: primary,
+          foregroundColor: whiteOrBlack,
         ),
       ),
     );
