@@ -35,10 +35,10 @@ IconButton(
 ThemeService get themeService => ThemeService.instance;
 
 Container(
-  color: themeService.getPrimary(),
+  color: themeService.primary,
   child: Text(
     'Título',
-    style: TextStyle(color: themeService.getWhiteOrBlack()),
+    style: TextStyle(color: themeService.whiteOrBlack),
   ),
 )
 ```
@@ -46,34 +46,34 @@ Container(
 ## **Métodos Disponíveis no ThemeService**
 
 ```dart
-themeService.getPrimary()              // Cor principal do app
+themeService.primary              // Cor principal do app
 // Exemplo: Color.fromRGBO(255, 64, 111, 1) (original)
 
-themeService.getSecondary()            // Cor secundária
+themeService.secondary            // Cor secundária
 // Exemplo: Color.fromRGBO(255, 128, 111, 1) (original)
 
-themeService.getWhiteOrBlack()         // Branco ou preto baseado no tema
+themeService.whiteOrBlack         // Branco ou preto baseado no tema
 // Exemplo: Colors.white (original), Colors.white (dark)
 
-themeService.getTextColor()            // Cor do texto principal
+themeService.textColor            // Cor do texto principal
 // Exemplo: Color(0xFF2C3E50)
 
-themeService.getSecondaryTextColor()   // Cor do texto secundário
+themeService.secondaryTextColor   // Cor do texto secundário
 // Exemplo: Color(0xFF757575)
 
-themeService.getBackgroundColor()      // Cor de fundo
+themeService.backgroundColor      // Cor de fundo
 // Exemplo: Color(0xFFFAFAFA)
 
-themeService.getSurfaceColor()         // Cor de superfície/cards
+themeService.backgroundColor         // Cor de superfície/cards
 // Exemplo: Colors.white
 
-themeService.getSuccessColor()         // Cor de sucesso (verde)
+themeService.successColor         // Cor de sucesso (verde)
 
-themeService.getErrorColor()           // Cor de erro (vermelho)
+themeService.errorColor           // Cor de erro (vermelho)
 
-themeService.getWarningColor()         // Cor de aviso (laranja)
+themeService.warningColor         // Cor de aviso (laranja)
 
-themeService.getInfoColor()            // Cor de informação (azul)
+themeService.infoColor            // Cor de informação (azul)
 ```
 
 ## **Exemplo Completo**
@@ -105,8 +105,8 @@ class MyButton extends StatelessWidget {
     
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: themeService.getPrimary(),
-        foregroundColor: themeService.getWhiteOrBlack(),
+        backgroundColor: themeService.primary,
+        foregroundColor: themeService.whiteOrBlack,
       ),
       onPressed: () {},
       child: Text('Clique aqui'),
@@ -125,7 +125,7 @@ class MyButton extends StatelessWidget {
 ## **Dicas**
 
 - Sempre acesse `ThemeService.instance` para obter o serviço de tema
-- Use os métodos específicos: `getPrimary()`, `getSecondary()`, etc.
+- Use os métodos específicos: `primary`, `secondary`, etc.
 - Nunca use `Colors.xxx` diretamente nos widgets
-- Para transparência, use `themeService.getPrimary().withValues(alpha: 0.5)`
+- Para transparência, use `themeService.primary.withValues(alpha: 0.5)`
 - Para acessar o tema atual como enum: `themeService.currentTheme.value`
