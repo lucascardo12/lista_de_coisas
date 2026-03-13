@@ -40,49 +40,63 @@ class _ListasPageState extends State<ListasPage> {
     return ValueListenableBuilder(
       valueListenable: ct.statusPage,
       builder: (context, value, child) {
-        if (ct.statusPage.value == StatusPage.loading) return LoadingPage();
-        return Scaffold(
-          body: SafeArea(
-            child: PopScope(
-              canPop: false,
-              onPopInvokedWithResult: (didPop, result) {
-                if (ct.bottonVoltar(context)) {
-                  if (Navigator.of(context).canPop()) {
-                    Navigator.of(context).pop();
+        if (ct.statusPage.value == StatusPage.loading) {
+          return const LoadingPage();
+        }
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [ThemeService.of.primary, ThemeService.of.secondary],
+            ),
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  if (ct.bottonVoltar(context)) {
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.of(context).pop();
+                    }
                   }
-                }
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                      ThemeService.instance.getPrimary(),
-                      ThemeService.instance.getSecondary(),
-                    ],
-                  ),
-                ),
+                },
+              ),
+              actions: const [SizedBox(width: 32)],
+              centerTitle: true,
+              title: ListSystemField(
+                hintText: 'Digite um Titulo',
+                initialValue: ct.coisas.nome,
+                textAlign: TextAlign.center,
+                showBorder: false,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Titulo não pode ser vazio';
+                  }
+                  return null;
+                },
+                onChanged: (value) => ct.coisas.nome = value,
+              ),
+            ),
+            body: SafeArea(
+              child: PopScope(
+                canPop: false,
+                onPopInvokedWithResult: (didPop, result) {
+                  if (ct.bottonVoltar(context)) {
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.of(context).pop();
+                    }
+                  }
+                },
                 child: Form(
                   key: ct.formKey,
                   child: Column(
                     children: [
-                      const SizedBox(height: 60),
-                      Expanded(
-                        child: ListSystemField(
-                          hintText: 'Digite um Titulo',
-                          initialValue: ct.coisas.nome,
-                          textAlign: TextAlign.center,
-                          showBorder: false,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Titulo não pode ser vazio';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) => ct.coisas.nome = value,
-                        ),
-                      ),
                       Expanded(
                         flex: 8,
                         child: AnimatedBuilder(
@@ -102,34 +116,24 @@ class _ListasPageState extends State<ListasPage> {
                 ),
               ),
             ),
-          ),
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const BackButton(color: Colors.white),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(width: 15),
-                    IconButton(
-                      icon: const Icon(Icons.done, color: Colors.white),
-                      onPressed: () async {
-                        if (ct.formKey.currentState!.validate()) {
-                          await ct.criaCoisa(coisa: ct.coisas);
-                          if (mounted && context.mounted) {
-                            Navigator.pop(context);
-                          }
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ],
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () async {
+                if (ct.formKey.currentState!.validate()) {
+                  await ct.criaCoisa(coisa: ct.coisas);
+                  if (mounted && context.mounted) {
+                    Navigator.pop(context);
+                  }
+                }
+              },
+              backgroundColor: ThemeService.of.backgroundColor,
+              icon: const Icon(Icons.check),
+              label: const Text('Salvar'),
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
         );
       },
     );

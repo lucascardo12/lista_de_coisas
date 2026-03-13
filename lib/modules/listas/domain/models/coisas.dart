@@ -8,6 +8,7 @@ class Coisas implements IModel {
   static String idCollection = 'coisas';
   String nome;
   String descricao;
+  Map<String, dynamic>? conteudoRich;
   TypeList tipo;
   List<Checklist> checklist;
   List<CheckCompras> checkCompras;
@@ -25,6 +26,7 @@ class Coisas implements IModel {
     this.idFire,
     required this.nome,
     required this.descricao,
+    this.conteudoRich,
     required this.checkCompras,
     required this.checklist,
     required this.tipo,
@@ -35,6 +37,7 @@ class Coisas implements IModel {
   Coisas.fromJson(Map<String, dynamic> xjson)
     : nome = xjson['nome'] ?? '',
       descricao = xjson['descricao'] ?? '',
+      conteudoRich = xjson['conteudoRich'] as Map<String, dynamic>?,
       idFire = xjson['idFire'],
       checklist = (xjson['checklist'] ?? [])
           .map<Checklist>((i) => Checklist.fromJson(i))
@@ -50,6 +53,7 @@ class Coisas implements IModel {
   Map<String, dynamic> toJson() => {
     'nome': nome,
     'descricao': descricao,
+    'conteudoRich': conteudoRich,
     'idFire': idFire,
     'checklist': checklist.map((i) => i.toJson()).toList(),
     'checkCompras': checkCompras.map((e) => e.toJson()).toList(),
@@ -76,6 +80,9 @@ class Coisas implements IModel {
       updatAp: updatAp,
       nome: nome,
       descricao: descricao,
+      conteudoRich: conteudoRich != null
+          ? Map<String, dynamic>.from(conteudoRich!)
+          : null,
       tipo: tipo,
       idFire: idFire,
     );
@@ -85,6 +92,7 @@ class Coisas implements IModel {
     : this(
         nome: '',
         descricao: '',
+        conteudoRich: null,
         checkCompras: [],
         checklist: [],
         tipo: TypeList.text,
